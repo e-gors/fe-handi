@@ -1,3 +1,5 @@
+/** @format */
+
 const routes = [
   {
     path: "/",
@@ -38,6 +40,10 @@ const routes = [
   {
     path: "/profile",
     component: "modules/users/pages/Profile",
+  },
+  {
+    path: "/fq-question",
+    component: "modules/home/pages/FQQuestion",
   },
 ];
 

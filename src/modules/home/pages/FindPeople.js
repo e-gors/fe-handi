@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   Avatar,
   Box,
@@ -242,7 +244,7 @@ function FindPeople() {
     setAnchorEl(null);
   };
 
-  const [loading, setLoading] = React.useState(false);
+  const [loading] = React.useState(false);
   const [search, setSearch] = React.useState("");
 
   const onSearch = (e) => {
