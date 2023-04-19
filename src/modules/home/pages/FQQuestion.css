@@ -68,7 +68,6 @@
 }
 
 @media only screen and (min-width: 600px) and (max-width: 960px) {
-  /* applies to md size */
   .Title {
     font-size: 45px;
     top: 20%;
@@ -77,7 +76,6 @@
 }
 
 @media only screen and (min-width: 960px) {
-  /* applies to lg size */
   .Title {
     font-size: 55px;
   }
@@ -86,9 +84,9 @@
   color: black;
   font-weight: 800;
 }
-/* for the fontSize property */
+
 .SecTitle {
-  font-size: 24px; /* default value */
+  font-size: 24px;
 }
 
 @media only screen and (min-width: 600px) {
