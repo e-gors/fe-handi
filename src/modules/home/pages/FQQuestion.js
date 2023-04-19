@@ -1,6 +1,7 @@
 /** @format */
 
 import React from "react";
+import "./FQQuestion.css";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -12,56 +13,24 @@ import frequently from "../../../assets/images/Faq.jpg";
 function FQQuestion() {
   return (
     <div>
-      <Box component="img" src={frequently} sx={{ width: "100%" }}></Box>
+      <div className="frequently">
+        <Box component="img" src={frequently} sx={{ width: "100%" }}></Box>
+      </div>
 
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mt: { xs: 3, md: 10 },
-          flexWrap: { xs: "wrap", md: "wrap", lg: "noWrap" },
-          p: 1,
-          height: "9 0vh",
-        }}
-      ></Box>
+      <div className="Title">
+        <p>
+          Got a Question? <br /> Get your Answer
+        </p>
+      </div>
 
-      <Typography
-        sx={{
-          fontSize: { xs: 24, md: 45, lg: 55 },
-          color: "white",
-          position: "absolute",
-          top: "30%",
-          left: "10%",
-          fontWeight: "800",
-        }}
-      >
-        Got a Question? <br /> Get your Answer
-      </Typography>
+      <div className="SecTitle">
+        <p>
+          Your Rigth To Know
+          <Divider />
+        </p>
+      </div>
 
-      <Typography
-        sx={{
-          fontSize: { xs: 24, md: 45, lg: 55 },
-          color: "black",
-          fontWeight: "800",
-        }}
-      >
-        Your Rigth To Know
-        <Divider />
-      </Typography>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "100%",
-          alignItems: "center",
-          marginTop: "3rem",
-          flexWrap: "wrap",
-          marginBottom: "3rem",
-          alignContent: "center",
-        }}
-      >
+      <div className="Cards">
         <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
           <CardContent>
             <Typography
@@ -171,16 +140,7 @@ function FQQuestion() {
         </Card>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "100%",
-          alignItems: "center",
-          marginTop: "3rem",
-          flexWrap: "wrap",
-        }}
-      >
+      <div className="Card">
         <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
           <CardContent>
             <Typography
