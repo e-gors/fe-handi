@@ -30,7 +30,7 @@ function FQQuestion() {
         </p>
       </div>
 
-      <div className="Card">
+      <div className="Cards">
         <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
           <CardContent>
             <Typography
