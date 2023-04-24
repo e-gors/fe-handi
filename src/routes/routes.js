@@ -1,3 +1,5 @@
+/** @format */
+
 const routes = [
   {
     path: "/",
@@ -98,6 +100,10 @@ const routes = [
     path: "/reports",
     component: "modules/users/pages/DefaultReports",
     auth: true,
+  },
+  {
+    path: "/fq-question",
+    component: "modules/home/pages/FQQuestion",
   },
 ];
 
