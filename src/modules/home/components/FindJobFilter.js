@@ -1,59 +1,55 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, InputAdornment } from "@mui/material";
 import React from "react";
 import FormField from "../../../components/FormField";
+import SearchIcon from "@mui/icons-material/Search";
 import SelectDropdown from "../../../components/SelectDropdown";
-
-const salaryRange = [
-  "250 - 500",
-  "500 - 1000",
-  "1000 - 5000",
-  "5000 - 10000",
-  "10000 - 20000",
-];
-const location = ["Hilongos", "Hindang", "Bato", "Hindang", "Matalom"];
 
 function FindJobFilter() {
   return (
-    <Box
-      sx={{
-        display: { xs: "none", md: "flex" },
-        alignItems: "center",
-        justifyContent: "space-evenly",
-        border: "1px solid gray",
-        width: "80%",
-        m: "0 auto",
-      }}
-    >
-      <FormField
-        size="small"
-        variant="standard"
-        sx={{ width: 360 }}
-        label="Search"
-      />
-      <SelectDropdown
-        size="small"
-        sx={{ width: 360 }}
-        variant="standard"
-        label="Salary range"
-        options={salaryRange}
-      />
-      <SelectDropdown
-        size="small"
-        sx={{ width: 320 }}
-        variant="standard"
-        label="Location"
-        options={location}
-      />
-      <Button
-        variant="contained"
-        size="large"
+    <Box>
+      <Box
         sx={{
-          minWidth: 150,
-          background: `linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%)`,
+          mt: 2,
+          width: "80%",
+          margin: "0 auto",
+          display: "flex",
         }}
       >
-        Find Offers
-      </Button>
+        <FormField
+          fullWidth
+          name="search"
+          placeholder="Job title or keywork"
+          size="small"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ mt: 0.5 }}
+        />
+        <SelectDropdown
+          fullWidth
+          name="location"
+          label="Location"
+          size="small"
+        />
+        <SelectDropdown
+          fullWidth
+          name="location"
+          label="Location"
+          size="small"
+        />
+        <Button
+          variant="contained"
+          size="small"
+          color="primary"
+          sx={{ minWidth: 100, height: 45, borderRadius: 10 }}
+        >
+          Search
+        </Button>
+      </Box>
     </Box>
   );
 }

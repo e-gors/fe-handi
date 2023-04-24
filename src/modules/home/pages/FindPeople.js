@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import AppBarMenu from "../../../layouts/AppBarMenu";
 import FormField from "../../../components/FormField";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import ReceiptIcon from "@mui/icons-material/Receipt";
@@ -18,6 +17,7 @@ import { styles } from "../../../assets/styles/styles";
 import { useHistory } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import MenuBar from "../../../layouts/MenuBar";
+import { useSelector } from "react-redux";
 
 const suggestedSearch = [
   "Data Entry",
@@ -231,6 +231,8 @@ const workerData = [
 
 function FindPeople() {
   const history = useHistory();
+
+  const profiles = useSelector((state) => state.profiles.worker);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -261,7 +263,6 @@ function FindPeople() {
         handleClose={() => handleClose()}
         anchorEl={anchorEl}
       />
-      <AppBarMenu />
       <Box sx={{ mt: 6 }}>
         <Box
           sx={{
@@ -387,7 +388,9 @@ function FindPeople() {
           </Box>
         )}
         {workerData.length !== 0 && (
-          <Typography sx={{ ml: 2 }}>Results: {workerData.length}</Typography>
+          <Typography sx={{ ml: 2 }}>
+            Results: {Object.values(profiles).length}
+          </Typography>
         )}
 
         <Box
@@ -397,8 +400,8 @@ function FindPeople() {
             justifyContent: "space-around",
           }}
         >
-          {workerData &&
-            workerData.map((data, i) => {
+          {profiles &&
+            Object.values(profiles).map((data, i) => {
               return (
                 <Box
                   key={i}
@@ -424,13 +427,14 @@ function FindPeople() {
                     <Avatar
                       alt="User Profile"
                       sx={{ bgcolor: "blue", width: 60, height: 60 }}
+                      src={data.profile.profile_url}
                     />
                     <Box>
                       <Typography>{data.fullname}</Typography>
-                      <Typography>{data.location}</Typography>
+                      <Typography>{data.profile.address}</Typography>
                       <Chip
                         variant="outlined"
-                        label={data.status}
+                        label={data.status ? data.status : "Availability"}
                         color={
                           data.status === "Available" ? "primary" : "error"
                         }
@@ -452,7 +456,7 @@ function FindPeople() {
                     >
                       Descriptions
                     </Typography>
-                    <Typography>{data.description}</Typography>
+                    <Typography>{data.profile.background}</Typography>
                   </Box>
                   <Box>
                     <Typography

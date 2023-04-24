@@ -10,9 +10,31 @@ import CallIcon from "@mui/icons-material/Call";
 import CardSet from "../components/CardSet";
 import JoinUsSection from "../components/JoinUsSection";
 import ForClientSection from "../components/ForClientSection";
+import { useDispatch } from "react-redux";
+import { setWorker } from "../../../redux/actions/profileActions";
+import Http from "../../../utils/Http";
 
 function Homepage() {
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  // React.useEffect(() => {
+  //   fetchWorker();
+  // }, []);
+
+  // const fetchWorker = () => {
+  //   Http.get("workers")
+  //     .then((res) => {
+  //       if (res.data) {
+  //         dispatch(setWorker(res.data.data));
+  //       } else {
+  //         console.log(res.data.message);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.oog(err);
+  //     });
+  // };
 
   return (
     <Box sx={{ mt: 8 }}>

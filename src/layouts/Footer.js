@@ -21,6 +21,8 @@ export default function Footer() {
     <Box
       sx={{
         width: "100%",
+        position: "relative",
+        mt: '100px',
         backgroundColor: (theme) =>
           theme.palette.mode === "light"
             ? theme.palette.grey[200]

@@ -32,6 +32,9 @@ import ToastNotificationContainer from "../../../components/ToastNotificationCon
 import ToastNotification from "../../../components/ToastNotification";
 import ReeValidate from "ree-validate-18";
 import { styles } from "../../../assets/styles/styles";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../redux/actions/userActions";
+import { options } from "../../../components/options";
 
 const validator = new ReeValidate.Validator({
   email: "required|email",
@@ -58,18 +61,9 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-const options = {
-  position: "top-right",
-  autoClose: 3000,
-  hideProgressBar: false,
-  draggable: true,
-  draggableDirection: "x" | "y",
-  draggablePercent: 60,
-  theme: "colored",
-};
-
 export default function Login() {
   const history = useHistory();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
@@ -83,9 +77,9 @@ export default function Login() {
 
   React.useEffect(() => {
     if (isAuth()) {
-      history.push("/profile");
+      history.push("/dashboard");
     }
-  }, [history]);
+  }, []);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -127,7 +121,8 @@ export default function Login() {
             "Authorization"
           ] = `Bearer ${res.data.access_token}`;
           localStorage.setItem("accessToken", res.data.access_token);
-          history.push("/profile");
+          dispatch(setUser(res.data.user));
+          history.push("/dashboard");
         } else {
           ToastNotification("error", res.data.message, options);
         }
@@ -242,8 +237,7 @@ export default function Login() {
                 ),
               }}
             />
-            <FormGroup
-            >
+            <FormGroup>
               <FormControlLabel
                 control={
                   <Checkbox

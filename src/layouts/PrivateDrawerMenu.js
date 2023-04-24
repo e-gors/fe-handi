@@ -1,24 +1,28 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import {
+  Box,
+  ListItemIcon,
+  ListItem,
+  ListItemButton,
+  List,
+  Divider,
+  ListItemText,
+  SwipeableDrawer,
+  IconButton,
+} from "@mui/material";
 import { useHistory } from "react-router-dom";
-import CloseIcon from "@mui/icons-material/Close";
-import { IconButton } from "@mui/material";
 import { isAuth } from "../utils/helpers";
 import logo from "../assets/images/handi-logo.png";
+import { icons } from "../components/Icon";
+import ConfirmationModal from "../components/ConfirmationModal";
 
-export default function DrawerMenu(props) {
+export default function PrivateDrawerMenu(props) {
   const {
     singleLink,
     firstLink,
     secondLink,
     accountLink,
+    logout,
     withDivider,
     open,
     handleCloseDrawer,
@@ -27,16 +31,24 @@ export default function DrawerMenu(props) {
   } = props;
   const history = useHistory();
 
+  const [loading, setLoading] = React.useState(false);
+  const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
+
   const handleNavigate = (link) => {
     history.push(link);
     handleCloseDrawer();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    history.push('/login');
   };
 
   const list = () => (
     <Box sx={{ width: 250 }} role="presentation" onClick={handleCloseDrawer}>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <IconButton size="small" edge="end" sx={{ mr: 1, mt: 1 }}>
-          <CloseIcon />
+          {icons.closeIcon}
         </IconButton>
       </Box>
 
@@ -70,6 +82,18 @@ export default function DrawerMenu(props) {
       </List>
       {withDivider && <Divider />}
       <List>
+        {isAuth() &&
+          logout &&
+          logout.map((data, index) => (
+            <ListItem key={index} disablePadding>
+              <ListItemButton onClick={() => setOpenConfirmModal(true)}>
+                <ListItemIcon>{data.icon}</ListItemIcon>
+                <ListItemText primary={data.label} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+      </List>
+      <List>
         {secondLink &&
           secondLink.map((data, index) => (
             <ListItem key={index} disablePadding>
@@ -98,6 +122,14 @@ export default function DrawerMenu(props) {
   return (
     <div>
       <React.Fragment>
+        <ConfirmationModal
+          open={openConfirmModal}
+          title="Are you sure?"
+          onConfirm={handleLogout}
+          loading={loading}
+          message="If you logout you need to login again!"
+          onClose={() => setOpenConfirmModal(false)}
+        />
         <SwipeableDrawer
           anchor={anchor ? anchor : "left"}
           open={open}

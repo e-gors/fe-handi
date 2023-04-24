@@ -3,8 +3,10 @@ import React from "react";
 import { icons } from "../../../components/Icon";
 import { styles } from "../../../assets/styles/styles";
 import carpenter from "../../../assets/images/carpenter.jpg";
+import { useHistory } from "react-router-dom";
 
 function JoinUsSection() {
+  const history = useHistory();
   return (
     <Box
       sx={{
@@ -69,7 +71,11 @@ function JoinUsSection() {
           </Box>
         </Box>
 
-        <Button variant="contained" sx={styles.customBlueButton}>
+        <Button
+          variant="contained"
+          sx={styles.customBlueButton}
+          onClick={() => history.push("/register")}
+        >
           Register for free
         </Button>
       </Box>

@@ -43,30 +43,3 @@ export const isAuth = () => {
   return !!localStorage.getItem("accessToken");
 };
 
-export const isClient = () => {
-  if (localStorage.getItem("role") === "Client") {
-    return true;
-  }
-  return false;
-};
-
-export const isWorker = () => {
-  if (localStorage.getItem("role") === "Worker") {
-    return true;
-  }
-  return false;
-};
-
-export const ToastNotificationOption = () => {
-  const options = {
-    position: "top-right",
-    autoClose: 3000,
-    hideProgressBar: false,
-    draggable: true,
-    draggableDirection: "x" | "y",
-    draggablePercent: 60,
-    theme: "colored",
-  };
-
-  return options;
-};

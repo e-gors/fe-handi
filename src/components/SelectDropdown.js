@@ -1,15 +1,21 @@
 import React from "react";
-import { TextField } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+} from "@mui/material";
 
 function SelectDropdown(props) {
   const {
+    label,
     errors,
     options = [],
     customError,
-    noOptions = false,
     ...rest
   } = props;
-
 
   let error = false;
   let helperText = "";
@@ -26,28 +32,27 @@ function SelectDropdown(props) {
   }
 
   const newProps = {
-    variant: "outlined",
-    select: true,
     margin: "dense",
-    fullWidth: true,
     error,
-    helperText,
     ...rest,
   };
 
   return (
-    <TextField
-      InputLabelProps={{ shrink: true }}
-      SelectProps={{ native: true }}
-      {...newProps}
-    >
-      {!noOptions && <option value="">Select Option</option>}
-      {options.map((option, i) => (
-        <option key={i} value={option}>
-          {option}
-        </option>
-      ))}
-    </TextField>
+    <FormControl size="small" sx={{ width: "100%", mt: 0.5, mb: 0.5 }}>
+      <InputLabel id="dropdown-label">{label}</InputLabel>
+      <Select
+        labelId="dropdown-label"
+        input={<OutlinedInput label={label} />}
+        {...newProps}
+      >
+        {options.map((option, i) => (
+          <MenuItem key={i} value={option}>
+            {option}
+          </MenuItem>
+        ))}
+      </Select>
+      <FormHelperText>{helperText}</FormHelperText>
+    </FormControl>
   );
 }
 

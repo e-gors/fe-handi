@@ -15,6 +15,7 @@ import ToastNotificationContainer from "../../../components/ToastNotificationCon
 import ToastNotification from "../../../components/ToastNotification";
 import ReeValidate from "ree-validate-18";
 import { styles } from "../../../assets/styles/styles";
+import { options } from "../../../components/options";
 
 const validator = new ReeValidate.Validator({
   email: "required|email",
@@ -22,16 +23,6 @@ const validator = new ReeValidate.Validator({
 });
 
 const theme = createTheme();
-
-const options = {
-  position: "top-right",
-  autoClose: 3000,
-  hideProgressBar: false,
-  draggable: true,
-  draggableDirection: "x" | "y",
-  draggablePercent: 60,
-  theme: "colored",
-};
 
 export default function ContactUs() {
   const history = useHistory();
@@ -43,12 +34,6 @@ export default function ContactUs() {
     },
     errors: validator.errors,
   });
-
-  React.useEffect(() => {
-    if (isAuth()) {
-      history.push("/profile");
-    }
-  }, [history]);
 
   const handleChange = (e) => {
     const name = e.target.name;

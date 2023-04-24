@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import {
   AppBar,
@@ -16,7 +17,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useHistory } from "react-router-dom";
-import DrawerMenu from "./DrawerMenu";
+import DrawerMenu from "./PublicDrawerMenu";
 import HomeIcon from "@mui/icons-material/Home";
 import BusinessIcon from "@mui/icons-material/Business";
 import TabIcon from "@mui/icons-material/Tab";
@@ -26,6 +27,7 @@ import HowToRegIcon from "@mui/icons-material/HowToReg";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import { styles } from "../assets/styles/styles";
 import logo from "../assets/images/handi-logo.png";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const userAnchorItemsOnLaptop = [
   {
@@ -101,7 +103,14 @@ const accountLinks = [
   },
 ];
 
-export default function AppBarMenu() {
+const logout = [
+  {
+    label: "Logout",
+    icon: <LogoutIcon />,
+  },
+];
+
+export default function PublicAppBarMenu() {
   const history = useHistory();
   const [scrollHeight, setScrollHeight] = React.useState(0);
   const [state, setState] = React.useState(false);
@@ -112,6 +121,13 @@ export default function AppBarMenu() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   React.useEffect(() => {
+    let tokenExpiration = localStorage.getItem("token_expiration");
+
+    if (!tokenExpiration || new Date().getTime() > tokenExpiration) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("expirationTime");
+    }
+
     function handleScroll() {
       setScrollHeight(window.scrollY);
     }
@@ -260,6 +276,7 @@ export default function AppBarMenu() {
         withDivider
         singleLink={singleLink}
         accountLink={accountLinks}
+        logout={logout}
         handleOpenDrawer={handleOpenDrawer}
         handleCloseDrawer={handleCloseDrawer}
         open={state}
@@ -293,7 +310,6 @@ export default function AppBarMenu() {
             ))}
           </Box>
           <Box sx={{ flexGrow: 1 }} />
-
 
           {!isAuth() &&
             accountLinks.map((page, i) => (

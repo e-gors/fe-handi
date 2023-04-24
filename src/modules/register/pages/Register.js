@@ -1,328 +1,261 @@
-import * as React from "react";
-import {
-  Avatar,
-  Button,
-  CssBaseline,
-  FormControlLabel,
-  Checkbox,
-  Link,
-  Grid,
-  Box,
-  Typography,
-  Container,
-  InputAdornment,
-  CircularProgress,
-  IconButton,
-  FormGroup,
-  FormHelperText,
-} from "@mui/material";
-import Http from "../../../utils/Http";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Favicon from "../../../assets/images/favicon.png";
-import { isAuth } from "../../../utils/helpers";
+import React from "react";
+import { Box, Button, Typography } from "@mui/material";
+import checked from "../../../assets/images/checked.png";
+import client from "../../../assets/images/client.png";
+import worker from "../../../assets/images/worker.png";
 import { useHistory } from "react-router-dom";
-import FormField from "../../../components/FormField";
-import PersonIcon from "@mui/icons-material/Person";
-import LockIcon from "@mui/icons-material/Lock";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
-import ToastNotification from "../../../components/ToastNotification";
-import ReeValidate from "ree-validate-18";
-import { styles } from "../../../assets/styles/styles";
-import AgreementModal from "../components/AgreementModal";
 
-const validator = new ReeValidate.Validator({
-  email: "required|email",
-  password: "required",
-});
+const styles = {
+  main: {
+    p: 3,
+    maxWidth: 800,
+    margin: "0 auto",
+  },
+  chooseRole: {
+    mb: 5,
+    fontSize: { xs: 24, md: 30, lg: 36 },
+    textAlign: "center",
+  },
+  userRoleWrapper: {
+    height: "auto",
+    display: "flex",
+    justifyContent: "space-evenly",
+    flexWrap: "wrap",
+  },
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="/">
-        {process.env.REACT_APP_NAME}
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+  skilledWorkerWrapperSelected: {
+    position: "relative",
+    mb: 2,
+    height: 144,
+    backgroundColor: "#F4F5F8",
+    cursor: "pointer",
+    border: "2px solid blue",
+    p: 1,
+    display: "flex",
+    flexWrap: "noWrap",
+    width: "48%",
+    boxShadow: 4,
 
-const theme = createTheme();
+    "&:hover": {
+      boxShadow: 10,
+    },
 
-const options = {
-  position: "top-right",
-  autoClose: 3000,
-  hideProgressBar: false,
-  draggable: true,
-  draggableDirection: "x" | "y",
-  draggablePercent: 60,
-  theme: "colored",
+    "@media(max-width: 600px )": {
+      width: "95%",
+    },
+  },
+
+  skilledWorkerWrapper: {
+    position: "relative",
+    mb: 2,
+    height: 144,
+    backgroundColor: "#F4F5F8",
+    cursor: "pointer",
+    border: "2px solid #F9F9F9",
+    p: 1,
+    display: "flex",
+    flexWrap: "noWrap",
+    width: "48%",
+    boxShadow: 4,
+
+    "&:hover": {
+      boxShadow: 10,
+    },
+    "@media(max-width: 600px )": {
+      width: "95%",
+    },
+  },
+
+  checkSelected: {
+    width: 50,
+    position: "absolute",
+    right: -10,
+    top: -15,
+  },
+
+  check: {
+    width: 30,
+    position: "absolute",
+    right: 0,
+    top: 0,
+    display: "none",
+  },
+
+  clientWrapperSelected: {
+    position: "relative",
+    mb: 2,
+    height: 144,
+    backgroundColor: "#F9F9F9",
+    cursor: "pointer",
+    border: "2px solid blue",
+    display: "flex",
+    flexWrap: "noWrap",
+    p: 1,
+    width: "48%",
+    boxShadow: 4,
+
+    "&:hover": {
+      boxShadow: 10,
+    },
+
+    "@media(max-width: 600px )": {
+      width: "95%",
+    },
+  },
+  clientWrapper: {
+    position: "relative",
+    mb: 2,
+    height: 144,
+    backgroundColor: "#F9F9F9",
+    cursor: "pointer",
+    border: "2px solid #F9F9F9",
+    display: "flex",
+    flexWrap: "noWrap",
+    p: 1,
+    width: "48%",
+    boxShadow: 4,
+
+    "&:hover": {
+      boxShadow: 10,
+    },
+
+    "@media(max-width: 600px )": {
+      width: "95%",
+    },
+  },
+  buttonWrapper: {
+    width: "90%",
+    display: "flex",
+    justifyContent: "space-between",
+    margin: "20px auto",
+  },
+  back: {
+    width: "45%",
+    maxWidth: 200,
+  },
+  next: {
+    width: "45%",
+    maxWidth: 200,
+    background: `linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%)`,
+    margin: "0 auto",
+    transition: "1s",
+
+    "&:hover": {
+      background: `linear-gradient(0deg, rgba(0,3,255,1) 50%, rgba(2,126,251,1) 100%)`,
+    },
+  },
 };
 
-export default function Register() {
+function Register() {
   const history = useHistory();
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [checkStatus, setCheckStatus] = React.useState(false);
-  const [agree, setAgree] = React.useState(null);
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [formValues, setFormValues] = React.useState({
-    values: {
-      email: "",
-      password: "",
-    },
-    errors: validator.errors,
-  });
+  const [selectedRole, setSelectedRole] = React.useState("Worker");
 
   React.useEffect(() => {
-    if (isAuth()) {
-      history.push("/profile");
+    let role = localStorage.getItem("selectedRole");
+
+    if (role) {
+      setSelectedRole(role);
     }
+  }, []);
 
-    if (agree) {
-      setCheckStatus(true);
-      setOpen(false);
-    }
-    setOpen(false);
-  }, [agree, checkStatus, history]);
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+  const isClient = () => {
+    return selectedRole === "Client";
   };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const handlePaymentType = (value) => {
+    setSelectedRole(value);
   };
 
-  const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setFormValues((prev) => ({
-      ...prev,
-      values: {
-        ...prev.values,
-        [name]: value,
-      },
-    }));
-
-    const { errors } = validator;
-
-    validator.validate(name, value).then(() => {
-      setFormValues((prev) => ({
-        ...prev,
-        errors,
-      }));
-    });
-  };
-
-  const handleSubmit = () => {
-    console.log(formValues.values);
-    history.push("/registration-process");
-    // setLoading(true);
-    // Http.post("register", formValues.values)
-    //   .then((res) => {
-    //     if (res.data.code === 200) {
-    //       Http.defaults.headers.common[
-    //         "Authorization"
-    //       ] = `Bearer ${res.data.access_token}`;
-    //       localStorage.setItem("accessToken", res.data.access_token);
-    //       history.push("/profile");
-    //     } else {
-    //       ToastNotification("error", res.data.message, options);
-    //     }
-    //     setLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     setLoading(false);
-    //     ToastNotification("error", err, options);
-    //   });
-  };
-
-  const handleValidate = () => {
-    validator.validateAll(formValues.values).then((success) => {
-      if (success) {
-        handleSubmit();
-      } else {
-        setFormValues((prev) => ({
-          ...prev,
-          errors: validator.errors,
-        }));
-      }
-    });
-  };
-
-  const handleCheckChange = () => {
-    handleOpen();
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleValidate();
-    }
+  const handlePassSelectedRole = () => {
+    localStorage.setItem("selectedRole", selectedRole);
+    history.push(`/join-us/${selectedRole}`);
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <ToastNotificationContainer />
-      <AgreementModal
-        open={open}
-        setClose={handleClose}
-        setAgree={setAgree}
-        setOpen={setOpen}
-      />
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box sx={styles.loginContentWrapper}>
-          <Avatar sx={styles.loginAvatar}>
-            <img src={Favicon} alt="Favicon" />
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Register
-          </Typography>
-          <Box component="form" sx={styles.loginForm}>
-            <FormField
-              onKeyPress={handleKeyPress}
-              required
-              name="email"
-              errors={formValues.errors}
-              onChange={handleChange}
-              value={formValues.values.email}
-              size="small"
-              margin="normal"
-              fullWidth
-              id="email"
-              label="Email Address"
-              autoComplete="email"
-              autoFocus
-              InputProps={{
-                style: {
-                  background: "rgba(255, 255, 255, 0.5)",
-                  color: "black",
-                },
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PersonIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <FormField
-              required
-              onKeyPress={handleKeyPress}
-              name="password"
-              errors={formValues.errors}
-              value={formValues.values.password}
-              onChange={handleChange}
-              size="small"
-              margin="normal"
-              fullWidth
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              id="password"
-              autoComplete="current-password"
-              InputProps={{
-                style: {
-                  background: "rgba(255, 255, 255, 0.5)",
-                  coor: "black",
-                },
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <LockIcon />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showPassword ? (
-                        <VisibilityOffIcon />
-                      ) : (
-                        <VisibilityIcon />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <FormGroup
-              sx={{
-                position: "relative",
-              }}
-            >
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    sx={{ position: "absolute", top: -5, left: 0 }}
-                    checked={checkStatus}
-                    onChange={handleCheckChange}
-                  />
-                }
-                label={`I agree to the "Terms of Services" and "Privacy Policy" of this system.`}
-                labelPlacement="end"
-                sx={{ textAlign: "justify", ml: 5 }}
+    <Box sx={{ mt: 10 }}>
+      <Box sx={styles.main}>
+        <Typography sx={styles.chooseRole}>
+          Choose the role that is align to your need!
+        </Typography>
+        <Box sx={styles.userRoleWrapper}>
+          <Box
+            sx={
+              !isClient()
+                ? styles.skilledWorkerWrapperSelected
+                : styles.skilledWorkerWrapper
+            }
+            boxShadow={1}
+            selected={!isClient()}
+            onClick={() => handlePaymentType("Worker")}
+          >
+            {!isClient() && (
+              <Box
+                component="img"
+                alt="Checked"
+                src={checked}
+                sx={styles.checkSelected}
               />
-              <FormHelperText>
-                If you check this means that you agree to our{" "}
-                <span
-                  style={{
-                    textDecoration: "underline",
-                    color: "blue",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => history.push("/terms-of-services")}
-                >
-                  "Terms of Services"
-                </span>{" "}
-                and{" "}
-                <span
-                  style={{
-                    textDecoration: "underline",
-                    color: "blue",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => history.push("/privacy-policy")}
-                >
-                  "Privacy Policy"
-                </span>{" "}
-                of this systen. Thank you for your cooperation.
-              </FormHelperText>
-            </FormGroup>
+            )}
+
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box component="img" src={worker} alt="Worker"></Box>
+              <Box>
+                <Typography sx={{ color: "blue", fontWeight: "bold" }}>
+                  Skilled Worker
+                </Typography>
+                <Typography>You are looking for a job.</Typography>
+              </Box>
+            </Box>
+          </Box>
+
+          <Box
+            sx={
+              isClient() ? styles.clientWrapperSelected : styles.clientWrapper
+            }
+            boxShadow={1}
+            selected={isClient()}
+            onClick={() => handlePaymentType("Client")}
+          >
+            {isClient() && (
+              <Box
+                component="img"
+                alt="Checked"
+                src={checked}
+                sx={styles.checkSelected}
+              />
+            )}
+
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box
+                component="img"
+                src={client}
+                alt="Client"
+                sx={{ width: 110 }}
+              ></Box>
+              <Box>
+                <Typography sx={{ color: "blue", fontWeight: "bold" }}>
+                  Client
+                </Typography>
+                <Typography>You are looking for a worker.</Typography>
+              </Box>
+            </Box>
+          </Box>
+
+          <Box sx={styles.buttonWrapper}>
             <Button
-              type="submit"
-              fullWidth
+              size="small"
               variant="contained"
-              sx={styles.loginSubmitButton}
-              onClick={handleValidate}
-              disabled={!checkStatus || loading}
+              onClick={handlePassSelectedRole}
+              sx={styles.next}
+              disabled={selectedRole ? false : true}
             >
-              {loading ? <CircularProgress size={24} /> : "Submit"}
+              Join as {selectedRole}
             </Button>
-            <Grid container>
-              <Grid item>
-                <Link href="/login" variant="body2">
-                  {"Already have an account? Login"}
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
-        <Copyright sx={styles.copyright} />
-      </Container>
-    </ThemeProvider>
+      </Box>
+    </Box>
   );
 }
+
+export default Register;

@@ -1,0 +1,121 @@
+/** @format */
+
+.frequently {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 9 0vh;
+}
+/* for the mt property */
+@media only screen and (max-width: 600px) {
+  /* applies to xs size */
+  .frequently {
+    margin-top: 3px;
+  }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 960px) {
+  /* applies to md size */
+  .frequently {
+    margin-top: 10px;
+  }
+}
+
+/* for the flexWrap property */
+.frequently {
+  flex-wrap: wrap; /* default value */
+}
+
+@media only screen and (min-width: 600px) {
+  /* applies to md size */
+  .frequently {
+    flex-wrap: wrap;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  /* applies to lg size */
+  .frequently {
+    flex-wrap: nowrap;
+  }
+}
+
+/* for the p property */
+.frequently {
+  padding: 8px; /* default value */
+}
+.Title {
+  color: white;
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  font-weight: 800;
+}
+/* for the fontSize property */
+@media only screen and (max-width: 400px) {
+  /* applies to xs size */
+  .Title {
+    font-size: 24px;
+    top: 10%;
+  }
+}
+@media only screen and (max-width: 600px) {
+  /* applies to xs size */
+  .Title {
+    font-size: 24px;
+    top: 20%;
+  }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 960px) {
+  .Title {
+    font-size: 45px;
+    top: 20%;
+    left: 10%;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .Title {
+    font-size: 55px;
+  }
+}
+.SecTitle {
+  color: black;
+  font-weight: 800;
+}
+
+.SecTitle {
+  font-size: 24px;
+}
+
+@media only screen and (min-width: 600px) {
+  /* applies to md and lg sizes */
+  .SecTitle {
+    font-size: 45px;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  /* applies to lg size */
+  .SecTitle {
+    font-size: 55px;
+  }
+}
+.Cards {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+  align-content: center;
+}
+@media only screen and (min-width: 400px) and (max-width: 600px) {
+  /* applies to md size */
+  .Cards {
+    display: flex;
+    justify-content: center;
+  }
+}

@@ -2,7 +2,25 @@ import React, { lazy, Suspense } from "react";
 import { Route } from "react-router-dom";
 import Loader from "../layouts/Loader";
 import Footer from "../layouts/Footer";
-import AppBarMenu from "../layouts/AppBarMenu";
+import PublicAppBarMenu from "../layouts/PublicAppBarMenu";
+import { createTheme, ThemeProvider } from "@mui/material";
+
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+  },
+});
 
 function Public(props) {
   const { component, ...rest } = props;
@@ -13,9 +31,11 @@ function Public(props) {
       {...rest}
       render={(props) => (
         <Suspense fallback={<Loader />}>
-          <AppBarMenu />
-          <Component {...props} />
-          <Footer />
+          <ThemeProvider theme={theme}>
+            <PublicAppBarMenu />
+            <Component {...props} />
+            <Footer />
+          </ThemeProvider>
         </Suspense>
       )}
     />

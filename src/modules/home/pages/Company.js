@@ -5,6 +5,33 @@ import { useHistory } from "react-router-dom";
 import { styles } from "../../../assets/styles/styles";
 import company from "../../../assets/images/who-we-are.png";
 
+const dummyData = [
+  {
+    fullname: "Efren Goron",
+    job: "Web Developer",
+    description:
+      "I am the team of this company. I am a web developer and I used the React and Laravel framework to build this project. I am responsible for the success of this project for our capstone. We develop this system for the purpose that we will help the skilled workers to find job and client to get the best skilled workers for their projects",
+  },
+  {
+    fullname: "Efren Goron",
+    job: "Web Developer",
+    description:
+      "I am the team of this company. I am a web developer and I used the React and Laravel framework to build this project. I am responsible for the success of this project for our capstone. We develop this system for the purpose that we will help the skilled workers to find job and client to get the best skilled workers for their projects",
+  },
+  {
+    fullname: "Efren Goron",
+    job: "Web Developer",
+    description:
+      "I am the team of this company. I am a web developer and I used the React and Laravel framework to build this project. I am responsible for the success of this project for our capstone. We develop this system for the purpose that we will help the skilled workers to find job and client to get the best skilled workers for their projects",
+  },
+  {
+    fullname: "Efren Goron",
+    job: "Web Developer",
+    description:
+      "I am the team of this company. I am a web developer and I used the React and Laravel framework to build this project. I am responsible for the success of this project for our capstone. We develop this system for the purpose that we will help the skilled workers to find job and client to get the best skilled workers for their projects",
+  },
+];
+
 function Company() {
   const history = useHistory();
 
@@ -33,7 +60,7 @@ function Company() {
           <Button
             variant="contained"
             sx={styles.customBlueButton}
-            onClick={() => history.push("/registers")}
+            onClick={() => history.push("/register")}
           >
             start now ?
           </Button>
@@ -103,162 +130,44 @@ function Company() {
             flexWrap: "wrap",
           }}
         >
-          <Box
-            sx={{
-              m: 1,
-              p: 2,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              background: "rgb(30, 36, 46)",
-              color: "#fff",
-              height: "auto",
-              boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
-              width: { xs: "100%", md: "23%" },
-              minWidth: "300px",
-            }}
-          >
-            <Avatar></Avatar>
-            <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
-              Efren Goron
-            </Typography>
-            <Typography
-              sx={{
-                width: "100%",
-                background: "linear-gradient(to right, #ee0979, #ff6a00)",
-                textAlign: "center",
-                p: 1,
-                mb: 5,
-              }}
-            >
-              Web Developer
-            </Typography>
-            <Typography>
-              I am the team of this company. I am a web developer and I used the
-              React and Laravel framework to build this project. I am
-              responsible for the success of this project for our capstone. We
-              develop this system for the purpose that we will help the skilled
-              workers to find job and client to get the best skilled workers for
-              their projects.
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              m: 1,
-              p: 2,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              background: "rgb(30, 36, 46)",
-              color: "#fff",
-              height: "auto",
-              boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
-              width: { xs: "100%", md: "23%" },
-              minWidth: "300px",
-            }}
-          >
-            <Avatar></Avatar>
-            <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
-              Efren Goron
-            </Typography>
-            <Typography
-              sx={{
-                width: "100%",
-                background: "linear-gradient(to right, #ee0979, #ff6a00)",
-                textAlign: "center",
-                p: 1,
-                mb: 5,
-              }}
-            >
-              Web Developer
-            </Typography>
-            <Typography>
-              I am the team of this company. I am a web developer and I used the
-              React and Laravel framework to build this project. I am
-              responsible for the success of this project for our capstone. We
-              develop this system for the purpose that we will help the skilled
-              workers to find job and client to get the best skilled workers for
-              their projects.
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              m: 1,
-              p: 2,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              background: "rgb(30, 36, 46)",
-              color: "#fff",
-              height: "auto",
-              boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
-              width: { xs: "100%", md: "23%" },
-              minWidth: "300px",
-            }}
-          >
-            <Avatar></Avatar>
-            <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
-              Efren Goron
-            </Typography>
-            <Typography
-              sx={{
-                width: "100%",
-                background: "linear-gradient(to right, #ee0979, #ff6a00)",
-                textAlign: "center",
-                p: 1,
-                mb: 5,
-              }}
-            >
-              Web Developer
-            </Typography>
-            <Typography>
-              I am the team of this company. I am a web developer and I used the
-              React and Laravel framework to build this project. I am
-              responsible for the success of this project for our capstone. We
-              develop this system for the purpose that we will help the skilled
-              workers to find job and client to get the best skilled workers for
-              their projects.
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              m: 1,
-              p: 2,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              background: "rgb(30, 36, 46)",
-              color: "#fff",
-              height: "auto",
-              boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
-              width: { xs: "100%", md: "23%" },
-              minWidth: "300px",
-            }}
-          >
-            <Avatar></Avatar>
-            <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
-              Efren Goron
-            </Typography>
-            <Typography
-              sx={{
-                width: "100%",
-                background: "linear-gradient(to right, #ee0979, #ff6a00)",
-                textAlign: "center",
-                p: 1,
-                mb: 5,
-              }}
-            >
-              Web Developer
-            </Typography>
-            <Typography>
-              I am the team of this company. I am a web developer and I used the
-              React and Laravel framework to build this project. I am
-              responsible for the success of this project for our capstone. We
-              develop this system for the purpose that we will help the skilled
-              workers to find job and client to get the best skilled workers for
-              their projects.
-            </Typography>
-          </Box>
+          {dummyData &&
+            dummyData.map((data, i) => {
+              return (
+                <Box
+                  key={i}
+                  sx={{
+                    m: 1,
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    background: "rgb(30, 36, 46)",
+                    color: "#fff",
+                    height: "auto",
+                    boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
+                    width: { xs: "100%", md: "23%" },
+                    minWidth: "300px",
+                  }}
+                >
+                  <Avatar></Avatar>
+                  <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+                    {data.fullname}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      width: "100%",
+                      background: "linear-gradient(to right, #ee0979, #ff6a00)",
+                      textAlign: "center",
+                      p: 1,
+                      mb: 5,
+                    }}
+                  >
+                    {data.job}
+                  </Typography>
+                  <Typography>{data.description}</Typography>
+                </Box>
+              );
+            })}
         </Box>
       </Box>
     </Box>

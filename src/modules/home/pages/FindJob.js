@@ -49,17 +49,7 @@ function FindJob() {
           <FilterSide />
         </Box>
         <Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column-reverse", md: "row" },
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              m: { xs: "0 auto", md: 0 },
-              p: 1,
-              //   flexWrap: "wrap",
-            }}
-          >
+          <Box sx={{ display: "flex", mt: 2, justifyContent: "space-between" }}>
             <Typography sx={{ mt: { xs: 2, md: 0 } }}>
               Search Results: 3
             </Typography>
@@ -68,30 +58,6 @@ function FindJob() {
               sx={{ width: { xs: "100%", md: 150 } }}
               size="small"
               label="Sort By"
-            />
-            <FormField
-              variant="standard"
-              fullWidth
-              name="filter"
-              label="Search"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end" onClick={handleOpen} sx={{}}>
-                    <Button
-                      sx={{
-                        mb: 2,
-                        cursor: "pointer",
-                        background:
-                          "linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%)",
-                        color: "white",
-                      }}
-                    >
-                      More filter
-                    </Button>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ display: { xs: "block", md: "none" }, mb: 1 }}
             />
           </Box>
           <Box
