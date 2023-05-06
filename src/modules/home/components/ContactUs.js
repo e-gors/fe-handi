@@ -58,24 +58,21 @@ export default function ContactUs() {
   };
 
   const handleSubmit = () => {
-    setLoading(true);
-    Http.post("contact-us", formValues.values)
-      .then((res) => {
-        if (res.data.code === 200) {
-          Http.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${res.data.access_token}`;
-          localStorage.setItem("accessToken", res.data.access_token);
-          history.push("/profile");
-        } else {
-          ToastNotification("error", res.data.message, options);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        ToastNotification("error", err, options);
-      });
+    console.log(formValues.values);
+    // setLoading(true);
+    // Http.post("contact-us", formValues.values)
+    //   .then((res) => {
+    //     if (res.data.code === 200) {
+
+    //     } else {
+    //       ToastNotification("error", res.data.message, options);
+    //     }
+    //     setLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     setLoading(false);
+    //     ToastNotification("error", err, options);
+    //   });
   };
 
   const handleValidate = () => {

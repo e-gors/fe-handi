@@ -252,7 +252,7 @@ function FQQuestion() {
       <div
         style={{ marginTop: "50px", justifyContent: "center", display: "flex" }}
       >
-        <Button variant="contained" disableElevation>
+        <Button variant="contained" disableElevation color="primary">
           Load more
         </Button>
       </div>

@@ -8,13 +8,17 @@ export const styles = {
   },
   customBlueButton: {
     background: `linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%)`,
+    boxShadow: 5,
     borderRadius: "20px 20px",
     p: "5px 30px",
+    whiteSpace: "nowrap",
   },
   customOrangeButton: {
     background: `linear-gradient(0deg, rgba(255,27,0,1) 0%, rgba(251,75,2,1) 100%)`,
+    boxShadow: 5,
     borderRadius: "20px 20px",
     p: "5px 30px",
+    whiteSpace: "nowrap",
   },
   customHide: {
     display: { xs: "none", md: "block" },

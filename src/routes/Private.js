@@ -5,6 +5,7 @@ import { isAuth } from "../utils/helpers";
 import { createTheme, ThemeProvider } from "@mui/material";
 import PrivateAppBarMenu from "../layouts/PrivateAppBarMenu";
 import Footer from "../layouts/Footer";
+import { useSelector } from "react-redux";
 
 const theme = createTheme({
   typography: {
@@ -24,11 +25,17 @@ const theme = createTheme({
 });
 
 function Private(props) {
-  const { component, label, ...rest } = props;
+  const { component, ...rest } = props;
   const Component = lazy(() => import(`../${component}`));
+
+  const user = useSelector((state) => state.users.user);
 
   if (!isAuth()) {
     return <Route render={() => <Redirect to="/login" />} />;
+  }
+
+  if (user && user.email_verified_at === null) {
+    return <Route render={() => <Redirect to="/confirm-registration" />} />;
   }
 
   return (

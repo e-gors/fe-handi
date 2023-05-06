@@ -14,15 +14,14 @@ import { useHistory } from "react-router-dom";
 import { isAuth } from "../utils/helpers";
 import logo from "../assets/images/handi-logo.png";
 import { icons } from "../components/Icon";
-import ConfirmationModal from "../components/ConfirmationModal";
 
 export default function PrivateDrawerMenu(props) {
   const {
     singleLink,
     firstLink,
     secondLink,
+    mobileSecondLink,
     accountLink,
-    logout,
     withDivider,
     open,
     handleCloseDrawer,
@@ -31,17 +30,10 @@ export default function PrivateDrawerMenu(props) {
   } = props;
   const history = useHistory();
 
-  const [loading, setLoading] = React.useState(false);
-  const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
 
   const handleNavigate = (link) => {
     history.push(link);
     handleCloseDrawer();
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    history.push('/login');
   };
 
   const list = () => (
@@ -82,11 +74,10 @@ export default function PrivateDrawerMenu(props) {
       </List>
       {withDivider && <Divider />}
       <List>
-        {isAuth() &&
-          logout &&
-          logout.map((data, index) => (
+        {mobileSecondLink &&
+          mobileSecondLink.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={() => setOpenConfirmModal(true)}>
+              <ListItemButton onClick={(e) => handleNavigate(data.path)}>
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.label} />
               </ListItemButton>
@@ -122,14 +113,6 @@ export default function PrivateDrawerMenu(props) {
   return (
     <div>
       <React.Fragment>
-        <ConfirmationModal
-          open={openConfirmModal}
-          title="Are you sure?"
-          onConfirm={handleLogout}
-          loading={loading}
-          message="If you logout you need to login again!"
-          onClose={() => setOpenConfirmModal(false)}
-        />
         <SwipeableDrawer
           anchor={anchor ? anchor : "left"}
           open={open}

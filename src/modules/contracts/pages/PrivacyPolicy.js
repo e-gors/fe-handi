@@ -11,7 +11,7 @@ const styles = {
     margin: "0 auto",
   },
   privacyPolicy: {
-    fontSize: { xs: 24, md: 28 },
+    fontSize: { xs: 20, md: 24 },
     fontWeight: "bold",
     background: `linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%)`,
     p: 1,
@@ -19,15 +19,15 @@ const styles = {
     color: "white",
   },
   termsDescription: {
-    fontSize: 18,
+    fontSize: { xs: 16, md: 20 },
   },
   header: {
-    fontSize: 20,
+    fontSize: { xs: 18, md: 22 },
     fontWeight: "bold",
     m: 2,
   },
   description: {
-    fontSize: 18,
+    fontSize: { xs: 14, md: 18 },
     m: 1,
   },
 };

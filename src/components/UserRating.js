@@ -28,7 +28,6 @@ export default function UserRating() {
       sx={{
         width: 200,
         display: "flex",
-        alignItems: "center",
       }}
     >
       <Rating

@@ -1,5 +1,11 @@
 import {
   Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
@@ -8,18 +14,28 @@ import {
 import React from "react";
 import FormField from "../../../components/FormField";
 import ReeValidate from "ree-validate-18";
-import SelectDropdown from "../../../components/SelectDropdown";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useHistory } from "react-router-dom";
+import * as service from "../service";
+import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
+import ToastNotification from "../../../components/ToastNotification";
+import { options } from "../../../components/options";
+import SelectDropdown from "../../../components/SelectDropdown";
+import { setUser } from "../../../redux/actions/userActions";
+import { useDispatch } from "react-redux";
 
 const validator = new ReeValidate.Validator({
-  email: "required",
-  password: "required",
+  first_name: "required",
+  last_name: "required",
+  email: "required|email",
+  password: "required|min:6",
   background: "required",
-  number: "required",
+  number: "required|numeric",
   gender: "required",
+  address: "required",
 });
 
 const styles = {
@@ -30,7 +46,7 @@ const styles = {
   main: {
     p: 3,
     backgroundColor: "#F8F9F9",
-    maxWidth: 600,
+    maxWidth: 700,
     margin: "10px auto",
     height: "auto",
     display: "flex",
@@ -39,9 +55,9 @@ const styles = {
     borderRadius: 10,
   },
   registerAs: {
-    fontSize: { xs: 18, md: 24 },
+    fontSize: { xs: 24, md: 30 },
     fontWeight: 400,
-    mb: 1,
+    mb: 2,
   },
   addressHelper: {
     color: "#888888",
@@ -71,64 +87,51 @@ const styles = {
       backgroundColor: "#ED563E",
     },
   },
-};
+  submit: {
+    width: "100%",
+    transition: ".5s",
+    background: `linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%)`,
 
-const jobInterest = [
-  "Carpenter",
-  "Plumber",
-  "Construction Worker",
-  "Electrician",
-  "Machine Operator",
-];
-const skillOptions = [
-  "Loyal",
-  "Time management",
-  "Machine operation",
-  "Flexible",
-  "Creative",
-  "Leadership",
-  "Positive",
-];
+    "&:hover": {
+      boxShadow: 5,
+    },
+  },
+};
 
 const genders = ["Male", "Female", "Others", "Better Not Tell"];
 
 function JoinUsClient() {
   let role = localStorage.getItem("selectedRole");
+  const history = useHistory();
+  const dispatch = useDispatch();
 
+  const [isChecked, setIsChecked] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
-  const [expertise, setExpertise] = React.useState({
-    values: {
-      skills: [],
-      jobs: [],
-    },
-  });
-
   const [formValues, setFormValues] = React.useState({
     values: {
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
-      background: "",
       number: "",
       gender: "",
+      address: "",
     },
     errors: validator.errors,
   });
+
+  const handdleChangeCheck = (e) => {
+    setIsChecked(!isChecked);
+  };
 
   const handleChangeSelect = (e) => {
     const name = e.target.name;
     const value = e.target.value;
     const newValue = typeof value === "string" ? value.split(",") : value;
-
-    setExpertise((prev) => ({
-      ...prev,
-      values: {
-        ...prev.values,
-        [name]: newValue,
-      },
-    }));
   };
 
-  const handleChange = (e) => {
+  const handleChangeFormValues = (e) => {
     const name = e.target.name;
     const value = e.target.value;
 
@@ -150,9 +153,32 @@ function JoinUsClient() {
     });
   };
 
-  const handlePassFormValues = () => {
+  const handleSubmit = () => {
+    setLoading(true);
+    service
+      .clientRegister(role, formValues)
+      .then((res) => {
+        if (res.data.code === 200) {
+          setLoading(false);
+          ToastNotification("success", res.data.message, options);
+          localStorage.removeItem("selectedRole");
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          setTimeout(() => history.push("/confirm-registration"), 500);
+        } else {
+          setLoading(false);
+          ToastNotification("error", res.data.message, options);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        ToastNotification("error", err, options);
+      });
+  };
+
+  const handleValidate = () => {
     validator.validateAll(formValues.values).then((success) => {
       if (success) {
+        handleSubmit();
       } else {
         setFormValues((prev) => ({
           ...prev,
@@ -170,23 +196,58 @@ function JoinUsClient() {
     event.preventDefault();
   };
 
+  const handleOpenNewTab = (link) => {
+    let baseUrl = process.env.REACT_APP_BASE_URL;
+    window.open(`${baseUrl}/${link}`, "_blank");
+  };
+
+  const handleChangeRole = (role) => {
+    localStorage.setItem("selectedRole", role);
+    history.push(`/join-us/${role}`);
+  };
+
   return (
     <Box sx={styles.wrapper}>
+      <ToastNotificationContainer />
       <Box component="form" sx={styles.main}>
         <Typography sx={styles.registerAs}>Register as {role}</Typography>
         <Grid container spacing={0.5}>
+          <Grid item xs={12} md={6}>
+            <FormField
+              errors={formValues.errors}
+              onChange={handleChangeFormValues}
+              margin="dense"
+              value={formValues.values.first_name}
+              label="First Name"
+              name="first_name"
+              fullWidth
+              required
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <FormField
+              errors={formValues.errors}
+              onChange={handleChangeFormValues}
+              margin="dense"
+              value={formValues.values.last_name}
+              label="Last Name"
+              name="last_name"
+              fullWidth
+              required
+            />
+          </Grid>
           <Grid item xs={12} md={6}>
             <FormField
               required
               type="email"
               name="email"
               errors={formValues.errors}
-              onChange={handleChange}
+              onChange={handleChangeFormValues}
               value={formValues.values.email}
               size="small"
               margin="normal"
               fullWidth
-              label="Email Address"
+              label="Working Email "
               autoComplete="email"
               autoFocus
               InputProps={{
@@ -208,7 +269,7 @@ function JoinUsClient() {
               name="password"
               errors={formValues.errors}
               value={formValues.values.password}
-              onChange={handleChange}
+              onChange={handleChangeFormValues}
               size="small"
               margin="normal"
               fullWidth
@@ -245,21 +306,134 @@ function JoinUsClient() {
           <Grid item xs={12} md={6}>
             <FormField
               errors={formValues.errors}
-              onChange={handleChange}
+              onChange={handleChangeFormValues}
               margin="dense"
               value={formValues.values.number}
               label="Contact Number"
               name="number"
-              type="number"
-              fullWidth
               required
-              InputProps={{
+              fullWidth
+              inputProps={{
+                inputMode: "numeric",
+                pattern: "[0-9]*",
                 maxLength: 11,
               }}
             />
             <Typography sx={styles.addressHelper}>09xxxxxxxxx</Typography>
           </Grid>
+          <Grid item xs={12} md={6}>
+            <SelectDropdown
+              size="small"
+              options={genders}
+              onChange={handleChangeFormValues}
+              value={formValues.values.gender}
+              name="gender"
+              label="Gender"
+              required
+              sx={{ mt: { xs: 0, md: 0.5 } }}
+              errors={formValues.errors}
+            />
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <FormField
+              errors={formValues.errors}
+              onChange={handleChangeFormValues}
+              margin="dense"
+              value={formValues.values.address}
+              label="Complete Address"
+              name="address"
+              fullWidth
+              required
+            />
+            <Typography sx={styles.addressHelper}>
+              Purok / Sitio / Subdivision, Barangay, Municipality, Provice
+            </Typography>
+          </Grid>
         </Grid>
+
+        <FormGroup sx={{ mt: 2 }}>
+          <FormControlLabel
+            required
+            control={
+              <Checkbox
+                sx={{ mt: { xs: -1.5, md: -1.2 } }}
+                checked={isChecked}
+                onChange={handdleChangeCheck}
+              />
+            }
+            labelPlacement="end"
+            label={
+              <Typography sx={{ fontSize: { xs: 12, sm: 14, md: 16 } }}>
+                Checking this means that you aggree to our "
+                <span
+                  style={{
+                    color: "blue",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleOpenNewTab("terms-of-services")}
+                >
+                  Terms and Condition
+                </span>
+                " and "
+                <span
+                  style={{
+                    color: "blue",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleOpenNewTab("privacy-policy")}
+                >
+                  Privacy Policy
+                </span>
+                ".
+              </Typography>
+            }
+          />
+          {!isChecked && (
+            <FormHelperText error>
+              Please read the conditions stated above and check the checkbox to
+              proceed.
+            </FormHelperText>
+          )}
+        </FormGroup>
+
+        <Box sx={styles.buttonWrapper}>
+          <Button
+            size="small"
+            variant="contained"
+            sx={styles.submit}
+            disabled={!isChecked || loading}
+            onClick={handleValidate}
+          >
+            {loading ? (
+              <CircularProgress
+                size={24}
+                disableShrink
+                sx={{ color: "white" }}
+              />
+            ) : !isChecked ? (
+              "Disabled"
+            ) : (
+              "Submit"
+            )}
+          </Button>
+        </Box>
+        <Box sx={{ mt: 2 }}>
+          <Typography sx={{ fontSize: 12 }}>
+            Register as a Worker?{" "}
+            <span
+              style={{
+                color: "blue",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+              onClick={() => handleChangeRole("Worker")}
+            >
+              Click here.
+            </span>
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );

@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import {
   AppBar,
@@ -28,25 +27,9 @@ import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import { styles } from "../assets/styles/styles";
 import logo from "../assets/images/handi-logo.png";
 import LogoutIcon from "@mui/icons-material/Logout";
-
-const userAnchorItemsOnLaptop = [
-  {
-    path: "/dashboard",
-    label: "Dashboard",
-  },
-  {
-    path: "/profile",
-    label: "Profile",
-  },
-  {
-    path: "/my-account",
-    label: "My Account",
-  },
-  {
-    path: "/settings",
-    label: "Settings",
-  },
-];
+import ConfirmationModal from "../components/ConfirmationModal";
+import { useDispatch, useSelector } from "react-redux";
+import { removeUser } from "../redux/actions/userActions";
 
 const userAnchorItemsOnSmallDevice = [
   {
@@ -112,6 +95,48 @@ const logout = [
 
 export default function PublicAppBarMenu() {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.user);
+
+  const workerAnchorItemsOnLaptop = [
+    {
+      path: "/dashboard",
+      label: "Dashboard",
+    },
+    {
+      path: "/overview/worker",
+      label: "Profile",
+    },
+    {
+      path: "/account",
+      label: "My Account",
+    },
+    {
+      path: "/account/settings",
+      label: "Settings",
+    },
+  ];
+  const clientAnchorItemsOnLaptop = [
+    {
+      path: "/dashboard",
+      label: "Dashboard",
+    },
+    {
+      path: "/overview/client",
+      label: "Profile",
+    },
+    {
+      path: "/account",
+      label: "My Account",
+    },
+    {
+      path: "/account/settings",
+      label: "Settings",
+    },
+  ];
+
+  const [loading, setLoading] = React.useState(false);
+  const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
   const [scrollHeight, setScrollHeight] = React.useState(0);
   const [state, setState] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -136,6 +161,16 @@ export default function PublicAppBarMenu() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const handleConfirmLogout = () => {
+    handleMenuClose();
+    setOpenConfirmModal(true);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    dispatch(removeUser(user.id ? user.id : null));
+    history.push("/login");
+  };
 
   const handleOpenDrawer = () => {
     setState(true);
@@ -182,12 +217,20 @@ export default function PublicAppBarMenu() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {userAnchorItemsOnLaptop &&
-        userAnchorItemsOnLaptop.map((page, i) => (
-          <MenuItem onClick={(e) => handleNavigate(page.path)} key={i}>
-            {page.label}
-          </MenuItem>
-        ))}
+      {user && user.role === "Worker"
+        ? workerAnchorItemsOnLaptop &&
+          workerAnchorItemsOnLaptop.map((page, i) => (
+            <MenuItem onClick={(e) => handleNavigate(page.path)} key={i}>
+              {page.label}
+            </MenuItem>
+          ))
+        : clientAnchorItemsOnLaptop &&
+          clientAnchorItemsOnLaptop.map((page, i) => (
+            <MenuItem onClick={(e) => handleNavigate(page.path)} key={i}>
+              {page.label}
+            </MenuItem>
+          ))}
+      <MenuItem onClick={handleConfirmLogout}>Logout</MenuItem>
     </Menu>
   );
 
@@ -272,6 +315,14 @@ export default function PublicAppBarMenu() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <ConfirmationModal
+        open={openConfirmModal}
+        title="Are you sure?"
+        onConfirm={handleLogout}
+        loading={loading}
+        message="If you logout you need to login again!"
+        onClose={() => setOpenConfirmModal(false)}
+      />
       <DrawerMenu
         withDivider
         singleLink={singleLink}

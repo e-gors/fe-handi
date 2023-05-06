@@ -1,4 +1,3 @@
-import ReeValidate from "ree-validate-18";
 
 export const handleErrorResponse = (err) => {
   if (
@@ -20,23 +19,6 @@ export const handleErrorResponse = (err) => {
     (err && err.response && err.response.data && err.response.data.message) ||
     err.message
   );
-};
-
-export const Validator = (fields) => {
-  const validator = new ReeValidate(fields);
-
-  // const dictionary = {
-  //   en: {
-  //     messages: {
-  //       required: () => "This field is required!",
-  //       number: () => "This must be a number!",
-  //     },
-  //   },
-  // };
-
-  // validator.localize(dictionary);
-
-  return validator;
 };
 
 export const isAuth = () => {

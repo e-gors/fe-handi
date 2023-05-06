@@ -4,6 +4,8 @@ import routes from "./routes/routes";
 import Private from "./routes/Private";
 import Public from "./routes/Public";
 import NotFound from "./routes/NotFound";
+import PrivateClient from "./routes/PrivateClient";
+import PrivateWorker from "./routes/PrivateWorker";
 
 function App() {
   return (
@@ -11,7 +13,17 @@ function App() {
       <Switch>
         {routes.map((route, index) => {
           if (route.auth) {
-            return <Private exact key={index} {...route} />;
+            if (route.role === "Client") {
+              return (
+                <PrivateClient exact key={index} {...route} role={route.role} />
+              );
+            } else if (route.role === "Worker") {
+              return (
+                <PrivateWorker exact key={index} {...route} role={route.role} />
+              );
+            } else {
+              return <Private exact key={index} {...route} />;
+            }
           } else {
             return <Public exact key={index} {...route} />;
           }

@@ -1,4 +1,5 @@
 import {
+  Box,
   CircularProgress,
   Grid,
   IconButton,
@@ -82,7 +83,7 @@ function DataTable(props) {
   };
 
   return (
-    <Paper {...rest}>
+    <Box {...rest} sx={{ border: "1px solid #BEBEBE", boxShadow: 10 }}>
       <TableContainer>
         <Table stickyHeader>
           <TableHead
@@ -90,7 +91,7 @@ function DataTable(props) {
               "& th": {
                 color: "black",
                 backgroundColor: "#E3E4E9",
-                fontWeight: 'bold'
+                fontWeight: "bold",
               },
             }}
           >
@@ -171,7 +172,7 @@ function DataTable(props) {
           <CircularProgress />
         </Grid>
       )}
-    </Paper>
+    </Box>
   );
 }
 

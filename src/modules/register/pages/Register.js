@@ -1,20 +1,28 @@
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import checked from "../../../assets/images/checked.png";
 import client from "../../../assets/images/client.png";
 import worker from "../../../assets/images/worker.png";
 import { useHistory } from "react-router-dom";
 
 const styles = {
+  wrapper: { mt: 10 },
   main: {
     p: 3,
     maxWidth: 800,
     margin: "0 auto",
   },
+  cardWrapper: {
+    display: "flex",
+    alignItems: "center",
+  },
+  chooseRoleHeader: {
+    fontSize: { xs: 20, md: 24 },
+    fontWeight: "bold",
+  },
   chooseRole: {
     mb: 5,
-    fontSize: { xs: 24, md: 30, lg: 36 },
-    textAlign: "center",
+    fontSize: 14,
   },
   userRoleWrapper: {
     height: "auto",
@@ -34,10 +42,10 @@ const styles = {
     display: "flex",
     flexWrap: "noWrap",
     width: "48%",
-    boxShadow: 4,
+    boxShadow: 10,
 
     "&:hover": {
-      boxShadow: 10,
+      boxShadow: 5,
     },
 
     "@media(max-width: 600px )": {
@@ -56,15 +64,17 @@ const styles = {
     display: "flex",
     flexWrap: "noWrap",
     width: "48%",
-    boxShadow: 4,
+    boxShadow: 10,
 
     "&:hover": {
-      boxShadow: 10,
+      boxShadow: 5,
     },
     "@media(max-width: 600px )": {
       width: "95%",
     },
   },
+
+  cardHeader: { color: "blue", fontWeight: "bold" },
 
   checkSelected: {
     width: 50,
@@ -92,10 +102,10 @@ const styles = {
     flexWrap: "noWrap",
     p: 1,
     width: "48%",
-    boxShadow: 4,
+    boxShadow: 10,
 
     "&:hover": {
-      boxShadow: 10,
+      boxShadow: 5,
     },
 
     "@media(max-width: 600px )": {
@@ -113,16 +123,17 @@ const styles = {
     flexWrap: "noWrap",
     p: 1,
     width: "48%",
-    boxShadow: 4,
+    boxShadow: 10,
 
     "&:hover": {
-      boxShadow: 10,
+      boxShadow: 5,
     },
 
     "@media(max-width: 600px )": {
       width: "95%",
     },
   },
+  clientImage: { width: 110 },
   buttonWrapper: {
     width: "90%",
     display: "flex",
@@ -134,11 +145,12 @@ const styles = {
     maxWidth: 200,
   },
   next: {
-    width: "45%",
+    width: { xs: "100%", md: "45%" },
     maxWidth: 200,
     background: `linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%)`,
     margin: "0 auto",
     transition: "1s",
+    boxShadow: 10,
 
     "&:hover": {
       background: `linear-gradient(0deg, rgba(0,3,255,1) 50%, rgba(2,126,251,1) 100%)`,
@@ -172,11 +184,10 @@ function Register() {
   };
 
   return (
-    <Box sx={{ mt: 10 }}>
+    <Box sx={styles.wrapper}>
       <Box sx={styles.main}>
-        <Typography sx={styles.chooseRole}>
-          Choose the role that is align to your need!
-        </Typography>
+        <Typography sx={styles.chooseRoleHeader}>Get Started</Typography>
+        <Typography sx={styles.chooseRole}>Start by choosing your role.</Typography>
         <Box sx={styles.userRoleWrapper}>
           <Box
             sx={
@@ -197,12 +208,10 @@ function Register() {
               />
             )}
 
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={styles.cardWrapper}>
               <Box component="img" src={worker} alt="Worker"></Box>
               <Box>
-                <Typography sx={{ color: "blue", fontWeight: "bold" }}>
-                  Skilled Worker
-                </Typography>
+                <Typography sx={styles.cardHeader}>Skilled Worker</Typography>
                 <Typography>You are looking for a job.</Typography>
               </Box>
             </Box>
@@ -225,17 +234,15 @@ function Register() {
               />
             )}
 
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={styles.cardWrapper}>
               <Box
                 component="img"
                 src={client}
                 alt="Client"
-                sx={{ width: 110 }}
+                sx={styles.clientImage}
               ></Box>
               <Box>
-                <Typography sx={{ color: "blue", fontWeight: "bold" }}>
-                  Client
-                </Typography>
+                <Typography sx={styles.cardHeader}>Client</Typography>
                 <Typography>You are looking for a worker.</Typography>
               </Box>
             </Box>
@@ -243,7 +250,6 @@ function Register() {
 
           <Box sx={styles.buttonWrapper}>
             <Button
-              size="small"
               variant="contained"
               onClick={handlePassSelectedRole}
               sx={styles.next}

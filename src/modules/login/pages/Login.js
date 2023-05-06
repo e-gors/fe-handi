@@ -120,9 +120,11 @@ export default function Login() {
           Http.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${res.data.access_token}`;
+          localStorage.removeItem("user");
+          let user = res.data.user;
           localStorage.setItem("accessToken", res.data.access_token);
-          dispatch(setUser(res.data.user));
-          history.push("/dashboard");
+          dispatch(setUser(user));
+            history.push("/dashboard");
         } else {
           ToastNotification("error", res.data.message, options);
         }
@@ -130,7 +132,7 @@ export default function Login() {
       })
       .catch((err) => {
         setLoading(false);
-        ToastNotification("error", err, options);
+        ToastNotification("error", err.message, options);
       });
   };
 

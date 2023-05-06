@@ -6,6 +6,7 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  Typography,
 } from "@mui/material";
 
 function SelectDropdown(props) {
@@ -13,6 +14,8 @@ function SelectDropdown(props) {
     label,
     errors,
     options = [],
+    categories = [],
+    subCategories = [],
     customError,
     ...rest
   } = props;
@@ -38,7 +41,14 @@ function SelectDropdown(props) {
   };
 
   return (
-    <FormControl size="small" sx={{ width: "100%", mt: 0.5, mb: 0.5 }}>
+    <FormControl
+      size="small"
+      sx={{
+        width: "100%",
+        mt: 0.5,
+        mb: 0.5,
+      }}
+    >
       <InputLabel id="dropdown-label">{label}</InputLabel>
       <Select
         labelId="dropdown-label"
@@ -50,8 +60,20 @@ function SelectDropdown(props) {
             {option}
           </MenuItem>
         ))}
+        {categories.map((category, i) => (
+          <MenuItem key={i} value={category.name}>
+            {category.name}
+          </MenuItem>
+        ))}
+        {subCategories.map((category) =>
+          category.children.map((child, i) => (
+            <MenuItem key={i} value={child.name}>
+              {child.name}
+            </MenuItem>
+          ))
+        )}
       </Select>
-      <FormHelperText>{helperText}</FormHelperText>
+      <FormHelperText error>{helperText}</FormHelperText>
     </FormControl>
   );
 }

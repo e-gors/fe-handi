@@ -1,7 +1,11 @@
 import {
   Box,
   Button,
+  Checkbox,
   CircularProgress,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
@@ -20,39 +24,47 @@ import * as service from "../service";
 import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
 import ToastNotification from "../../../components/ToastNotification";
 import { options } from "../../../components/options";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../../redux/actions/userActions";
 
-const validator = new ReeValidate.Validator({
+const formValuesValidator = new ReeValidate.Validator({
   email: "required|email",
   first_name: "required",
   last_name: "required",
-  password: "required",
+  password: "required|min:6",
   number: "required|numeric",
   gender: "required",
   address: "required",
-  skills: "required",
-  jobs: "required",
+});
+
+const expertiseValidator = new ReeValidate.Validator({
+  job_categories: "required",
+  selected_jobs: "required",
+  selected_skills: "required",
 });
 
 const styles = {
   wrapper: {
     mt: 10,
-    p: 2,
+    p: 1,
+    minHeight: "50vh",
   },
   main: {
-    p: 3,
-    backgroundColor: "#F8F9F9",
-    maxWidth: 600,
+    p: { xs: 2, md: 3 },
+    backgroundColor: "#EEEEEE",
+    maxWidth: 700,
     margin: "10px auto",
     height: "auto",
     display: "flex",
     justifyContent: "space-evenly",
     flexWrap: "wrap",
     borderRadius: 5,
+    boxShadow: 10,
   },
   registerAs: {
-    fontSize: { xs: 18, md: 24 },
+    fontSize: { xs: 24, md: 30 },
     fontWeight: 400,
-    mb: 1,
+    mb: 2,
   },
   addressHelper: {
     color: "#888888",
@@ -91,38 +103,32 @@ const styles = {
       boxShadow: 5,
     },
   },
+  gender: { mt: { xs: 0, md: 0.5 } },
+  checkbox: { mt: { xs: -1.5, md: -1.2 } },
+  checking: { fontSize: { xs: 12, sm: 14, md: 16 } },
+  marginTop2: { mt: 2 },
+  registerAsSwitch: { fontSize: 12 },
 };
-
-const jobInterest = [
-  "Carpenter",
-  "Plumber",
-  "Construction Worker",
-  "Electrician",
-  "Machine Operator",
-];
-const skillOptions = [
-  "Loyal",
-  "Time management",
-  "Machine operation",
-  "Flexible",
-  "Creative",
-  "Leadership",
-  "Positive",
-];
 
 const genders = ["Male", "Female", "Others", "Better Not Tell"];
 
 function JoinUsWorker() {
   let role = localStorage.getItem("selectedRole");
-  let history = useHistory();
+
+  const categories = useSelector((state) => state.categories.categories);
+  const skills = useSelector((state) => state.skills.skills);
+
+  const history = useHistory();
 
   const [loading, setLoading] = React.useState(false);
+  const [isChecked, setIsChecked] = React.useState(false);
   const [expertise, setExpertise] = React.useState({
     values: {
-      skills: [],
-      jobs: [],
+      job_categories: [],
+      selected_jobs: [],
+      selected_skills: [],
     },
-    errors: validator.errors,
+    errors: expertiseValidator.errors,
   });
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -136,8 +142,12 @@ function JoinUsWorker() {
       gender: "",
       address: "",
     },
-    errors: validator.errors,
+    errors: formValuesValidator.errors,
   });
+
+  const handdleChangeCheck = (e) => {
+    setIsChecked(!isChecked);
+  };
 
   const handleChangeExpertise = (e) => {
     const name = e.target.name;
@@ -153,9 +163,9 @@ function JoinUsWorker() {
       },
     }));
 
-    const { errors } = validator;
+    const { errors } = expertiseValidator;
 
-    validator.validate(name, value).then(() => {
+    expertiseValidator.validate(name, value).then(() => {
       setExpertise((prev) => ({
         ...prev,
         errors,
@@ -175,9 +185,9 @@ function JoinUsWorker() {
       },
     }));
 
-    const { errors } = validator;
+    const { errors } = formValuesValidator;
 
-    validator.validate(name, value).then(() => {
+    formValuesValidator.validate(name, value).then(() => {
       setFormValues((prev) => ({
         ...prev,
         errors,
@@ -185,63 +195,44 @@ function JoinUsWorker() {
     });
   };
 
-  // const handleSubmit = () => {
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         let latitude = position.coords.latitude;
-  //         let longitude = position.coords.longitude;
-
-  //         service.workerRegister(role, formValues)
-  //           .then((res) => {
-  //             if (res.data.code === 200) {
-  //               console.log(res.data);
-  //               // history.push("/confirm-registration");
-  //             } else {
-  //               console.log(res.data.message);
-  //             }
-  //           })
-  //           .catch((err) => {
-  //             console.log(err);
-  //           });
-  //       },
-  //       (error) => {
-  //         console.log(error.message);
-  //       }
-  //     );
-  //   } else {
-  //     console.log("Geolocation is not supported in your browser!");
-  //   }
-  // };
-
   const handleSubmit = () => {
     setLoading(true);
     service
       .workerRegister(role, formValues, expertise)
       .then((res) => {
         if (res.data.code === 200) {
-          localStorage.setItem("accessToken", res.data.access_token);
-          history.push("/confirm-registration");
-          setLoading(false);
+          ToastNotification("success", res.data.message, options);
+          localStorage.removeItem("selectedRole");
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          setTimeout(() => history.push("/confirm-registration"), 500);
         } else {
-          ToastNotification("error", res.data.message, options);
           setLoading(false);
+          ToastNotification("error", res.data.message, options);
         }
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
+        ToastNotification("error", err, options);
       });
   };
 
   const handleValidate = () => {
-    validator.validateAll(formValues.values).then((success) => {
+    formValuesValidator.validateAll(formValues.values).then((success) => {
       if (success) {
-        handleSubmit();
+        expertiseValidator.validateAll(expertise.values).then((success) => {
+          if (success) {
+            handleSubmit();
+          } else {
+            setFormValues((prev) => ({
+              ...prev,
+              errors: formValuesValidator.errors,
+            }));
+          }
+        });
       } else {
         setFormValues((prev) => ({
           ...prev,
-          errors: validator.errors,
+          errors: formValuesValidator.errors,
         }));
       }
     });
@@ -255,12 +246,54 @@ function JoinUsWorker() {
     event.preventDefault();
   };
 
+  const handleOpenNewTab = (link) => {
+    let baseUrl = process.env.REACT_APP_BASE_URL;
+    window.open(`${baseUrl}/${link}`, "_blank");
+  };
+
+  const handleChangeRole = (role) => {
+    localStorage.setItem("selectedRole", role);
+    history.push(`/join-us/${role}`);
+  };
+
+  const filteredJobSubCategories = categories.filter((category) =>
+    expertise.values.job_categories.includes(category.name)
+  );
+
+  const filteredSkillSubCategories = skills.filter((skill) =>
+    expertise.values.job_categories.includes(skill.name)
+  );
+
   return (
     <Box sx={styles.wrapper}>
       <ToastNotificationContainer />
       <Box component="form" sx={styles.main}>
         <Typography sx={styles.registerAs}>Register as {role}</Typography>
         <Grid container spacing={0.5}>
+          <Grid item xs={12} md={6}>
+            <FormField
+              errors={formValues.errors}
+              onChange={handleChangeValues}
+              margin="dense"
+              value={formValues.values.first_name}
+              label="First Name"
+              name="first_name"
+              fullWidth
+              required
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <FormField
+              errors={formValues.errors}
+              onChange={handleChangeValues}
+              margin="dense"
+              value={formValues.values.last_name}
+              label="Last Name"
+              name="last_name"
+              fullWidth
+              required
+            />
+          </Grid>
           <Grid item xs={12} md={6}>
             <FormField
               required
@@ -272,7 +305,7 @@ function JoinUsWorker() {
               size="small"
               margin="normal"
               fullWidth
-              label="Email Address"
+              label="Working Email"
               autoFocus
               InputProps={{
                 style: {
@@ -331,30 +364,6 @@ function JoinUsWorker() {
               errors={formValues.errors}
               onChange={handleChangeValues}
               margin="dense"
-              value={formValues.values.first_name}
-              label="First Name"
-              name="first_name"
-              fullWidth
-              required
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormField
-              errors={formValues.errors}
-              onChange={handleChangeValues}
-              margin="dense"
-              value={formValues.values.last_name}
-              label="Last Name"
-              name="last_name"
-              fullWidth
-              required
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormField
-              errors={formValues.errors}
-              onChange={handleChangeValues}
-              margin="dense"
               value={formValues.values.number}
               label="Contact Number"
               name="number"
@@ -377,7 +386,7 @@ function JoinUsWorker() {
               name="gender"
               label="Gender"
               required
-              sx={{ mt: { xs: 0, md: 0.5 } }}
+              sx={styles.gender}
               errors={formValues.errors}
             />
           </Grid>
@@ -398,45 +407,114 @@ function JoinUsWorker() {
           </Grid>
           <Grid item xs={12} md={12}>
             <SelectDropdown
-              options={jobInterest}
+              categories={categories}
               size="small"
               required
-              label="Job Interest"
+              label="Job Categories"
               multiple
               onChange={handleChangeExpertise}
-              value={expertise.values.jobs}
-              name="jobs"
+              value={expertise.values.job_categories}
+              name="job_categories"
               errors={expertise.errors}
             />
 
             <Typography sx={styles.addressHelper}>
-              You can select Multiple Jobs
+              You can select multiple job categories
             </Typography>
           </Grid>
-          <Grid item xs={12} md={12}>
-            <SelectDropdown
-              options={skillOptions}
-              size="small"
-              required
-              label="Your Skills"
-              multiple
-              onChange={handleChangeExpertise}
-              value={expertise.values.skills}
-              name="skills"
-              errors={expertise.errors}
-            />
-            <Typography sx={styles.addressHelper}>
-              You can select multiple skills
-            </Typography>
-          </Grid>
+          {expertise.values.job_categories.length !== 0 && (
+            <Grid item xs={12} md={12}>
+              <SelectDropdown
+                subCategories={filteredJobSubCategories}
+                size="small"
+                required
+                label="Your Job Interests"
+                multiple
+                onChange={handleChangeExpertise}
+                value={expertise.values.selected_jobs}
+                name="selected_jobs"
+                errors={expertise.errors}
+              />
+
+              <Typography sx={styles.addressHelper}>
+                You can select multiple jobs
+              </Typography>
+            </Grid>
+          )}
+          {expertise.values.job_categories.length !== 0 &&
+            expertise.values.selected_jobs.length !== 0 && (
+              <Grid item xs={12} md={12}>
+                <SelectDropdown
+                  subCategories={filteredSkillSubCategories}
+                  size="small"
+                  required
+                  label="Your Skills"
+                  multiple
+                  onChange={handleChangeExpertise}
+                  value={expertise.values.selected_skills}
+                  name="selected_skills"
+                  errors={expertise.errors}
+                />
+                <Typography sx={styles.addressHelper}>
+                  You can select multiple skills
+                </Typography>
+              </Grid>
+            )}
         </Grid>
+
+        <FormGroup sx={styles.marginTop2}>
+          <FormControlLabel
+            required
+            control={
+              <Checkbox
+                sx={styles.checkbox}
+                checked={isChecked}
+                onChange={handdleChangeCheck}
+              />
+            }
+            labelPlacement="end"
+            label={
+              <Typography sx={styles.checking}>
+                Checking this means that you aggree to our "
+                <span
+                  style={{
+                    color: "blue",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleOpenNewTab("terms-of-services")}
+                >
+                  Terms and Condition
+                </span>
+                " and "
+                <span
+                  style={{
+                    color: "blue",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleOpenNewTab("privacy-policy")}
+                >
+                  Privacy Policy
+                </span>
+                ".
+              </Typography>
+            }
+          />
+          {!isChecked && (
+            <FormHelperText error>
+              Please read the conditions stated above and check the checkbox to
+              proceed.
+            </FormHelperText>
+          )}
+        </FormGroup>
 
         <Box sx={styles.buttonWrapper}>
           <Button
             size="small"
             variant="contained"
             sx={styles.submit}
-            disabled={loading}
+            disabled={!isChecked || loading}
             onClick={handleValidate}
           >
             {loading ? (
@@ -445,10 +523,28 @@ function JoinUsWorker() {
                 disableShrink
                 sx={{ color: "white" }}
               />
+            ) : !isChecked ? (
+              "Disabled"
             ) : (
               "Submit"
             )}
           </Button>
+        </Box>
+
+        <Box sx={styles.marginTop2}>
+          <Typography sx={styles.registerAsSwitch}>
+            Register as a Worker?{" "}
+            <span
+              style={{
+                color: "blue",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+              onClick={() => handleChangeRole("Client")}
+            >
+              Click here.
+            </span>
+          </Typography>
         </Box>
       </Box>
     </Box>

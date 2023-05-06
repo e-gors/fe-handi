@@ -5,47 +5,54 @@ import { styles } from "../../../assets/styles/styles";
 import carpenter from "../../../assets/images/carpenter.jpg";
 import { useHistory } from "react-router-dom";
 
+const innerStyles = {
+  wrapper: {
+    mt: 5,
+    p: { xs: 1, md: 5 },
+    display: "flex",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    flexWrap: { xs: "wrap", md: "noWrap" },
+  },
+  carpenterImage: { width: 420, mb: 3 },
+  main: { m: { xs: 0, md: 2 } },
+  joinUsForFree: { fontSize: { xs: 20, md: 24 }, fontWeight: "bold" },
+  card: { display: "flex", alignItems: "center", mb: 2 },
+  cardHeader: { fontSize: { xs: 18, md: 20 }, fontWeight: "bold" },
+};
+
 function JoinUsSection() {
   const history = useHistory();
   return (
-    <Box
-      sx={{
-        mt: 5,
-        p: { xs: 1, md: 5 },
-        display: "flex",
-        justifyContent: "space-evenly",
-        alignItems: "center",
-        flexWrap: { xs: "wrap", md: "noWrap" },
-      }}
-    >
-      <Box sx={{ width: 420, mb: 3 }} component="img" src={carpenter}></Box>
+    <Box sx={innerStyles.wrapper}>
+      <Box
+        sx={innerStyles.carpenterImage}
+        component="img"
+        src={carpenter}
+      ></Box>
 
-      <Box sx={{ m: { xs: 0, md: 2 } }}>
+      <Box sx={innerStyles.main}>
         <Box>
-          <Typography sx={{ fontSize: { xs: 24, md: 36 }, fontWeight: "bold" }}>
+          <Typography sx={innerStyles.joinUsForFree}>
             Join us, it's free.
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+        <Box sx={innerStyles.card}>
           {icons.moneyOffIcon}
           <Box>
-            <Typography
-              sx={{ fontSize: { xs: 18, md: 20 }, fontWeight: "bold" }}
-            >
-              No cost to join
-            </Typography>
+            <Typography sx={innerStyles.cardHeader}>No cost to join</Typography>
             <Typography>
               Register and browse skilled workers, explore jobs and clients.
             </Typography>
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+        <Box sx={innerStyles.card}>
           {icons.engineeringIcon}
           <Box>
             <Typography
-              sx={{ fontSize: { xs: 18, md: 20 }, fontWeight: "bold" }}
+              sx={innerStyles.cardHeader}
             >
               Post a job and hire skilled workers.
             </Typography>
@@ -56,11 +63,11 @@ function JoinUsSection() {
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+        <Box sx={innerStyles.card}>
           {icons.workIcon}
           <Box>
             <Typography
-              sx={{ fontSize: { xs: 18, md: 20 }, fontWeight: "bold" }}
+              sx={innerStyles.cardHeader}
             >
               Work with the best - without breaking the bank.
             </Typography>

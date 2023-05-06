@@ -14,7 +14,6 @@ import { useHistory } from "react-router-dom";
 import { isAuth } from "../utils/helpers";
 import logo from "../assets/images/handi-logo.png";
 import { icons } from "../components/Icon";
-import ConfirmationModal from "../components/ConfirmationModal";
 
 export default function PublicDrawerMenu(props) {
   const {
@@ -22,7 +21,6 @@ export default function PublicDrawerMenu(props) {
     firstLink,
     secondLink,
     accountLink,
-    logout,
     withDivider,
     open,
     handleCloseDrawer,
@@ -31,17 +29,9 @@ export default function PublicDrawerMenu(props) {
   } = props;
   const history = useHistory();
 
-  const [loading, setLoading] = React.useState(false);
-  const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
-
   const handleNavigate = (link) => {
     history.push(link);
     handleCloseDrawer();
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    history.push('/login');
   };
 
   const list = () => (
@@ -82,18 +72,6 @@ export default function PublicDrawerMenu(props) {
       </List>
       {withDivider && <Divider />}
       <List>
-        {isAuth() &&
-          logout &&
-          logout.map((data, index) => (
-            <ListItem key={index} disablePadding>
-              <ListItemButton onClick={() => setOpenConfirmModal(true)}>
-                <ListItemIcon>{data.icon}</ListItemIcon>
-                <ListItemText primary={data.label} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-      </List>
-      <List>
         {secondLink &&
           secondLink.map((data, index) => (
             <ListItem key={index} disablePadding>
@@ -122,14 +100,6 @@ export default function PublicDrawerMenu(props) {
   return (
     <div>
       <React.Fragment>
-        <ConfirmationModal
-          open={openConfirmModal}
-          title="Are you sure?"
-          onConfirm={handleLogout}
-          loading={loading}
-          message="If you logout you need to login again!"
-          onClose={() => setOpenConfirmModal(false)}
-        />
         <SwipeableDrawer
           anchor={anchor ? anchor : "left"}
           open={open}

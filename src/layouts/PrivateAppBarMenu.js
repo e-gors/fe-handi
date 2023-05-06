@@ -29,25 +29,10 @@ import logo from "../assets/images/handi-logo.png";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import WorkIcon from "@mui/icons-material/Work";
-
-const userAnchorItemsOnLaptop = [
-  {
-    path: "/dashboard",
-    label: "Dashboard",
-  },
-  {
-    path: "/profile",
-    label: "Profile",
-  },
-  {
-    path: "/my-account",
-    label: "My Account",
-  },
-  {
-    path: "/settings",
-    label: "Settings",
-  },
-];
+import PeopleIcon from "@mui/icons-material/People";
+import ConfirmationModal from "../components/ConfirmationModal";
+import { useDispatch, useSelector } from "react-redux";
+import { removeUser } from "../redux/actions/userActions";
 
 const userAnchorItemsOnSmallDevice = [
   {
@@ -86,13 +71,53 @@ const workerNavLinks = [
     icon: <PersonSearchIcon />,
   },
   {
+    label: "Marketplace",
+    path: "/marketplace",
+    icon: <WorkIcon />,
+  },
+  {
     label: "Reports",
     path: "/reports",
     icon: <AssessmentIcon />,
   },
+];
+const clientNavLinks = [
+  {
+    label: "Dashboard",
+    path: "/dashboard",
+    icon: <HomeIcon />,
+  },
+  {
+    label: "Contracts",
+    path: "/contracts",
+    icon: <BusinessIcon />,
+  },
+  {
+    label: "Offers",
+    path: "/my-offers",
+    icon: <TabIcon />,
+  },
   {
     label: "Marketplace",
     path: "/marketplace",
+    icon: <WorkIcon />,
+  },
+  {
+    label: "Reports",
+    path: "/reports",
+    icon: <AssessmentIcon />,
+  },
+];
+
+const clientMobileSecondLink = [
+  {
+    label: "Hire",
+    path: "/marketplace",
+    icon: <PeopleIcon />,
+  },
+  {
+    label: "Post Job",
+    path: "/new/job-post",
     icon: <WorkIcon />,
   },
 ];
@@ -123,6 +148,42 @@ const logout = [
 
 export default function PrivateAppBarMenu() {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.user);
+  const { id, role, uuid } = user;
+
+  const workerAnchorItemsOnLaptop = [
+    {
+      path: "/overview/worker",
+      label: "Profile",
+    },
+    {
+      path: "/account",
+      label: "My Account",
+    },
+    {
+      path: "/account/settings",
+      label: "Settings",
+    },
+  ];
+
+  const clientAnchorItemsOnLaptop = [
+    {
+      path: "/overview/client",
+      label: "Profile",
+    },
+    {
+      path: "/account",
+      label: "My Account",
+    },
+    {
+      path: "/account/settings",
+      label: "Settings",
+    },
+  ];
+
+  const [loading, setLoading] = React.useState(false);
+  const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
   const [scrollHeight, setScrollHeight] = React.useState(0);
   const [state, setState] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -147,6 +208,17 @@ export default function PrivateAppBarMenu() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const handleConfirmLogout = () => {
+    handleMenuClose();
+    setOpenConfirmModal(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    dispatch(removeUser(id));
+    history.push("/login");
+  };
 
   const handleOpenDrawer = () => {
     setState(true);
@@ -193,12 +265,20 @@ export default function PrivateAppBarMenu() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {userAnchorItemsOnLaptop &&
-        userAnchorItemsOnLaptop.map((page, i) => (
-          <MenuItem onClick={(e) => handleNavigate(page.path)} key={i}>
-            {page.label}
-          </MenuItem>
-        ))}
+      {role && role === "Worker"
+        ? workerAnchorItemsOnLaptop &&
+          workerAnchorItemsOnLaptop.map((page, i) => (
+            <MenuItem onClick={(e) => handleNavigate(page.path)} key={i}>
+              {page.label}
+            </MenuItem>
+          ))
+        : clientAnchorItemsOnLaptop &&
+          clientAnchorItemsOnLaptop.map((page, i) => (
+            <MenuItem onClick={(e) => handleNavigate(page.path)} key={i}>
+              {page.label}
+            </MenuItem>
+          ))}
+      <MenuItem onClick={handleConfirmLogout}>Logout</MenuItem>
     </Menu>
   );
 
@@ -283,9 +363,20 @@ export default function PrivateAppBarMenu() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <ConfirmationModal
+        open={openConfirmModal}
+        title="Are you sure?"
+        onConfirm={handleLogout}
+        loading={loading}
+        message="If you logout you need to login again!"
+        onClose={() => setOpenConfirmModal(false)}
+      />
       <PrivateDrawerMenu
         withDivider
-        singleLink={workerNavLinks}
+        singleLink={
+          user && user.role === "Worker" ? workerNavLinks : clientNavLinks
+        }
+        mobileSecondLink={clientMobileSecondLink}
         accountLink={accountLinks}
         logout={logout}
         handleOpenDrawer={handleOpenDrawer}
@@ -311,14 +402,18 @@ export default function PrivateAppBarMenu() {
             style={{ width: 110, cursor: "pointer" }}
             onClick={(e) => handleNavigate("/")}
           />
-          <Box
-            sx={{ ml: 10, flexGrow: 1, display: { xs: "none", md: "flex" } }}
-          >
-            {workerNavLinks.map((page, i) => (
-              <MenuItem key={i} onClick={() => handleNavigate(page.path)}>
-                <Typography textAlign="center">{page.label}</Typography>
-              </MenuItem>
-            ))}
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {user && user.role === "Worker"
+              ? workerNavLinks.map((page, i) => (
+                  <MenuItem key={i} onClick={() => handleNavigate(page.path)}>
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>
+                ))
+              : clientNavLinks.map((page, i) => (
+                  <MenuItem key={i} onClick={() => handleNavigate(page.path)}>
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>
+                ))}
           </Box>
           <Box sx={{ flexGrow: 1 }} />
 
@@ -334,6 +429,24 @@ export default function PrivateAppBarMenu() {
               </Button>
             ))}
 
+          {isAuth() && role === "Client" && (
+            <Box sx={{ "@media(max-width: 965px)": { display: "none" } }}>
+              <Button
+                variant="outlined"
+                sx={{ mr: 1 }}
+                onClick={() => handleNavigate("/marketplace")}
+              >
+                Hire
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleNavigate("/new/job-post")}
+              >
+                Post Job
+              </Button>
+            </Box>
+          )}
           {isAuth() && (
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton

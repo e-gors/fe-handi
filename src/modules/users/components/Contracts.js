@@ -89,22 +89,22 @@ export default function Contracts(props) {
   //   }, []); // eslint-disable-line
 
   const fetchingData = (params = {}) => {
-    setLoading(true);
-    Http.get("/attendances", {
-      params: {
-        ...filterValues.values,
-        ...params,
-      },
-    }).then((res) => {
-      if (res.data.data) {
-        setUserList({
-          data: res.data.data,
-          meta: res.data.meta,
-        });
-      }
+    // setLoading(true);
+    // Http.get("/attendances", {
+    //   params: {
+    //     ...filterValues.values,
+    //     ...params,
+    //   },
+    // }).then((res) => {
+    //   if (res.data.data) {
+    //     setUserList({
+    //       data: res.data.data,
+    //       meta: res.data.meta,
+    //     });
+    //   }
 
-      setLoading(false);
-    });
+    //   setLoading(false);
+    // });
   };
 
   const handleChangeFilter = (e) => {
