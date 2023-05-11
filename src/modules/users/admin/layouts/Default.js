@@ -18,19 +18,6 @@ import ConfirmationModal from "../../../../components/ConfirmationModal";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../../../../redux/actions/userActions";
 import { useHistory } from "react-router-dom";
-import { createTheme } from "@mui/material/styles";
-
-const theme = createTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 960,
-      lg: 1280,
-      xl: 1920,
-    },
-  },
-});
 
 const drawerWidth = 240;
 
