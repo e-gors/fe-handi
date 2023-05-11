@@ -1,10 +1,9 @@
 import { Avatar, Box, Chip, Grid, Stack, Typography } from "@mui/material";
 import React from "react";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
-const categoryLimit = 2;
+const categoryLimit = 3;
 const skillLimit = 3;
 
 const styles = {
@@ -15,6 +14,11 @@ const styles = {
     backgroundColor: "#EBEBEB",
     p: 2,
     borderRadius: 3,
+  },
+  jobCategoryText: {
+    fontWeight: "bold",
+    fontSize: { xs: 14, md: 16 },
+    mb: 1,
   },
   cardTop: {
     display: "flex",
@@ -65,21 +69,6 @@ const styles = {
     boxShadow: 1,
   },
   moreSkill: { border: "2px solid white", boxShadow: 1 },
-  projectWrapper: {
-    mt: 1,
-    display: "inlineFlex",
-    overflowX: "scroll",
-
-    "::-webkit-scrollbar": {
-      display: "none",
-    },
-  },
-  project: {
-    width: 200,
-    height: 150,
-    backgroundColor: "#BEBEBE",
-    m: 1,
-  },
   cardBottom: { mt: 1 },
   cardBottomWrapper: {
     display: "flex",
@@ -88,7 +77,7 @@ const styles = {
   },
 };
 
-function FindWorkerCard(props) {
+function FindJobCard(props) {
   const { workers } = props;
 
   return (
@@ -101,8 +90,11 @@ function FindWorkerCard(props) {
           );
           const limitedSkills = worker.skillChildren.slice(0, skillLimit);
           return (
-            <Grid key={workerIndex} item xs={12} sm={12} md={6} lg={4}>
+            <Grid key={workerIndex} item xs={12} sm={12} md={6}>
               <Box sx={styles.cardWrapper}>
+                <Typography sx={styles.jobCategoryText}>
+                  Job Category
+                </Typography>
                 <Box sx={styles.cardTop}>
                   <Avatar
                     alt={worker.fullname}
@@ -139,7 +131,6 @@ function FindWorkerCard(props) {
                         )}
                       </Box>
                     </Box>
-                    <BookmarkBorderIcon sx={styles.bookmark} />
                   </Box>
                 </Box>
 
@@ -179,20 +170,16 @@ function FindWorkerCard(props) {
                   )}
                 </Stack>
 
-                <Box sx={styles.projectWrapper}>
-                  <Box sx={styles.project}></Box>
-                  <Box sx={styles.project}></Box>
-                  <Box sx={styles.project}></Box>
-                </Box>
-
                 <Box sx={styles.cardBottom}>
                   {worker.profile.map((user, i) => (
                     <Box key={i} sx={styles.cardBottomWrapper}>
                       <Typography>
-                        {user.daily_rate ? user.daily_rate : "No rates"}
+                        {user.daily_rate
+                          ? user.daily_rate
+                          : "$1 - $3 / Daily rate"}
                       </Typography>
                       <Typography>
-                        {user.rating ? user.rating : "Star 5.0 (5)"}
+                        {user.rating ? user.rating : "2 weeks"}
                       </Typography>
                     </Box>
                   ))}
@@ -206,4 +193,4 @@ function FindWorkerCard(props) {
   );
 }
 
-export default FindWorkerCard;
+export default FindJobCard;

@@ -2,12 +2,52 @@ import { Box, Chip, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
 import FindJobWorkerFilter from "../../components/FindJobWorkerFilter";
-import FindWorkerCard from "../../components/worker/FindWorkerCard";
+import FindJobCard from "../../components/client/FindJobCard";
 
 function CMarketplace() {
   const workers = useSelector((state) => state.profiles.workers);
   const categories = useSelector((state) => state.categories.categories);
   const skills = useSelector((state) => state.skills.skills);
+
+  const [showMore, setShowMore] = React.useState(false);
+  const [filters, setFilters] = React.useState();
+  const handleShowMore = () => {
+    setShowMore(!showMore);
+  };
+
+  const handleSetCategoryFilter = (item) => {
+    setFilters(item);
+  };
+
+  const limitShow = (categories, limit) => {
+    if (limit) {
+      return categories.map((category) => {
+        return category.children
+          .slice(0, limit)
+          .map((child, childIndex) => (
+            <Chip
+              key={childIndex}
+              label={child.name}
+              variant="contained"
+              sx={{ m: 1, cursor: "pointer" }}
+              onClick={() => handleSetCategoryFilter(child.name)}
+            />
+          ));
+      });
+    } else {
+      return categories.map((category) => {
+        return category.children.map((child, childIndex) => (
+          <Chip
+            key={childIndex}
+            label={child.name}
+            variant="contained"
+            sx={{ m: 1, cursor: "pointer" }}
+            onClick={() => handleSetCategoryFilter(child.name)}
+          />
+        ));
+      });
+    }
+  };
 
   return (
     <Box sx={{ p: { xs: 2, md: 5 }, mt: 10 }}>
@@ -15,7 +55,7 @@ function CMarketplace() {
         <Box
           sx={{
             position: "sticky",
-            top: 60,
+            top: { xs: -30, md: 60 },
             bgcolor: "background.paper",
             zIndex: 1,
           }}
@@ -23,7 +63,7 @@ function CMarketplace() {
           <Typography
             sx={{ fontSize: { xs: 30, md: 36 }, fontWeight: "bold", ml: 1 }}
           >
-            Find Workers
+            Find Jobs
           </Typography>
 
           <Stack
@@ -39,19 +79,9 @@ function CMarketplace() {
               },
             }}
           >
-            {workers.map((worker, i) => {
-              worker.categories.map((category, i) => {
-                return (
-                  <Chip
-                    key={i}
-                    label={category.name}
-                    variant="contained"
-                    sx={{ m: 1, cursor: "pointer" }}
-                  />
-                );
-              });
-            })}
-            {/* {!showMore && chipLabel.length > 3 && (
+            {!showMore && limitShow(categories, 2)}
+            {showMore && limitShow(categories)}
+            {!showMore && categories.length > 3 && (
               <Typography
                 component="span"
                 variant="outlined"
@@ -66,14 +96,14 @@ function CMarketplace() {
               >
                 show more
               </Typography>
-            )} */}
-            {/* {showMore && (
+            )}
+            {showMore && (
               <Typography
                 component="span"
                 variant="outlined"
-                onClick={handleShowLess}
+                onClick={handleShowMore}
                 sx={{
-                  fontSize: 14,
+                  fontSize: 12,
                   cursor: "pointer",
                   textDecoration: "underline",
                   color: "blue",
@@ -82,13 +112,18 @@ function CMarketplace() {
               >
                 Show less
               </Typography>
-            )} */}
+            )}
           </Stack>
 
-          <FindJobWorkerFilter categories={categories} skills={skills} />
+          <FindJobWorkerFilter
+            categories={categories}
+            skills={skills}
+            type="jobs"
+          />
         </Box>
-
-        <FindWorkerCard workers={workers} />
+        <FindJobCard
+          workers={workers}
+        />
       </Box>
     </Box>
   );

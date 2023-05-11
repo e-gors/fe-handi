@@ -9,6 +9,7 @@ import {
   MenuItem,
   Menu,
   Button,
+  Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -139,6 +140,36 @@ const accountLinks = [
   },
 ];
 
+const workerAnchorItemsOnLaptop = [
+  {
+    path: "/overview/worker",
+    label: "Profile",
+  },
+  {
+    path: "/account",
+    label: "My Account",
+  },
+  {
+    path: "/account/settings",
+    label: "Settings",
+  },
+];
+
+const clientAnchorItemsOnLaptop = [
+  {
+    path: "/overview/client",
+    label: "Profile",
+  },
+  {
+    path: "/account",
+    label: "My Account",
+  },
+  {
+    path: "/account/settings",
+    label: "Settings",
+  },
+];
+
 const logout = [
   {
     label: "Logout",
@@ -151,36 +182,8 @@ export default function PrivateAppBarMenu() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
   const { id, role, uuid } = user;
-
-  const workerAnchorItemsOnLaptop = [
-    {
-      path: "/overview/worker",
-      label: "Profile",
-    },
-    {
-      path: "/account",
-      label: "My Account",
-    },
-    {
-      path: "/account/settings",
-      label: "Settings",
-    },
-  ];
-
-  const clientAnchorItemsOnLaptop = [
-    {
-      path: "/overview/client",
-      label: "Profile",
-    },
-    {
-      path: "/account",
-      label: "My Account",
-    },
-    {
-      path: "/account/settings",
-      label: "Settings",
-    },
-  ];
+  const { profile, fullname } = user;
+  const { profile_url } = profile[0];
 
   const [loading, setLoading] = React.useState(false);
   const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
@@ -323,7 +326,14 @@ export default function PrivateAppBarMenu() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <Avatar
+          alt={fullname && fullname}
+            src={profile_url && profile_url}
+            sx={{
+              boxShadow: 5,
+              border: "1px solid #EEEEEE",
+            }}
+          />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -376,7 +386,9 @@ export default function PrivateAppBarMenu() {
         singleLink={
           user && user.role === "Worker" ? workerNavLinks : clientNavLinks
         }
-        mobileSecondLink={clientMobileSecondLink}
+        mobileSecondLink={
+          user.role === "Client" ? clientMobileSecondLink : null
+        }
         accountLink={accountLinks}
         logout={logout}
         handleOpenDrawer={handleOpenDrawer}
@@ -432,13 +444,15 @@ export default function PrivateAppBarMenu() {
           {isAuth() && role === "Client" && (
             <Box sx={{ "@media(max-width: 965px)": { display: "none" } }}>
               <Button
+                size="small"
                 variant="outlined"
-                sx={{ mr: 1 }}
+                sx={{ mr: 0.5 }}
                 onClick={() => handleNavigate("/marketplace")}
               >
                 Hire
               </Button>
               <Button
+                size="small"
                 variant="contained"
                 color="primary"
                 onClick={() => handleNavigate("/new/job-post")}
@@ -476,7 +490,14 @@ export default function PrivateAppBarMenu() {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+                <Avatar
+                alt={fullname && fullname}
+                  src={profile_url && profile_url}
+                  sx={{
+                    boxShadow: 5,
+                    border: "1px solid #EEEEEE",
+                  }}
+                />
               </IconButton>
             </Box>
           )}

@@ -6,8 +6,21 @@ import Public from "./routes/Public";
 import NotFound from "./routes/NotFound";
 import PrivateClient from "./routes/PrivateClient";
 import PrivateWorker from "./routes/PrivateWorker";
+import React from "react";
 
 function App() {
+  const currentDate = Date.now();
+
+  React.useEffect(() => {
+    let tokenExpiration = localStorage.getItem("tokenExpiration");
+    const expiresAt = Date.now() + 30 * 1000;
+    console.log("useEffect");
+    if (currentDate >= expiresAt) {
+      console.log("Token expired");
+      localStorage.clear();
+    }
+  }, [currentDate]);
+
   return (
     <BrowserRouter history={createBrowserHistory()}>
       <Switch>

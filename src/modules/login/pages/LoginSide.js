@@ -120,6 +120,7 @@ export default function LoginSide() {
             "Authorization"
           ] = `Bearer ${res.data.access_token}`;
           localStorage.setItem("accessToken", res.data.access_token);
+          localStorage.setItem("tokenExpiration", res.data.expires_in);
           dispatch(setUser(res.data.user));
           history.push("/dashboard");
         } else {

@@ -9,6 +9,7 @@ import {
   MenuItem,
   Menu,
   Button,
+  Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -93,74 +94,56 @@ const logout = [
   },
 ];
 
+const workerAnchorItemsOnLaptop = [
+  {
+    path: "/dashboard",
+    label: "Dashboard",
+  },
+  {
+    path: "/overview/worker",
+    label: "Profile",
+  },
+  {
+    path: "/account",
+    label: "My Account",
+  },
+  {
+    path: "/account/settings",
+    label: "Settings",
+  },
+];
+const clientAnchorItemsOnLaptop = [
+  {
+    path: "/dashboard",
+    label: "Dashboard",
+  },
+  {
+    path: "/overview/client",
+    label: "Profile",
+  },
+  {
+    path: "/account",
+    label: "My Account",
+  },
+  {
+    path: "/account/settings",
+    label: "Settings",
+  },
+];
+
 export default function PublicAppBarMenu() {
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
 
-  const workerAnchorItemsOnLaptop = [
-    {
-      path: "/dashboard",
-      label: "Dashboard",
-    },
-    {
-      path: "/overview/worker",
-      label: "Profile",
-    },
-    {
-      path: "/account",
-      label: "My Account",
-    },
-    {
-      path: "/account/settings",
-      label: "Settings",
-    },
-  ];
-  const clientAnchorItemsOnLaptop = [
-    {
-      path: "/dashboard",
-      label: "Dashboard",
-    },
-    {
-      path: "/overview/client",
-      label: "Profile",
-    },
-    {
-      path: "/account",
-      label: "My Account",
-    },
-    {
-      path: "/account/settings",
-      label: "Settings",
-    },
-  ];
-
   const [loading, setLoading] = React.useState(false);
   const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
-  const [scrollHeight, setScrollHeight] = React.useState(0);
   const [state, setState] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  React.useEffect(() => {
-    let tokenExpiration = localStorage.getItem("token_expiration");
-
-    if (!tokenExpiration || new Date().getTime() > tokenExpiration) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("expirationTime");
-    }
-
-    function handleScroll() {
-      setScrollHeight(window.scrollY);
-    }
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const handleConfirmLogout = () => {
     handleMenuClose();
@@ -275,7 +258,14 @@ export default function PublicAppBarMenu() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <Avatar
+            alt={user && user.fullname}
+            src={isAuth() && user.profile[0].profile_url}
+            sx={{
+              boxShadow: 5,
+              border: "1px solid #EEEEEE",
+            }}
+          />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -403,7 +393,14 @@ export default function PublicAppBarMenu() {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+                <Avatar
+                  alt={user && user.fullname}
+                  src={isAuth() && user.profile[0].profile_url}
+                  sx={{
+                    boxShadow: 5,
+                    border: "1px solid #EEEEEE",
+                  }}
+                />
               </IconButton>
             </Box>
           )}

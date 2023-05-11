@@ -1,19 +1,24 @@
-import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import React from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useHistory } from "react-router-dom";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ProjectReviewTabs from "../../components/worker/ProjectReviewTabs";
-import UserRating from "../../../../components/UserRating";
 import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
 import ProfileModalEdit from "../../components/ProfileModalEdit";
 import { useSelector } from "react-redux";
+import SocialNetworks from "../../components/worker/SocialNetworks";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import UserRatingLinearProgress from "../../../../components/UserRatingLinearProgress";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
 function WProfileEdit() {
   const history = useHistory();
   const user = useSelector((state) => state.users.user);
-  const { profile } = user;
-  const { background_url, profile_url } = profile[0];
+  const { profile, fullname } = user;
+  const { background_url, profile_url, address } = profile[0];
 
   const [open, setOpen] = React.useState(false);
   const [type, setType] = React.useState("");
@@ -92,13 +97,9 @@ function WProfileEdit() {
         height: { xs: 60, sm: 80, md: 100 },
       },
     },
-    profileImageWrapper: {
-      display: "flex",
-    },
     mainProfileWrapper: {
-      position: "relative",
-      top: { xs: -50, md: -120 },
-      left: 20,
+      display: "flex",
+      flexWrap: { xs: "wrap", md: "noWrap" },
     },
     profileImage: {
       position: "relative",
@@ -108,6 +109,7 @@ function WProfileEdit() {
       backgroundColor: profile_url ? "transparent" : "#BEBEBE",
       border: "2px solid white",
       borderRadius: 3,
+      minWidth: 90,
       width: { xs: 100, sm: 120, md: 240 },
       height: { xs: 100, sm: 120, md: 240 },
       cursor: "pointer",
@@ -139,25 +141,74 @@ function WProfileEdit() {
         left: "50%",
         transform: "translate(-50%, -50%)",
         backgroundColor: "rgba(255, 255, 255, 0.5)",
-        width: { xs: 40, sm: 50, md: 60 },
-        height: { xs: 40, sm: 50, md: 60 },
+        width: { xs: 60, md: 70 },
+        height: { xs: 60, md: 70 },
         padding: 2,
         borderRadius: "50%",
         cursor: "pointer",
         display: "none",
       },
     },
-    nameWrapper: {
-      ml: 5,
-      mt: 1,
+    profileWrapper: {
+      position: "relative",
+      height: "auto",
+      top: { xs: -50, sm: -70, md: -120 },
+      ml: 2,
+      width: { xs: "100%", md: 240 },
     },
-    fullname: {
-      fontSize: { xs: 14, sm: 16, md: 18 },
+    leftProfileWrapper: {
+      display: { xs: "flex", md: "block" },
+      width: "100%",
+    },
+    fullnameWrapper: {
+      textAlign: { xs: "left", md: "center" },
+      backgroundColor: { xs: "transparent", md: "#EEEEEE" },
+      p: 1,
+      mt: { xs: 6, sm: 8, md: 0 },
+      boxShadow: { xs: 0, md: 5 },
+    },
+    fullnameText: { fontWeight: "bold", fontSize: { xs: 16, sm: 18, md: 22 } },
+    backgroundText: {
+      fontSize: { xs: 12, sm: 14, md: 16 },
+    },
+    userRatingWrapper: {
+      width: { xs: "105%", sm: "102%", md: "100%" },
+      mt: 3,
+      backgroundColor: "#EEEEEE",
+      borderRadius: 3,
+      p: 1,
+      boxShadow: 5,
+      ml: { xs: -2, md: 0 },
+    },
+    projectReviewTabsWrapper: {
+      ml: { xs: 0, md: 5 },
+      mt: { xs: -3, sm: -5, md: 2 },
+      backgroundColor: "#EEEEEE",
+      borderRadius: 3,
+      p: 2,
+      boxShadow: 5,
+      width: "100%",
+    },
+    socialNetworkMain: { display: "flex", alignItems: "center" },
+    socialNetworkText: {
       fontWeight: "bold",
+      fontSize: { xs: 16, sm: 18, md: 20 },
     },
-    location: { fontSize: { xs: 12, sm: 14, md: 16 } },
-    amount: { fontSize: { xs: 12, sm: 14, md: 16 } },
-    userRatingWrapper: { mt: { xs: -2, md: -12 }, ml: { xs: 2, md: 5 }, mb: 2 },
+    social: {
+      mt: 1,
+      border: "1px solid #BEBEBE",
+      p: 0.3,
+      borderRadius: 1,
+      transition: ".5s",
+      cursor: "pointer",
+      boxShadow: 3,
+      display: "flex",
+      justifyContent: "center",
+
+      "&:hover": {
+        backgroundColor: "#BEBEBE",
+      },
+    },
   };
 
   return (
@@ -176,31 +227,57 @@ function WProfileEdit() {
               <AddAPhotoOutlinedIcon className="bg-camera-icon" />
             </Box>
 
-            <Box sx={styles.profileImageWrapper}>
-              <Box sx={styles.mainProfileWrapper}>
-                <Box
-                  sx={styles.profileImage}
-                  onClick={() => handleOpen("Profile Image")}
-                >
-                  <AddAPhotoOutlinedIcon className="profile-camera-icon" />
+            <Box sx={styles.mainProfileWrapper}>
+              <Box sx={styles.profileWrapper}>
+                <Box sx={styles.leftProfileWrapper}>
+                  <Box
+                    sx={styles.profileImage}
+                    onClick={() => handleOpen("Profile Image")}
+                  >
+                    <AddAPhotoOutlinedIcon className="profile-camera-icon" />
+                  </Box>
+                  <Box sx={styles.fullnameWrapper}>
+                    <Typography sx={styles.fullnameText}>
+                      Efren Goron
+                    </Typography>
+                    <Typography sx={styles.backgroundText}>
+                      Purok Lapulapu Brgy. Atabay Hilongos, Leyte
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box sx={styles.userRatingWrapper}>
+                  <UserRatingLinearProgress />
+                </Box>
+                <Box sx={styles.userRatingWrapper}>
+                  <Box sx={styles.socialNetworkMain}>
+                    <Typography sx={styles.socialNetworkText}>
+                      Social Networks
+                    </Typography>
+                    <IconButton onClick={() => handleOpen("Social Networks")}>
+                      <EditOutlinedIcon />
+                    </IconButton>
+                  </Box>
+                  <SocialNetworks
+                    title={"Add Social Networks"}
+                    Icon={ThumbUpOutlinedIcon}
+                    content={
+                      " Adding your social media accounts helps showcase you as a person and can help to strengthen your reputability."
+                    }
+                    handleOpen={handleOpen}
+                  />
+                  <Box sx={styles.social}>
+                    <FacebookIcon color="primary" />
+                    <Typography>Facebook Link</Typography>
+                  </Box>
                 </Box>
               </Box>
-
-              <Box sx={styles.nameWrapper}>
-                <Typography sx={styles.fullname}>Efren Goron</Typography>
-                <Typography sx={styles.location}>
-                  Purok Lapulapu Brgy. Atabay Hilongos, Leyte
-                </Typography>
-                <Typography sx={styles.amount}>P500</Typography>
+              <Box sx={styles.projectReviewTabsWrapper}>
+                <Box>
+                  <ProjectReviewTabs />
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
-        <Box sx={styles.userRatingWrapper}>
-          <UserRating />
-        </Box>
-        <Box>
-          <ProjectReviewTabs />
         </Box>
       </Box>
     </Box>

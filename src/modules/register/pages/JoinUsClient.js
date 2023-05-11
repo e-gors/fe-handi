@@ -211,213 +211,216 @@ function JoinUsClient() {
       <ToastNotificationContainer />
       <Box component="form" sx={styles.main}>
         <Typography sx={styles.registerAs}>Register as {role}</Typography>
-        <Grid container spacing={0.5}>
-          <Grid item xs={12} md={6}>
-            <FormField
-              errors={formValues.errors}
-              onChange={handleChangeFormValues}
-              margin="dense"
-              value={formValues.values.first_name}
-              label="First Name"
-              name="first_name"
-              fullWidth
-              required
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormField
-              errors={formValues.errors}
-              onChange={handleChangeFormValues}
-              margin="dense"
-              value={formValues.values.last_name}
-              label="Last Name"
-              name="last_name"
-              fullWidth
-              required
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormField
-              required
-              type="email"
-              name="email"
-              errors={formValues.errors}
-              onChange={handleChangeFormValues}
-              value={formValues.values.email}
-              size="small"
-              margin="normal"
-              fullWidth
-              label="Working Email "
-              autoComplete="email"
-              autoFocus
-              InputProps={{
-                style: {
-                  background: "rgba(255, 255, 255, 0.5)",
-                  color: "black",
-                },
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PersonIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormField
-              required
-              name="password"
-              errors={formValues.errors}
-              value={formValues.values.password}
-              onChange={handleChangeFormValues}
-              size="small"
-              margin="normal"
-              fullWidth
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              autoComplete="current-password"
-              InputProps={{
-                style: {
-                  background: "rgba(255, 255, 255, 0.5)",
-                  coor: "black",
-                },
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <LockIcon />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showPassword ? (
-                        <VisibilityOffIcon />
-                      ) : (
-                        <VisibilityIcon />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormField
-              errors={formValues.errors}
-              onChange={handleChangeFormValues}
-              margin="dense"
-              value={formValues.values.number}
-              label="Contact Number"
-              name="number"
-              required
-              fullWidth
-              inputProps={{
-                inputMode: "numeric",
-                pattern: "[0-9]*",
-                maxLength: 11,
-              }}
-            />
-            <Typography sx={styles.addressHelper}>09xxxxxxxxx</Typography>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <SelectDropdown
-              size="small"
-              options={genders}
-              onChange={handleChangeFormValues}
-              value={formValues.values.gender}
-              name="gender"
-              label="Gender"
-              required
-              sx={{ mt: { xs: 0, md: 0.5 } }}
-              errors={formValues.errors}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <FormField
-              errors={formValues.errors}
-              onChange={handleChangeFormValues}
-              margin="dense"
-              value={formValues.values.address}
-              label="Complete Address"
-              name="address"
-              fullWidth
-              required
-            />
-            <Typography sx={styles.addressHelper}>
-              Purok / Sitio / Subdivision, Barangay, Municipality, Provice
-            </Typography>
-          </Grid>
-        </Grid>
-
-        <FormGroup sx={{ mt: 2 }}>
-          <FormControlLabel
-            required
-            control={
-              <Checkbox
-                sx={{ mt: { xs: -1.5, md: -1.2 } }}
-                checked={isChecked}
-                onChange={handdleChangeCheck}
+        <Box component="form">
+          <Grid container spacing={0.5}>
+            <Grid item xs={12} md={6}>
+              <FormField
+                errors={formValues.errors}
+                onChange={handleChangeFormValues}
+                margin="dense"
+                value={formValues.values.first_name}
+                label="First Name"
+                name="first_name"
+                fullWidth
+                required
               />
-            }
-            labelPlacement="end"
-            label={
-              <Typography sx={{ fontSize: { xs: 12, sm: 14, md: 16 } }}>
-                Checking this means that you aggree to our "
-                <span
-                  style={{
-                    color: "blue",
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => handleOpenNewTab("terms-of-services")}
-                >
-                  Terms and Condition
-                </span>
-                " and "
-                <span
-                  style={{
-                    color: "blue",
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => handleOpenNewTab("privacy-policy")}
-                >
-                  Privacy Policy
-                </span>
-                ".
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormField
+                errors={formValues.errors}
+                onChange={handleChangeFormValues}
+                margin="dense"
+                value={formValues.values.last_name}
+                label="Last Name"
+                name="last_name"
+                fullWidth
+                required
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormField
+                required
+                type="email"
+                name="email"
+                errors={formValues.errors}
+                onChange={handleChangeFormValues}
+                value={formValues.values.email}
+                size="small"
+                margin="normal"
+                fullWidth
+                label="Working Email "
+                autoComplete="email"
+                autoFocus
+                InputProps={{
+                  style: {
+                    background: "rgba(255, 255, 255, 0.5)",
+                    color: "black",
+                  },
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PersonIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormField
+                required
+                name="password"
+                errors={formValues.errors}
+                value={formValues.values.password}
+                onChange={handleChangeFormValues}
+                size="small"
+                margin="normal"
+                fullWidth
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                InputProps={{
+                  style: {
+                    background: "rgba(255, 255, 255, 0.5)",
+                    coor: "black",
+                  },
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockIcon />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword ? (
+                          <VisibilityOffIcon />
+                        ) : (
+                          <VisibilityIcon />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormField
+                errors={formValues.errors}
+                onChange={handleChangeFormValues}
+                margin="dense"
+                value={formValues.values.number}
+                label="Contact Number"
+                name="number"
+                required
+                fullWidth
+                inputProps={{
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                  maxLength: 11,
+                }}
+              />
+              <Typography sx={styles.addressHelper}>09xxxxxxxxx</Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <SelectDropdown
+                size="small"
+                options={genders}
+                onChange={handleChangeFormValues}
+                value={formValues.values.gender}
+                name="gender"
+                label="Gender"
+                required
+                sx={{ mt: { xs: 0, md: 0.5 } }}
+                errors={formValues.errors}
+              />
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <FormField
+                errors={formValues.errors}
+                onChange={handleChangeFormValues}
+                margin="dense"
+                value={formValues.values.address}
+                label="Complete Address"
+                name="address"
+                fullWidth
+                required
+              />
+              <Typography sx={styles.addressHelper}>
+                Purok / Sitio / Subdivision, Barangay, Municipality, Provice
               </Typography>
-            }
-          />
-          {!isChecked && (
-            <FormHelperText error>
-              Please read the conditions stated above and check the checkbox to
-              proceed.
-            </FormHelperText>
-          )}
-        </FormGroup>
+            </Grid>
+          </Grid>
 
-        <Box sx={styles.buttonWrapper}>
-          <Button
-            size="small"
-            variant="contained"
-            sx={styles.submit}
-            disabled={!isChecked || loading}
-            onClick={handleValidate}
-          >
-            {loading ? (
-              <CircularProgress
-                size={24}
-                disableShrink
-                sx={{ color: "white" }}
-              />
-            ) : !isChecked ? (
-              "Disabled"
-            ) : (
-              "Submit"
+          <FormGroup sx={{ mt: 2 }}>
+            <FormControlLabel
+              required
+              control={
+                <Checkbox
+                  sx={{ mt: { xs: -1.5, md: -1.2 } }}
+                  checked={isChecked}
+                  onChange={handdleChangeCheck}
+                />
+              }
+              labelPlacement="end"
+              label={
+                <Typography sx={{ fontSize: { xs: 12, sm: 14, md: 16 } }}>
+                  Checking this means that you aggree to our "
+                  <span
+                    style={{
+                      color: "blue",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleOpenNewTab("terms-of-services")}
+                  >
+                    Terms and Condition
+                  </span>
+                  " and "
+                  <span
+                    style={{
+                      color: "blue",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleOpenNewTab("privacy-policy")}
+                  >
+                    Privacy Policy
+                  </span>
+                  ".
+                </Typography>
+              }
+            />
+            {!isChecked && (
+              <FormHelperText error>
+                Please read the conditions stated above and check the checkbox
+                to proceed.
+              </FormHelperText>
             )}
-          </Button>
+          </FormGroup>
+
+          <Box sx={styles.buttonWrapper}>
+            <Button
+              size="small"
+              variant="contained"
+              sx={styles.submit}
+              disabled={!isChecked || loading}
+              onClick={handleValidate}
+              type="submit"
+            >
+              {loading ? (
+                <CircularProgress
+                  size={24}
+                  disableShrink
+                  sx={{ color: "white" }}
+                />
+              ) : !isChecked ? (
+                "Disabled"
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </Box>
         </Box>
         <Box sx={{ mt: 2 }}>
           <Typography sx={{ fontSize: 12 }}>

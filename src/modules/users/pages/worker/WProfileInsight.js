@@ -62,6 +62,11 @@ const styles = {
     fontSize: { xs: 24, md: 30 },
     fontWeight: "bold",
   },
+  profileInsightText: {
+    fontWeight: "bold",
+    fontSize: { xs: 24, md: 30 },
+    mb: 2,
+  },
   profileCardWrapper: {
     backgroundColor: "#EEEEEE",
     display: "flex",
@@ -75,6 +80,15 @@ const styles = {
       flexDirection: "column",
     },
   },
+  profileCompleteWarning: {
+    backgroundColor: "#FFEED8",
+    p: 1.5,
+    display: "flex",
+    mb: 3,
+    borderRadius: 2,
+    boxShadow: 5,
+  },
+  youNeedToComplete: { ml: 1 },
   profileLeft: { display: "flex" },
   profileAvatar: { width: { xs: 75, md: 100 }, height: { xs: 75, md: 100 } },
   nameWrapper: { ml: 2 },
@@ -101,13 +115,18 @@ const styles = {
     "&:hover": { backgroundColor: "#BEBEBE" },
     ml: 1,
   },
+  incomplete: {
+    backgroundColor: "#6F7689",
+    borderRadius: 5,
+    color: "white",
+  },
 };
 
 function WProfileInsight() {
   const history = useHistory();
   const user = useSelector((state) => state.users.user);
   const { fullname, profile, role, uuid } = user;
-  const { address, profile_completeness } = profile[0];
+  const { address, profile_completeness, profile_url } = profile[0];
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -170,25 +189,14 @@ function WProfileInsight() {
           items={more}
         />
         <Box>
-          <Typography
-            sx={{ fontWeight: "bold", fontSize: { xs: 24, md: 30 }, mb: 2 }}
-          >
+          <Typography sx={styles.profileInsightText}>
             Profile Insights
           </Typography>
 
           {profile_completeness < 10 && (
-            <Box
-              sx={{
-                backgroundColor: "#FFEED8",
-                p: 1.5,
-                display: "flex",
-                mb: 3,
-                borderRadius: 2,
-                boxShadow: 5,
-              }}
-            >
+            <Box sx={styles.profileCompleteWarning}>
               <ErrorIcon color="error" />
-              <Typography sx={{ ml: 1 }}>
+              <Typography sx={styles.youNeedToComplete}>
                 You need to complete your profile to show up in the search
                 results and be able to submit proposals
               </Typography>
@@ -197,7 +205,11 @@ function WProfileInsight() {
         </Box>
         <Box sx={styles.profileCardWrapper}>
           <Box sx={styles.profileLeft}>
-            <Avatar variant="rounded" sx={styles.profileAvatar}>
+            <Avatar
+              variant="rounded"
+              sx={styles.profileAvatar}
+              src={profile_url && profile_url}
+            >
               <Typography>Profile</Typography>
             </Avatar>
             <Box sx={styles.nameWrapper}>
@@ -205,14 +217,7 @@ function WProfileInsight() {
               <Typography>Hilongos, Leyte</Typography>
               <Typography>{online ? "Online" : "Offline"}</Typography>
               {profile_completeness < 10 && (
-                <Typography
-                  sx={{
-                    backgroundColor: "#6F7689",
-                    borderRadius: 5,
-                    color: "white",
-                  }}
-                  align="center"
-                >
+                <Typography sx={styles.incomplete} align="center">
                   Incomplete
                 </Typography>
               )}

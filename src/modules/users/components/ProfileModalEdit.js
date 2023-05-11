@@ -1,10 +1,14 @@
-import { Box, Button, IconButton, Modal, Typography } from "@mui/material";
+import { Box, IconButton, Modal, Typography } from "@mui/material";
 import React from "react";
-import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
 import CancelIcon from "@mui/icons-material/Cancel";
 import UploadBGImage from "./worker/UploadBGImage";
 import UploadProfileImage from "./worker/UploadProfileImage";
+import UpdateBio from "./worker/UpdateBio";
+import UpdateBackground from "./worker/UpdateBackground";
+import UpdateCategories from "./worker/UpdateCategories";
+import UpdateSkills from "./worker/UpdateSkills";
+import UpdateSocialNetworks from "./worker/UpdateSocialNetworks";
+import UpdateSocialNetwork from "./worker/UpdateSocialNetwork";
 
 const style = {
   position: "absolute",
@@ -49,6 +53,42 @@ function ProfileModalEdit(props) {
               )}
               {type === "Profile Image" && (
                 <UploadProfileImage
+                  handleClose={handleClose}
+                  onConfirm={handleClose}
+                />
+              )}
+              {type === "Social Networks" && (
+                <UpdateSocialNetworks
+                  handleClose={handleClose}
+                  onConfirm={handleClose}
+                />
+              )}
+              {(type === "Facebook" ||
+                type === "Twitter" ||
+                type === "Instagram") && (
+                <UpdateSocialNetwork
+                  type={type}
+                  handleClose={handleClose}
+                  onConfirm={handleClose}
+                />
+              )}
+              {type === "Background" && (
+                <UpdateBackground
+                  handleClose={handleClose}
+                  onConfirm={handleClose}
+                />
+              )}
+              {type === "Bio" && (
+                <UpdateBio handleClose={handleClose} onConfirm={handleClose} />
+              )}
+              {type === "Categories" && (
+                <UpdateCategories
+                  handleClose={handleClose}
+                  onConfirm={handleClose}
+                />
+              )}
+              {type === "Skills" && (
+                <UpdateSkills
                   handleClose={handleClose}
                   onConfirm={handleClose}
                 />

@@ -15,11 +15,11 @@ const routes = [
   },
   {
     path: "/find-people",
-    component: "modules/users/pages/client/CMarketplace",
+    component: "modules/users/pages/worker/WMarketplace",
   },
   {
     path: "/find-jobs",
-    component: "modules/users/pages/worker/WMarketplace",
+    component: "modules/users/pages/client/CMarketplace",
   },
   {
     path: "/faq",

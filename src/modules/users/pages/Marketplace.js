@@ -9,8 +9,8 @@ function Marketplace() {
 
   return (
     <Box>
-      {user && user.role === "Worker" && <WMarketplace />}
-      {user && user.role === "Client" && <CMarketplace />}
+      {user && user.role === "Worker" && <CMarketplace />}
+      {user && user.role === "Client" && <WMarketplace />}
     </Box>
   );
 }

@@ -1,113 +1,196 @@
-import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import React from "react";
 import ToastNotification from "../../../../components/ToastNotification";
 import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
 import { options } from "../../../../components/options";
 import Http from "../../../../utils/Http";
-import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../../../redux/actions/userActions";
+import Cropper from "react-easy-crop";
+import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
+import CropImage from "../../../../components/CropImage";
 
 function UploadBGImage(props) {
   const { handleClose, onConfirm } = props;
   const dispatch = useDispatch();
 
-  const [data, setData] = React.useState(null);
-  const [previewUrl, setPreviewUrl] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [image, setImage] = React.useState(null);
+  const [crop, setCrop] = React.useState({
+    x: 0,
+    y: 0,
+  });
+  const [zoom, setZoom] = React.useState(1);
+  const [croppedArea, setCroppedArea] = React.useState(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setData(file);
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreviewUrl(reader.result);
-    };
-    reader.readAsDataURL(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        setImage(event.target.result);
+      };
+    }
+    return;
   };
 
-  const handleSubmit = (data) => {
+  const handleCropChange = (crop, zoom) => {
+    setCrop(crop);
+    setZoom(zoom);
+  };
+
+  const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
+    setCroppedArea(croppedAreaPixels);
+  };
+
+  const handleSubmit = async () => {
     setLoading(true);
+    try {
+      const croppedImg = await CropImage(image, croppedArea);
 
-    const formData = new FormData();
-    formData.append("background_img", data);
+      const formData = new FormData();
+      formData.append("background_img", croppedImg);
 
-    Http.post("/upload/bg-image", formData)
-      .then((res) => {
-        if (res.data.code === 200) {
-          dispatch(updateUser(res.data.user));
-          ToastNotification("success", res.data.message, options);
-          onConfirm();
-        } else {
-          ToastNotification("error", res.data.message, options);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        ToastNotification("error", err, options);
+      const res = await Http.post("/upload/bg-image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+
+      if (res.data.code === 200) {
+        setImage(null);
+        dispatch(updateUser(res.data.user));
+        ToastNotification("success", res.data.message, options);
+        onConfirm();
+      } else {
+        ToastNotification("error", res.data.message, options);
+      }
+    } catch (error) {
+      if (error.response.status === 413) {
+        ToastNotification(
+          "error",
+          "Image is too large. Please choose another image!",
+          options
+        );
+      } else {
+        ToastNotification("error", error.message, options);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Box>
+    <Box sx={{ width: "100%", height: "100%" }}>
       <ToastNotificationContainer />
-      <Box>
-        <form encType="multipart/form-data">
-          <input
-            accept="image/*"
-            id="image-upload"
-            type="file"
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-          <Box>
-            <Grid container spacing={1}>
-              <Grid item xs={12} md={6}>
-                <Box sx={{ mb: 2 }}>
-                  <Typography component="li">
-                    Recommended dimensions 1440 x 180 px
-                  </Typography>
-                  <Typography component="li">JPG, PNG</Typography>
-                  <Typography component="li">Max Size: 5mb</Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Box
-                  sx={{
-                    width: "100%",
-                    height: { xs: 100, sm: 200, md: 100 },
-                    mb: 5,
-                    backgroundImage: `url(${previewUrl})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundColor: previewUrl && "transparent",
-                    border: "2px dashed #BEBEBE",
-                  }}
-                ></Box>
-                <label htmlFor="image-upload">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    component="span"
-                    startIcon={<AddAPhotoOutlinedIcon />}
-                    sx={{ mt: 2 }}
-                  >
-                    Upload Image
-                  </Button>
-                </label>
-              </Grid>
-            </Grid>
+      <form encType="multipart/form-data">
+        <input
+          accept="image/*"
+          id="image-upload"
+          type="file"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+          required
+        />
+      </form>
+
+      {!image && (
+        <Box>
+          <Box
+            sx={{ width: { xs: "100%", sm: "50%", md: "50%" }, m: "0 auto" }}
+          >
+            <Box sx={{ fontSize: { xs: 12, md: 14 } }}>
+              <Typography component="li" sx={{ fontSize: "inherit" }}>
+                Recommended dimensions 1440 x 180 px
+              </Typography>
+              <Typography component="li" sx={{ fontSize: "inherit" }}>
+                JPG, JPEG, PNG
+              </Typography>
+              <Typography component="li" sx={{ fontSize: "inherit" }}>
+                Max size: 5mb
+              </Typography>
+            </Box>
           </Box>
-        </form>
-      </Box>
+          <Box sx={{ mt: 4 }} align="center">
+            <label htmlFor="image-upload">
+              <Button
+                variant="outlined"
+                color="primary"
+                component="span"
+                startIcon={<UploadOutlinedIcon />}
+                sx={{ mt: 2 }}
+              >
+                choose an image
+              </Button>
+            </label>
+          </Box>
+        </Box>
+      )}
+
+      {image && (
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            minHeight: 260,
+            p: 2,
+
+            img: {
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              objectPosition: "center",
+            },
+          }}
+        >
+          <Cropper
+            image={image}
+            crop={crop}
+            aspect={4 / 1}
+            onCropChange={handleCropChange}
+            cropShape="rect"
+            showGrid
+            zoomWithScroll
+            restrictPosition
+            zoom={zoom}
+            onZoomChange={setZoom}
+            dragCrop
+            dragImage={false}
+            pinchToZoom={false}
+            allowCropOutOfBounds={false}
+            onCropComplete={onCropComplete}
+            interaction={{
+              dragCrop: true,
+              pinchToZoom: false,
+              dragImage: false,
+            }}
+          />
+        </Box>
+      )}
+
+      {image && (
+        <Box sx={{ mt: 1 }} align="center">
+          <label htmlFor="image-upload">
+            <Button
+              variant="outlined"
+              color="primary"
+              component="span"
+              startIcon={<UploadOutlinedIcon />}
+              sx={{ mt: 2 }}
+            >
+              choose another image
+            </Button>
+          </label>
+        </Box>
+      )}
 
       <Box
         align="right"
         sx={{ backgroundColor: "#F4F5FB", p: 2, borderRadius: 3, mt: 5 }}
       >
-        <Button variant="outlined" onClick={handleClose}>
+        <Button size="small" variant="outlined" onClick={handleClose}>
           Cancel
         </Button>
         <Button
@@ -115,11 +198,11 @@ function UploadBGImage(props) {
           variant="contained"
           color="primary"
           sx={{ ml: 1 }}
-          onClick={() => handleSubmit(data)}
-          disabled={data ? false : true}
+          onClick={handleSubmit}
+          disabled={loading}
         >
           {loading ? (
-            <CircularProgress size={24} color="primary" thickness={5} />
+            <CircularProgress size={24} sx={{ color: "white" }} thickness={5} />
           ) : (
             "Save"
           )}

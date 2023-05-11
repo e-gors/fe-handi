@@ -24,7 +24,7 @@ const locations = [
 const sortBy = ["Relevance", "Rating", "Hourly Rate", "Hours Work"];
 
 function FindJobWorkerFilter(props) {
-  const { categories = [], skills = [] } = props;
+  const { categories = [], skills = [], type } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [filterValues, setFilterValues] = React.useState({
@@ -83,7 +83,7 @@ function FindJobWorkerFilter(props) {
         sx={{
           width: "100%",
           backgroundColor: "#EBEBEB",
-          p: 2,
+          p: 1,
           borderRadius: 3,
           display: "flex",
           alignItems: "center",
@@ -97,7 +97,9 @@ function FindJobWorkerFilter(props) {
           name="search"
           size="small"
           variant="outlined"
-          placeholder="Search by names"
+          placeholder={
+            type === "jobs" ? "Search by job categories" : "Search by names"
+          }
           onChange={handleChangeFilter}
           value={filterValues.values.search}
           InputProps={{
@@ -114,30 +116,36 @@ function FindJobWorkerFilter(props) {
             width: "100%",
           }}
         />
-        <SelectDropdown
-          label="Sort By"
-          name="sort_by"
-          onChange={handleChangeFilter}
-          value={filterValues.values.sort_by}
-          options={sortBy}
-          sx={{
-            mt: 0.5,
-            backgroundColor: "white",
-            maxWidth: { xs: "100%", md: 240 },
-            ml: { xs: 0, md: 1 },
-          }}
-        />
-        <Button
-          variant="outlined"
-          color="primary"
-          sx={{
-            backgroundColor: "white",
-            width: { xs: "100%", md: 150 },
-          }}
-          onClick={handleOpen}
-        >
-          {<FilterAltIcon />} Filter
-        </Button>
+        <Box sx={{ display: "flex", width: "100%" }}>
+          <SelectDropdown
+            label="Sort By"
+            name="sort_by"
+            onChange={handleChangeFilter}
+            value={filterValues.values.sort_by}
+            options={sortBy}
+            sx={{
+              mt: 0.5,
+              backgroundColor: "white",
+              maxWidth: { xs: "100%", md: 240 },
+              ml: { xs: 0, md: 1 },
+              mr: { xs: 1, md: 0 },
+            }}
+          />
+          <Button
+            size="small"
+            variant="outlined"
+            color="primary"
+            sx={{
+              backgroundColor: "white",
+              width: { xs: "50%", md: 120 },
+              maxHeight: 40,
+              mt: { xs: 1, md: 1 },
+            }}
+            onClick={handleOpen}
+          >
+            {<FilterAltIcon />} Filter
+          </Button>
+        </Box>
 
         <Menu
           anchorEl={anchorEl}

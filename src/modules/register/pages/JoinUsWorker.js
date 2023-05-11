@@ -272,6 +272,7 @@ function JoinUsWorker() {
         <Grid container spacing={0.5}>
           <Grid item xs={12} md={6}>
             <FormField
+              autoFocus
               errors={formValues.errors}
               onChange={handleChangeValues}
               margin="dense"
@@ -306,7 +307,6 @@ function JoinUsWorker() {
               margin="normal"
               fullWidth
               label="Working Email"
-              autoFocus
               InputProps={{
                 style: {
                   background: "rgba(255, 255, 255, 0.5)",
