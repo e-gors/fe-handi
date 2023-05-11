@@ -5,12 +5,18 @@ import { useHistory, useParams } from "react-router-dom";
 import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
 import ToastNotification from "../../../components/ToastNotification";
 import { options } from "../../../components/options";
+import { useSelector } from "react-redux";
 
 function ConfirmedUser() {
   const history = useHistory();
   const params = useParams();
 
+  const verifiedUser = useSelector((state) => state.users.user);
+
   React.useEffect(() => {
+    if (verifiedUser.email_verified_at !== null) {
+      history.push("/dashboard");
+    }
     fetchConfirmedUser();
   }, []);
 
@@ -18,8 +24,9 @@ function ConfirmedUser() {
     Http.get(`/verify-email/${params.id}`)
       .then((res) => {
         if (res.data.code === 200) {
+          localStorage.removeItem("accessToken");
           ToastNotification("success", res.data.message, options);
-          setTimeout(() => history.push("/login"), 2000);
+          setTimeout(() => history.push("/login"), 5000);
         } else {
           ToastNotification("err", res.data.message, options);
         }

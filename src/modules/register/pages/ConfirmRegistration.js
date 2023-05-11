@@ -29,6 +29,7 @@ function ConfirmRegistration() {
   const history = useHistory();
 
   const verifiedUser = useSelector((state) => state.users.user);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   React.useEffect(() => {
     if (verifiedUser && verifiedUser.email_verified_at !== null) {
@@ -40,12 +41,12 @@ function ConfirmRegistration() {
     <Box sx={styles.wrapper}>
       <Box sx={styles.main}>
         <Typography sx={styles.headerHello}>
-          Hello there {verifiedUser && verifiedUser.first_name}, thank you for
+          Hello there {user && user.first_name}, thank you for
           Joining {process.env.REACT_APP_NAME}!
         </Typography>
         <Typography sx={styles.descriptions}>
           We have sent you an activation email on{" "}
-          <span style={styles.email}>{verifiedUser && verifiedUser.email}</span>
+          <span style={styles.email}>{user && user.email}</span>
         </Typography>
         <Typography sx={styles.descriptions}>
           Go to your email inbox and follow the instructions to verify your

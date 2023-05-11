@@ -135,6 +135,10 @@ export default function PublicAppBarMenu() {
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
+  const profile_url =
+    user && user.role !== "Super Admin" && user.profile
+      ? user.profile[0].profile_url
+      : "";
 
   const [loading, setLoading] = React.useState(false);
   const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
@@ -260,7 +264,7 @@ export default function PublicAppBarMenu() {
         >
           <Avatar
             alt={user && user.fullname}
-            src={isAuth() && user.profile[0].profile_url}
+            src={profile_url && profile_url}
             sx={{
               boxShadow: 5,
               border: "1px solid #EEEEEE",
@@ -395,7 +399,7 @@ export default function PublicAppBarMenu() {
               >
                 <Avatar
                   alt={user && user.fullname}
-                  src={isAuth() && user.profile[0].profile_url}
+                  src={profile_url && profile_url}
                   sx={{
                     boxShadow: 5,
                     border: "1px solid #EEEEEE",

@@ -63,6 +63,15 @@ const routes = [
   },
 
   // Private components
+
+  //Admin Routes
+  {
+    path: "/admin/dashboard",
+    component: "modules/users/admin/pages/AdminDashboard",
+    auth: true,
+    role: "Super Admin",
+  },
+
   // Worker Routes
   {
     path: "/onboarding",
@@ -138,12 +147,6 @@ const routes = [
     component: "modules/users/pages/client/CProfileEdit",
     auth: true,
     role: "Client",
-  },
-  {
-    path: "/cropping",
-    component: "modules/users/components/worker/CroppingImage",
-    auth: true,
-    role: "Worker",
   },
 
   {

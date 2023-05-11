@@ -114,6 +114,7 @@ const genders = ["Male", "Female", "Others", "Better Not Tell"];
 
 function JoinUsWorker() {
   let role = localStorage.getItem("selectedRole");
+  const dispatch = useDispatch();
 
   const categories = useSelector((state) => state.categories.categories);
   const skills = useSelector((state) => state.skills.skills);
@@ -201,10 +202,10 @@ function JoinUsWorker() {
       .workerRegister(role, formValues, expertise)
       .then((res) => {
         if (res.data.code === 200) {
+          dispatch(setUser(res.data.user));
           ToastNotification("success", res.data.message, options);
           localStorage.removeItem("selectedRole");
-          localStorage.setItem("user", JSON.stringify(res.data.user));
-          setTimeout(() => history.push("/confirm-registration"), 500);
+          history.push("/confirm-registration");
         } else {
           setLoading(false);
           ToastNotification("error", res.data.message, options);

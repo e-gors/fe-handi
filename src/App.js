@@ -7,6 +7,7 @@ import NotFound from "./routes/NotFound";
 import PrivateClient from "./routes/PrivateClient";
 import PrivateWorker from "./routes/PrivateWorker";
 import React from "react";
+import PrivateAdmin from "./routes/PrivateAdmin";
 
 function App() {
   const currentDate = Date.now();
@@ -33,6 +34,10 @@ function App() {
             } else if (route.role === "Worker") {
               return (
                 <PrivateWorker exact key={index} {...route} role={route.role} />
+              );
+            } else if (route.role === "Super Admin") {
+              return (
+                <PrivateAdmin exact key={index} {...route} role={route.role} />
               );
             } else {
               return <Private exact key={index} {...route} />;

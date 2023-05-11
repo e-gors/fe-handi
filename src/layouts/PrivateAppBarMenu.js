@@ -183,7 +183,10 @@ export default function PrivateAppBarMenu() {
   const user = useSelector((state) => state.users.user);
   const { id, role, uuid } = user;
   const { profile, fullname } = user;
-  const { profile_url } = profile[0];
+  const profile_url =
+    user && user.role !== "Super Admin" && user.profile
+      ? user.profile[0].profile_url
+      : "";
 
   const [loading, setLoading] = React.useState(false);
   const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
@@ -327,7 +330,7 @@ export default function PrivateAppBarMenu() {
           color="inherit"
         >
           <Avatar
-          alt={fullname && fullname}
+            alt={fullname && fullname}
             src={profile_url && profile_url}
             sx={{
               boxShadow: 5,
@@ -491,7 +494,7 @@ export default function PrivateAppBarMenu() {
                 color="inherit"
               >
                 <Avatar
-                alt={fullname && fullname}
+                  alt={fullname && fullname}
                   src={profile_url && profile_url}
                   sx={{
                     boxShadow: 5,

@@ -15,21 +15,31 @@ const style = {
   borderRadius: 3,
 };
 
+const styles = {
+  wrapper: {
+    mt: 10,
+    p: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "51vh",
+  },
+  WhenYou: { fontWeight: "bold", fontSize: 18, mb: 1 },
+  lists: { mt: 1 },
+  completeProfile: { mt: 5 },
+  skip: {
+    color: "blue",
+    cursor: "pointer",
+    mt: 2,
+  },
+};
+
 function OnBoarding() {
   const history = useHistory();
   const user = useSelector((state) => state.users.user);
   const { role, uuid } = user;
   return (
-    <Box
-      sx={{
-        mt: 10,
-        p: 1,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "51vh",
-      }}
-    >
+    <Box sx={styles.wrapper}>
       <Modal
         open={true}
         aria-labelledby="modal-modal-title"
@@ -37,17 +47,17 @@ function OnBoarding() {
       >
         <Box sx={style}>
           <Box>
-            <Typography sx={{ fontWeight: "bold", fontSize: 18, mb: 1 }}>
+            <Typography sx={styles.WhenYou}>
               When you complete all required fields in your profile:
             </Typography>
-            <Typography component="li" sx={{ mt: 1 }}>
+            <Typography component="li" sx={styles.lists}>
               Clients will see you in their search results if your profile is
               public.
             </Typography>
-            <Typography component="li" sx={{ mt: 1 }}>
+            <Typography component="li" sx={styles.lists}>
               You can navigate to our system freely.
             </Typography>
-            <Typography component="li" sx={{ mt: 1 }}>
+            <Typography component="li" sx={styles.lists}>
               You will able to apply for posted Jobs.{" "}
             </Typography>
 
@@ -55,7 +65,7 @@ function OnBoarding() {
               variant="contained"
               color="primary"
               onClick={() => history.push(`/overview/${role}/${uuid}`)}
-              sx={{ mt: 5 }}
+              sx={styles.completeProfile}
             >
               Complete Profile
             </Button>
@@ -63,11 +73,7 @@ function OnBoarding() {
 
           <Typography
             align="right"
-            sx={{
-              color: "blue",
-              cursor: "pointer",
-              mt: 2,
-            }}
+            sx={styles.skip}
             onClick={() => history.push("/dashboard")}
           >
             skip

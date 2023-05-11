@@ -119,10 +119,15 @@ export default function LoginSide() {
           Http.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${res.data.access_token}`;
+          const user = res.data.user;
           localStorage.setItem("accessToken", res.data.access_token);
           localStorage.setItem("tokenExpiration", res.data.expires_in);
-          dispatch(setUser(res.data.user));
-          history.push("/dashboard");
+          dispatch(setUser(user));
+          if (user.role === "Super Admin") {
+            history.push("/admin/dashboard");
+          } else {
+            history.push("/dashboard");
+          }
         } else {
           ToastNotification("error", res.data.message, options);
         }

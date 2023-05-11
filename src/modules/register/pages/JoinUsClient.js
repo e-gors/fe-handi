@@ -24,8 +24,6 @@ import ToastNotificationContainer from "../../../components/ToastNotificationCon
 import ToastNotification from "../../../components/ToastNotification";
 import { options } from "../../../components/options";
 import SelectDropdown from "../../../components/SelectDropdown";
-import { setUser } from "../../../redux/actions/userActions";
-import { useDispatch } from "react-redux";
 
 const validator = new ReeValidate.Validator({
   first_name: "required",
@@ -53,6 +51,7 @@ const styles = {
     justifyContent: "space-evenly",
     flexWrap: "wrap",
     borderRadius: 10,
+    boxShadow: 5,
   },
   registerAs: {
     fontSize: { xs: 24, md: 30 },
@@ -96,6 +95,22 @@ const styles = {
       boxShadow: 5,
     },
   },
+  gender: { mt: { xs: 0, md: 0.5 } },
+  checkbox: { mt: { xs: -1.5, md: -1.2 } },
+  formgroup: { mt: 2 },
+  checkingThis: { fontSize: { xs: 12, sm: 14, md: 16 } },
+  terms: {
+    color: "blue",
+    textDecoration: "underline",
+    cursor: "pointer",
+  },
+  clickHereWrapper: { mt: 2 },
+  clickHere: {
+    color: "blue",
+    textDecoration: "underline",
+    cursor: "pointer",
+  },
+  registerAsWorker: { fontSize: 12 },
 };
 
 const genders = ["Male", "Female", "Others", "Better Not Tell"];
@@ -103,7 +118,6 @@ const genders = ["Male", "Female", "Others", "Better Not Tell"];
 function JoinUsClient() {
   let role = localStorage.getItem("selectedRole");
   const history = useHistory();
-  const dispatch = useDispatch();
 
   const [isChecked, setIsChecked] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -123,12 +137,6 @@ function JoinUsClient() {
 
   const handdleChangeCheck = (e) => {
     setIsChecked(!isChecked);
-  };
-
-  const handleChangeSelect = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    const newValue = typeof value === "string" ? value.split(",") : value;
   };
 
   const handleChangeFormValues = (e) => {
@@ -159,11 +167,10 @@ function JoinUsClient() {
       .clientRegister(role, formValues)
       .then((res) => {
         if (res.data.code === 200) {
-          setLoading(false);
+          localStorage.setItem("user", JSON.stringify(res.data.user));
           ToastNotification("success", res.data.message, options);
           localStorage.removeItem("selectedRole");
-          localStorage.setItem("user", JSON.stringify(res.data.user));
-          setTimeout(() => history.push("/confirm-registration"), 500);
+          history.push("/confirm-registration");
         } else {
           setLoading(false);
           ToastNotification("error", res.data.message, options);
@@ -171,7 +178,7 @@ function JoinUsClient() {
       })
       .catch((err) => {
         setLoading(false);
-        ToastNotification("error", err, options);
+        ToastNotification("error", err.message, options);
       });
   };
 
@@ -331,7 +338,7 @@ function JoinUsClient() {
                 name="gender"
                 label="Gender"
                 required
-                sx={{ mt: { xs: 0, md: 0.5 } }}
+                sx={styles.gender}
                 errors={formValues.errors}
               />
             </Grid>
@@ -352,37 +359,29 @@ function JoinUsClient() {
             </Grid>
           </Grid>
 
-          <FormGroup sx={{ mt: 2 }}>
+          <FormGroup sx={styles.formgroup}>
             <FormControlLabel
               required
               control={
                 <Checkbox
-                  sx={{ mt: { xs: -1.5, md: -1.2 } }}
+                  sx={styles.checkbox}
                   checked={isChecked}
                   onChange={handdleChangeCheck}
                 />
               }
               labelPlacement="end"
               label={
-                <Typography sx={{ fontSize: { xs: 12, sm: 14, md: 16 } }}>
+                <Typography sx={styles.checkingThis}>
                   Checking this means that you aggree to our "
                   <span
-                    style={{
-                      color: "blue",
-                      textDecoration: "underline",
-                      cursor: "pointer",
-                    }}
+                    style={styles.terms}
                     onClick={() => handleOpenNewTab("terms-of-services")}
                   >
                     Terms and Condition
                   </span>
                   " and "
                   <span
-                    style={{
-                      color: "blue",
-                      textDecoration: "underline",
-                      cursor: "pointer",
-                    }}
+                    style={styles.terms}
                     onClick={() => handleOpenNewTab("privacy-policy")}
                   >
                     Privacy Policy
@@ -422,15 +421,11 @@ function JoinUsClient() {
             </Button>
           </Box>
         </Box>
-        <Box sx={{ mt: 2 }}>
-          <Typography sx={{ fontSize: 12 }}>
+        <Box sx={styles.clickHereWrapper}>
+          <Typography sx={styles.registerAsWorker}>
             Register as a Worker?{" "}
             <span
-              style={{
-                color: "blue",
-                textDecoration: "underline",
-                cursor: "pointer",
-              }}
+              style={styles.clickHere}
               onClick={() => handleChangeRole("Worker")}
             >
               Click here.
