@@ -75,6 +75,42 @@ const routes = [
     auth: true,
     role: "Super Admin",
   },
+  {
+    path: "/admin/users",
+    component: "modules/users/admin/pages/AdminUsers",
+    auth: true,
+    role: "Super Admin",
+  },
+  {
+    path: "/admin/contracts",
+    component: "modules/users/admin/pages/AdminContract",
+    auth: true,
+    role: "Super Admin",
+  },
+  {
+    path: "/admin/job-post",
+    component: "modules/users/admin/pages/AdminJobpost",
+    auth: true,
+    role: "Super Admin",
+  },
+  {
+    path: "/admin/offers",
+    component: "modules/users/admin/pages/AdminOffers",
+    auth: true,
+    role: "Super Admin",
+  },
+  {
+    path: "/admin/reports",
+    component: "modules/users/admin/pages/AdminReports",
+    auth: true,
+    role: "Super Admin",
+  },
+  {
+    path: "/admin/settings",
+    component: "modules/users/admin/pages/AdminSettings",
+    auth: true,
+    role: "Super Admin",
+  },
 
   // Worker Routes
   {
