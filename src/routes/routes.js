@@ -43,11 +43,11 @@ const routes = [
   },
   {
     path: "/join-us/Worker",
-    component: "modules/register/pages/JoinUsWorker",
+    component: "modules/register/pages/JoinAsWorker",
   },
   {
     path: "/join-us/Client",
-    component: "modules/register/pages/JoinUsClient",
+    component: "modules/register/pages/JoinAsClient",
   },
   {
     path: "/confirm-registration",
@@ -60,6 +60,10 @@ const routes = [
   {
     path: "/confirmed/:id",
     component: "modules/register/pages/ConfirmedUser",
+  },
+  {
+    path: "/worker/profile/overview/:uuid",
+    component: "modules/home/pages/worker/Profile",
   },
 
   // Private components
@@ -93,12 +97,6 @@ const routes = [
     role: "Worker",
   },
   {
-    path: "/profile/worker",
-    component: "modules/users/pages/worker/WProfile",
-    auth: true,
-    role: "Worker",
-  },
-  {
     path: "/edit/profile/worker",
     component: "modules/users/pages/worker/WProfileEdit",
     auth: true,
@@ -127,6 +125,12 @@ const routes = [
   {
     path: "/new/job-offer",
     component: "modules/users/pages/NewJobOffer",
+    auth: true,
+    role: "Client",
+  },
+  {
+    path: "/new/job/posted",
+    component: "modules/users/components/jobs/Posted",
     auth: true,
     role: "Client",
   },

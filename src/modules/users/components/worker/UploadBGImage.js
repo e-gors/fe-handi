@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { updateUser } from "../../../../redux/actions/userActions";
 import Cropper from "react-easy-crop";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
-import CropImage from "../../../../components/CropImage";
+import { CropImage } from "../../../../utils/helpers";
 
 function UploadBGImage(props) {
   const { handleClose, onConfirm } = props;
@@ -30,6 +30,7 @@ function UploadBGImage(props) {
       reader.readAsDataURL(file);
       reader.onload = (event) => {
         setImage(event.target.result);
+        console.log(image);
       };
     }
     return;

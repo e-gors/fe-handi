@@ -4,7 +4,7 @@ const initialState = {
   posts: [],
 };
 
-export const userReducer = (state = initialState, { type, payload }) => {
+export const postsReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case ActionTypes.SET_POSTS:
       return { ...state, posts: payload };

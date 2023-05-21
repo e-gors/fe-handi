@@ -9,20 +9,17 @@ import {
   StepLabel,
   LinearProgress,
 } from "@mui/material";
-import { useHistory } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Check from "@mui/icons-material/Check";
-import InfoIcon from "@mui/icons-material/Info";
 import PaidIcon from "@mui/icons-material/Paid";
 import HelpIcon from "@mui/icons-material/Help";
 import EditOffIcon from "@mui/icons-material/EditOff";
 import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
-import BasicInfo from "../../components/jobs/BasicInfo";
-import TypeAndBudget from "../../components/jobs/TypeAndBudget";
-import OptionalFields from "../../components/jobs/OptionalFields";
-import ReviewAndPost from "../../components/jobs/ReviewAndPost";
+import ReviewAndSubmit from "./ReviewAndSubmit";
+import ProposalForm from "./ProposalForm";
+import RateForm from "./RateForm";
 import ConfirmationModal from "../../../../components/ConfirmationModal";
 
 function LinearProgressWithLabel(props) {
@@ -148,10 +145,9 @@ function ColorlibStepIcon(props) {
   const { active, completed, className } = props;
 
   const icons = {
-    1: <InfoIcon />,
-    2: <PaidIcon />,
-    3: <HelpIcon />,
-    4: <EditOffIcon />,
+    1: <PaidIcon />,
+    2: <HelpIcon />,
+    3: <EditOffIcon />,
   };
 
   return (
@@ -182,34 +178,24 @@ ColorlibStepIcon.propTypes = {
   icon: PropTypes.node,
 };
 
-const steps = [
-  "Basic Info",
-  "Type and Budget",
-  "Optional Fields",
-  "Review and Post",
-];
+const steps = ["Rate", "Proposal", "Review and Submit"];
 
 const progressVal = 100 / steps.length;
 
-export default function Register() {
-  const history = useHistory();
-  const [openConfirmDialogue, setConfirmDialogue] = React.useState(false);
+export default function ApplyStepper(props) {
+  const { handleCancel, selectedItem, handleClose, onHandleSubmit } = props;
+
+  const [openConfirmDialogue, setOpenConfirmDialogue] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [activeStep, setActiveStep] = React.useState(0);
   const [progress, setprogress] = React.useState(progressVal);
 
-  //Basic Info states
-  const [titles, setTitles] = React.useState();
-  const [descriptions, setDescriptions] = React.useState("");
-  const [imagesContainer, setImagesContainer] = React.useState();
+  // rate states
+  const [formValues, setFormValues] = React.useState();
 
-  // Type and Budget states
-  const [typeAndBudget, setTypeAndBudget] = React.useState();
-
-  //Optional fields
-  const [locations, setLocations] = React.useState();
-  const [skillses, setSkills] = React.useState([]);
-  const [ques, setQues] = React.useState([]);
+  //proposal states
+  const [proposal, setProposal] = React.useState("");
+  const [images, setImages] = React.useState([]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -221,28 +207,20 @@ export default function Register() {
     setprogress((prev) => prev - progressVal);
   };
 
-  const handleCancel = () => {
-    setConfirmDialogue(true);
-  };
-  const handleclose = () => {
-    setConfirmDialogue(false);
-  };
-
-  const handleConfirm = () => {
-    history.goBack();
+  const handleConfirmDialogue = () => {
+    setOpenConfirmDialogue(!openConfirmDialogue);
   };
 
   return (
-    <Stack sx={{ width: "100%", mt: 10 }} spacing={1}>
+    <Stack sx={{ width: "100%", mt: 5 }} spacing={1}>
       <ConfirmationModal
         open={openConfirmDialogue}
-        onClose={handleclose}
+        onClose={handleConfirmDialogue}
         message="Are you sure you want to proceed? Changes you made will not be saved!"
-        onConfirm={handleConfirm}
-        title="Quit Job Posting"
+        onConfirm={handleCancel}
+        title="Quit Job Application"
         loading={loading}
       />
-
       <Stepper
         alternativeLabel
         activeStep={activeStep}
@@ -257,16 +235,6 @@ export default function Register() {
 
       <Box>
         <Box sx={{ p: 2, maxWidth: 800, margin: "0 auto" }}>
-          <Box sx={{ p: 2 }}>
-            <Typography sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: 600 }}>
-              Post a Job
-            </Typography>
-            <Typography>It takes 2 minutes.</Typography>
-            <Typography>
-              No payment processing fees. Absolutely no fees for Clients...
-              ever.
-            </Typography>
-          </Box>
           <Box
             sx={{
               backgroundColor: "#EEEEEE",
@@ -287,12 +255,10 @@ export default function Register() {
                 sx={{ fontWeight: 600, fontSize: { xs: 20, md: 24 } }}
               >
                 {activeStep === 0
-                  ? "Basic Info"
+                  ? "Rate"
                   : activeStep === 1
-                  ? "Type and Budget"
-                  : activeStep === 2
-                  ? " Optional Fields"
-                  : "Review and Post"}
+                  ? "Proposal"
+                  : "Review and Submit"}
               </Typography>
               <Typography sx={{ mb: 2, fontSize: { xs: 12, md: 14 } }}>
                 Step {activeStep + 1} of {steps.length}
@@ -303,61 +269,42 @@ export default function Register() {
               </Box>
             </Box>
             {activeStep === 0 && (
-              <BasicInfo
-                activeStep={activeStep}
+              <RateForm
                 steps={steps}
-                handleCancel={handleCancel}
-                handleNext={handleNext}
+                activeStep={activeStep}
+                handleCancel={handleConfirmDialogue}
                 handleBack={handleBack}
-                titles={titles}
-                setTitles={setTitles}
-                descriptions={descriptions}
-                setDescriptions={setDescriptions}
-                imagesContainer={imagesContainer}
-                setImagesContainer={setImagesContainer}
+                handleNext={handleNext}
+                rate={formValues}
+                setRate={setFormValues}
               />
             )}
             {activeStep === 1 && (
-              <TypeAndBudget
-                activeStep={activeStep}
+              <ProposalForm
                 steps={steps}
-                handleCancel={handleCancel}
+                activeStep={activeStep}
+                handleCancel={handleConfirmDialogue}
                 handleNext={handleNext}
                 handleBack={handleBack}
-                typeAndBudget={typeAndBudget}
-                setTypeAndBudget={setTypeAndBudget}
+                letter={proposal}
+                setLetter={setProposal}
+                imagesContainer={images}
+                setImagesContainer={setImages}
               />
             )}
             {activeStep === 2 && (
-              <OptionalFields
-                category={typeAndBudget.category}
-                activeStep={activeStep}
+              <ReviewAndSubmit
                 steps={steps}
-                handleCancel={handleCancel}
+                activeStep={activeStep}
+                handleCancel={handleConfirmDialogue}
                 handleNext={handleNext}
                 handleBack={handleBack}
-                ques={ques}
-                setQues={setQues}
-                skillses={skillses}
-                setSkills={setSkills}
-                locations={locations}
-                setLocations={setLocations}
-              />
-            )}
-            {activeStep === 3 && (
-              <ReviewAndPost
-                activeStep={activeStep}
-                steps={steps}
-                handleCancel={handleCancel}
-                handleNext={handleNext}
-                handleBack={handleBack}
-                titles={titles}
-                descriptions={descriptions}
-                imagesContainer={imagesContainer}
-                typeAndBudget={typeAndBudget}
-                ques={ques}
-                skillses={skillses}
-                locations={locations}
+                handleClose={handleClose}
+                onHandleSubmit={onHandleSubmit}
+                rate={formValues.rate}
+                proposal={proposal}
+                images={images}
+                id={selectedItem.id}
               />
             )}
           </Box>

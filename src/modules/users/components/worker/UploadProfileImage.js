@@ -8,7 +8,32 @@ import { useDispatch } from "react-redux";
 import { updateUser } from "../../../../redux/actions/userActions";
 import Cropper from "react-easy-crop";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
-import CropImage from "../../../../components/CropImage";
+import { CropImage } from "../../../../utils/helpers";
+
+const styles = {
+  wrapper: { width: "100%", height: "100%" },
+  descriptionWrapper: {
+    width: { xs: "100%", sm: "50%", md: "50%" },
+    m: "0 auto",
+  },
+  descriptions: { fontSize: { xs: 12, md: 14 } },
+  description: { fontSize: "inherit" },
+  imageCropWrapper: {
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    minHeight: 260,
+    p: 2,
+
+    img: {
+      width: "100%",
+      height: "100%",
+      objectFit: "contain",
+      objectPosition: "center",
+    },
+  },
+  buttonsWrapper: { backgroundColor: "#F4F5FB", p: 2, borderRadius: 3, mt: 5 },
+};
 
 function UploadProfileImage(props) {
   const { handleClose, onConfirm } = props;
@@ -48,7 +73,6 @@ function UploadProfileImage(props) {
     setLoading(true);
     try {
       const croppedImg = await CropImage(image, croppedArea);
-
       const formData = new FormData();
       formData.append("profile_img", croppedImg);
 
@@ -82,7 +106,7 @@ function UploadProfileImage(props) {
   };
 
   return (
-    <Box sx={{ width: "100%", height: "100%" }}>
+    <Box sx={styles.wrapper}>
       <ToastNotificationContainer />
       <form encType="multipart/form-data">
         <input
@@ -97,17 +121,15 @@ function UploadProfileImage(props) {
 
       {!image && (
         <Box>
-          <Box
-            sx={{ width: { xs: "100%", sm: "50%", md: "50%" }, m: "0 auto" }}
-          >
-            <Box sx={{ fontSize: { xs: 12, md: 14 } }}>
-              <Typography component="li" sx={{ fontSize: "inherit" }}>
+          <Box sx={styles.descriptionWrapper}>
+            <Box sx={styles.descriptions}>
+              <Typography component="li" sx={styles.description}>
                 Recommended dimensions 400 x 400 px
               </Typography>
-              <Typography component="li" sx={{ fontSize: "inherit" }}>
+              <Typography component="li" sx={styles.description}>
                 JPG, JPEG, PNG
               </Typography>
-              <Typography component="li" sx={{ fontSize: "inherit" }}>
+              <Typography component="li" sx={styles.description}>
                 Max size: 5mb
               </Typography>
             </Box>
@@ -129,22 +151,7 @@ function UploadProfileImage(props) {
       )}
 
       {image && (
-        <Box
-          sx={{
-            position: "relative",
-            width: "100%",
-            height: "100%",
-            minHeight: 260,
-            p: 2,
-
-            img: {
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              objectPosition: "center",
-            },
-          }}
-        >
+        <Box sx={styles.imageCropWrapper}>
           <Cropper
             image={image}
             crop={crop}
@@ -186,10 +193,7 @@ function UploadProfileImage(props) {
         </Box>
       )}
 
-      <Box
-        align="right"
-        sx={{ backgroundColor: "#F4F5FB", p: 2, borderRadius: 3, mt: 5 }}
-      >
+      <Box align="right" sx={styles.buttonsWrapper}>
         <Button size="small" variant="outlined" onClick={handleClose}>
           Cancel
         </Button>

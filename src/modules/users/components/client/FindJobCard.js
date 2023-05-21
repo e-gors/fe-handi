@@ -1,10 +1,17 @@
-import { Avatar, Box, Chip, Grid, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Chip,
+  CircularProgress,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React from "react";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import FindJobCardModal from "./FindJobCardModal";
+import { useSelector } from "react-redux";
 
-const categoryLimit = 3;
-const skillLimit = 3;
+const skillLimit = 2;
 
 const styles = {
   wrapper: {
@@ -14,6 +21,15 @@ const styles = {
     backgroundColor: "#EBEBEB",
     p: 2,
     borderRadius: 3,
+    cursor: "pointer",
+
+    "&:hover": {
+      boxShadow: 5,
+
+      ".position": {
+        color: "blue",
+      },
+    },
   },
   jobCategoryText: {
     fontWeight: "bold",
@@ -53,7 +69,6 @@ const styles = {
     WebkitBoxOrient: "vertical",
     overflow: "hidden",
     textOverflow: "ellipsis",
-    lineHeight: 10,
   },
   skillWrapper: {
     mt: 2,
@@ -77,118 +92,137 @@ const styles = {
   },
 };
 
+const newPosts = (date) => {
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+  const isOlderThanOneWeek = date < oneWeekAgo;
+
+  if (isOlderThanOneWeek) {
+    return null;
+  } else {
+    return date;
+  }
+};
 function FindJobCard(props) {
-  const { workers } = props;
+  const { jobs, loading } = props;
+
+  const user = useSelector((state) => state.users.user);
+
+  const [open, setOpen] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState({});
+
+  const handleOpen = (value) => {
+    setSelectedItem(value);
+    setOpen(!open);
+  };
 
   return (
     <Box sx={styles.wrapper}>
+      {loading && (
+        <Box align="center">
+          <CircularProgress size={40} />
+        </Box>
+      )}
+      <FindJobCardModal
+        open={open}
+        handleClose={handleOpen}
+        selectedItem={selectedItem}
+        user={user && user}
+      />
       <Grid container spacing={1}>
-        {workers.map((worker, workerIndex) => {
-          const limitedCategories = worker.categoryChildren.slice(
-            0,
-            categoryLimit
-          );
-          const limitedSkills = worker.skillChildren.slice(0, skillLimit);
-          return (
-            <Grid key={workerIndex} item xs={12} sm={12} md={6}>
-              <Box sx={styles.cardWrapper}>
-                <Typography sx={styles.jobCategoryText}>
-                  Job Category
-                </Typography>
-                <Box sx={styles.cardTop}>
-                  <Avatar
-                    alt={worker.fullname}
-                    src={worker.profile && worker.profile[0]["profile_url"]}
-                  />
-                  <Box sx={styles.categoryWrapper}>
-                    <Box sx={styles.fullname}>
-                      <Typography sx={styles.fullnameText}>
-                        {worker.fullname}
-                      </Typography>
+        {!loading &&
+          jobs &&
+          jobs.map((job, postIndex) => {
+            const limitedSkills = job.skills.slice(0, skillLimit);
+            return (
+              <Grid key={postIndex} item xs={12} sm={12} md={6}>
+                <Box sx={styles.cardWrapper} onClick={() => handleOpen(job)}>
+                  <Box sx={{ display: "flex" }}>
+                    <Typography
+                      sx={styles.jobCategoryText}
+                      className="position"
+                    >
+                      {job.position}
+                    </Typography>
+                    <Typography sx={{ ml: 1, color: "green" }}>•</Typography>
+                    <Typography
+                      sx={{ ml: 1, color: "green", fontSize: 12, mt: 0.5 }}
+                    >
+                      Posted {newPosts(job.created_at)}
+                    </Typography>
+                  </Box>
+                  <Box sx={styles.cardTop}>
+                    <Avatar
+                      alt={job.client.fullname}
+                      src={
+                        job.client.profile &&
+                        job.client.profile[0]["profile_url"]
+                      }
+                    />
+                    <Box sx={styles.categoryWrapper}>
+                      <Box sx={styles.fullname}>
+                        <Typography sx={styles.fullnameText}>
+                          {job.client.fullname}
+                        </Typography>
 
-                      <Box sx={styles.categoryMainWrapper}>
-                        {limitedCategories.map((category, categoryIndex) => {
-                          return (
-                            <Chip
-                              size="medium"
-                              key={categoryIndex}
-                              label={category.name}
-                              variant="contained"
-                              sx={styles.category}
-                            />
-                          );
-                        })}
-                        {worker.categoryChildren.length > categoryLimit && (
+                        <Box sx={styles.categoryMainWrapper}>
                           <Chip
-                            size="medium"
-                            key={`${workerIndex}-more`}
-                            label={`+${
-                              worker.categoryChildren.length - categoryLimit
-                            }`}
-                            variant="outlined"
-                            sx={styles.moreCategory}
+                            size="small"
+                            key={postIndex}
+                            label={job.category}
+                            variant="contained"
+                            sx={styles.category}
                           />
-                        )}
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
-                </Box>
 
-                <Box sx={styles.backgroundText} align="justify">
-                  <Typography>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                  </Typography>
+                  <div
+                    style={styles.backgroundText}
+                    dangerouslySetInnerHTML={{ __html: job.description }}
+                  />
+                  <Stack sx={styles.skillWrapper}>
+                    {limitedSkills.map((skill, skillIndex) => (
+                      <Chip
+                        size="small"
+                        key={skillIndex}
+                        label={skill}
+                        variant="contained"
+                        sx={styles.skill}
+                      />
+                    ))}
+                    {job.skills.length > skillLimit && (
+                      <Chip
+                        size="small"
+                        key={`${postIndex}-more`}
+                        label={`+${job.skills.length - skillLimit}`}
+                        variant="contained"
+                        sx={styles.moreSkill}
+                      />
+                    )}
+                  </Stack>
 
-                  {/* {worker.profile.map((user, i) => (
-                    <Typography>
-                      {user.background && user.background}
-                    </Typography>
-                  ))} */}
-                </Box>
-                <Stack sx={styles.skillWrapper}>
-                  {limitedSkills.map((skill, skillIndex) => (
-                    <Chip
-                      size="medium"
-                      key={skillIndex}
-                      label={skill.name}
-                      variant="outlined"
-                      sx={styles.skill}
-                    />
-                  ))}
-                  {worker.skills.length > skillLimit && (
-                    <Chip
-                      size="medium"
-                      key={`${workerIndex}-more`}
-                      label={`+${worker.skillChildren.length - skillLimit}`}
-                      variant="outlined"
-                      sx={styles.moreSkill}
-                    />
-                  )}
-                </Stack>
-
-                <Box sx={styles.cardBottom}>
-                  {worker.profile.map((user, i) => (
-                    <Box key={i} sx={styles.cardBottomWrapper}>
+                  <Box sx={styles.cardBottom}>
+                    <Box sx={styles.cardBottomWrapper}>
                       <Typography>
-                        {user.daily_rate
-                          ? user.daily_rate
-                          : "$1 - $3 / Daily rate"}
+                        {job.rate ? job.rate : "$1 - $3 / Daily rate"} /{" "}
+                        {job.job_type}
                       </Typography>
-                      <Typography>
-                        {user.rating ? user.rating : "2 weeks"}
-                      </Typography>
+                      <Typography>{job.days ? job.days : "2 weeks"}</Typography>
                     </Box>
-                  ))}
+                  </Box>
                 </Box>
-              </Box>
-            </Grid>
-          );
-        })}
+              </Grid>
+            );
+          })}
       </Grid>
+
+      {!loading && jobs && jobs.length === 0 && (
+        <Box align="center">
+          <Typography>No Jobs found!</Typography>
+        </Box>
+      )}
     </Box>
   );
 }

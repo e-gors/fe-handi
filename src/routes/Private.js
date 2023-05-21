@@ -30,14 +30,13 @@ function Private(props) {
 
   const user = useSelector((state) => state.users.user);
 
+  // if (user && user.email_verified_at === null) {
+  //   return <Route render={() => <Redirect to="/confirm-registration" />} />;
+  // }
+
   if (!isAuth()) {
     return <Route render={() => <Redirect to="/login" />} />;
   }
-
-  if (user && user.email_verified_at === null) {
-    return <Route render={() => <Redirect to="/confirm-registration" />} />;
-  }
-
   return (
     <Route
       {...rest}

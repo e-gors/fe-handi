@@ -32,8 +32,8 @@ const columns = [
     label: "Contract Name",
   },
   {
-    name: "client",
-    label: "Client",
+    name: "worker",
+    label: "Worker",
   },
   {
     name: "type",
@@ -102,7 +102,6 @@ export default function Contracts(props) {
     //       meta: res.data.meta,
     //     });
     //   }
-
     //   setLoading(false);
     // });
   };

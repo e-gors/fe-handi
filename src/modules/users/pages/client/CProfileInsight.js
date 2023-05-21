@@ -14,6 +14,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import ArticleIcon from "@mui/icons-material/Article";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import DropdownMenuItem from "../../../../components/DropdownMenuItem";
+import { useSelector } from "react-redux";
 
 const styles = {
   wrapper: {
@@ -94,6 +95,8 @@ const styles = {
 function CProfileInsight() {
   const history = useHistory();
 
+  const user = useSelector((state) => state.users.user);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -132,12 +135,14 @@ function CProfileInsight() {
 
         <Box sx={styles.profileCardWrapper}>
           <Box sx={styles.profileLeft}>
-            <Avatar variant="rounded" sx={styles.profileAvatar}>
-              <Typography>Profile</Typography>
-            </Avatar>
+            <Avatar
+              variant="rounded"
+              sx={styles.profileAvatar}
+              src={user && user.profile[0].profile_url}
+            ></Avatar>
             <Box sx={styles.nameWrapper}>
-              <Typography sx={styles.name}>Efren Goron</Typography>
-              <Typography>Hilongos, Leyte</Typography>
+              <Typography sx={styles.name}>{user.fullname}</Typography>
+              <Typography>{user.profile[0].address}</Typography>
             </Box>
           </Box>
 
@@ -146,7 +151,7 @@ function CProfileInsight() {
               variant="contained"
               color="primary"
               sx={styles.viewProfileButton}
-              onClick={() => handleNavigate('/profile/client')}
+              onClick={() => handleNavigate("/profile/client")}
             >
               View Profile
             </Button>

@@ -1,46 +1,25 @@
-import { Box, Chip, IconButton, Tooltip, Typography } from "@mui/material";
+import { Box, Chip, Tooltip, Typography } from "@mui/material";
 import React from "react";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import ProfileModalEdit from "../ProfileModalEdit";
 import parse from "html-react-parser";
 
 const categoryLimit = 10;
 
 function ProfileOverview(props) {
-  const { user } = props;
+  const { worker } = props;
 
-  const { profile, categories, skills } = user;
+  const { profile, categories, skills } = worker;
   const { background } = profile[0];
-
-  const [open, setOpen] = React.useState(false);
-  const [type, setType] = React.useState("");
-
-  const handleOpen = (type) => {
-    setOpen(true);
-    setType(type);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <Box>
-      <ProfileModalEdit type={type} open={open} handleClose={handleClose} />
       <Box>
         <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
           <Typography>This is a headline</Typography>
-          <IconButton sx={{ ml: 1 }} onClick={() => handleOpen("Background")}>
-            <EditOutlinedIcon />
-          </IconButton>
         </Box>
         <Box>
           <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
             <Typography>Bio</Typography>
-            <IconButton sx={{ ml: 1 }} onClick={() => handleOpen("Bio")}>
-              <EditOutlinedIcon />
-            </IconButton>
           </Box>
           <Typography
             sx={{
@@ -49,7 +28,7 @@ function ProfileOverview(props) {
               fontSize: { xs: 14, md: 16 },
             }}
           >
-            {background && parse(background)}
+            {/* {background && parse(background)} */}
           </Typography>
         </Box>
 
@@ -62,9 +41,6 @@ function ProfileOverview(props) {
             >
               <InfoOutlinedIcon />
             </Tooltip>
-            <IconButton onClick={() => handleOpen("Categories")}>
-              <EditOutlinedIcon />
-            </IconButton>
           </Box>
           {categories &&
             categories.map((category, categoryIndex) => {
@@ -115,9 +91,6 @@ function ProfileOverview(props) {
             >
               <InfoOutlinedIcon />
             </Tooltip>
-            <IconButton onClick={() => handleOpen("Skills")}>
-              <EditOutlinedIcon />
-            </IconButton>
           </Box>
           {skills &&
             skills.map((skill, skillIndex) => {

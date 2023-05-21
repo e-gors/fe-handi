@@ -30,15 +30,17 @@ function PrivateWorker(props) {
 
   const user = useSelector((state) => state.users.user);
 
-  if (user.role !== role) {
-    return <Route render={() => <Redirect to="/forbidden" />} />;
-  }
   if (!isAuth()) {
     return <Route render={() => <Redirect to="/login" />} />;
   }
-  if (user && user.email_verified_at === null) {
-    return <Route render={() => <Redirect to="/confirm-registration" />} />;
+
+  if (user.role !== role) {
+    return <Route render={() => <Redirect to="/forbidden" />} />;
   }
+
+  // if (user && user.email_verified_at === null) {
+  //   return <Route render={() => <Redirect to="/confirm-registration" />} />;
+  // }
 
   return (
     <Route

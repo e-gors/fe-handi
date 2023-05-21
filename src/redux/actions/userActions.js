@@ -20,3 +20,4 @@ export const updateUser = (newUser) => {
     payload: newUser,
   };
 };
+

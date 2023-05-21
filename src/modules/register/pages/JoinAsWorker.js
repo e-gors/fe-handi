@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import FormField from "../../../components/FormField";
-import ReeValidate from "ree-validate-18";
 import SelectDropdown from "../../../components/SelectDropdown";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
@@ -26,13 +25,14 @@ import ToastNotification from "../../../components/ToastNotification";
 import { options } from "../../../components/options";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../../redux/actions/userActions";
+import ReeValidate from "ree-validate-18";
 
 const formValuesValidator = new ReeValidate.Validator({
-  email: "required|email",
+  email: "required|email|regex:^[a-zA-Z0-9]+.[^s@]+@gmail.com$",
   first_name: "required",
   last_name: "required",
   password: "required|min:6",
-  number: "required|numeric",
+  number: "required|numeric|regex:^09[0-9]{9}$",
   gender: "required",
   address: "required",
 });
@@ -112,7 +112,7 @@ const styles = {
 
 const genders = ["Male", "Female", "Others", "Better Not Tell"];
 
-function JoinUsWorker() {
+function JoinAsWorker() {
   let role = localStorage.getItem("selectedRole");
   const dispatch = useDispatch();
 
@@ -202,10 +202,9 @@ function JoinUsWorker() {
       .workerRegister(role, formValues, expertise)
       .then((res) => {
         if (res.data.code === 200) {
-          dispatch(setUser(res.data.user));
           ToastNotification("success", res.data.message, options);
           localStorage.removeItem("selectedRole");
-          history.push("/confirm-registration");
+          history.push("/login");
         } else {
           setLoading(false);
           ToastNotification("error", res.data.message, options);
@@ -213,7 +212,7 @@ function JoinUsWorker() {
       })
       .catch((err) => {
         setLoading(false);
-        ToastNotification("error", err, options);
+        ToastNotification("error", err.message, options);
       });
   };
 
@@ -476,7 +475,7 @@ function JoinUsWorker() {
             labelPlacement="end"
             label={
               <Typography sx={styles.checking}>
-                Checking this means that you aggree to our "
+                Checking this means that you agree to our "
                 <span
                   style={{
                     color: "blue",
@@ -552,4 +551,4 @@ function JoinUsWorker() {
   );
 }
 
-export default JoinUsWorker;
+export default JoinAsWorker;

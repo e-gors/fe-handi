@@ -64,7 +64,7 @@ function OnBoarding() {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => history.push(`/overview/${role}/${uuid}`)}
+              onClick={() => history.push("/edit/profile/worker")}
               sx={styles.completeProfile}
             >
               Complete Profile

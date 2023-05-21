@@ -16,7 +16,7 @@ import { options } from "../../../../components/options";
 import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../../../redux/actions/userActions";
-import SocialLinkRegex from "../../../../components/SocialLinkRegex";
+import { SocialLinkRegex } from "../../../../utils/helpers";
 
 const styles = {
   iconTextWrapper: { mb: 5 },
