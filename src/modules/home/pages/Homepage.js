@@ -1,3 +1,5 @@
+/** @format */
+
 import { Box, Button, Typography, Grid, CircularProgress } from "@mui/material";
 import React from "react";
 import ImageCarousel from "../components/ImageCarousel";
@@ -14,7 +16,6 @@ import { useDispatch } from "react-redux";
 import { setWorkers } from "../../../redux/actions/profileActions";
 import { setCategories } from "../../../redux/actions/categoryActions";
 import { setSkills } from "../../../redux/actions/skillActions";
-import Http from "../../../utils/Http";
 import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
 import noGuardHttp from "../../register/service";
 
@@ -29,7 +30,11 @@ const innerStyles = {
     transition: "1s",
     p: { xs: "20px 10px 50px 20px", md: 15, lg: 20 },
   },
-  header: { fontSize: { xs: 24, md: 45, lg: 55 }, color: "blue" },
+  header: {
+    fontSize: { xs: 30, md: 45, lg: 55 },
+    color: "black",
+    fontWeight: "bold",
+  },
   buttonWrapper: {
     mt: 2,
     display: "flex",
@@ -50,7 +55,7 @@ const innerStyles = {
   forSkilledWorkerWrapper: {
     p: 1,
   },
-  forSkilledWorkerText: { fontSize: { xs: 18, md: 24 }, fontWeight: "bold" },
+  forSkilledWorkerText: { fontSize: { xs: 30, md: 24 }, fontWeight: "bold" },
 
   contactWrapper: {
     p: 2,
@@ -76,7 +81,8 @@ function Homepage() {
   }, []);
 
   const fetchWorker = () => {
-    noGuardHttp.get("workers")
+    noGuardHttp
+      .get("workers")
       .then((res) => {
         dispatch(setWorkers(res.data.data));
       })

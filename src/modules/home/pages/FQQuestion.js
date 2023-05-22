@@ -32,7 +32,14 @@ function FQQuestion() {
         </div>
 
         <div className="Cards">
-          <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
+          <Card
+            sx={{
+              minWidth: 275,
+              width: "80%",
+              marginBottom: "3rem",
+              backgroundColor: "#bdc8ce",
+            }}
+          >
             <CardContent>
               <Typography
                 sx={{ fontSize: 14 }}
@@ -43,6 +50,7 @@ function FQQuestion() {
               </Typography>
               <Typography variant="h5" component="div">
                 Gwapo bako?
+                <Divider />
               </Typography>
               <Typography variant="body2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -59,7 +67,14 @@ function FQQuestion() {
             </CardActions>
           </Card>
 
-          <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
+          <Card
+            sx={{
+              minWidth: 275,
+              width: "80%",
+              marginBottom: "3rem",
+              backgroundColor: "#bdc8ce",
+            }}
+          >
             <CardContent>
               <Typography
                 sx={{ fontSize: 14 }}
@@ -70,6 +85,7 @@ function FQQuestion() {
               </Typography>
               <Typography variant="h5" component="div">
                 Gwapo bako?
+                <Divider />
               </Typography>
               <Typography variant="body2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -86,7 +102,14 @@ function FQQuestion() {
             </CardActions>
           </Card>
 
-          <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
+          <Card
+            sx={{
+              minWidth: 275,
+              width: "80%",
+              marginBottom: "3rem",
+              backgroundColor: "#bdc8ce",
+            }}
+          >
             <CardContent>
               <Typography
                 sx={{ fontSize: 14 }}
@@ -97,6 +120,7 @@ function FQQuestion() {
               </Typography>
               <Typography variant="h5" component="div">
                 Gwapo bako?
+                <Divider />
               </Typography>
               <Typography variant="body2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -113,7 +137,14 @@ function FQQuestion() {
             </CardActions>
           </Card>
 
-          <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
+          <Card
+            sx={{
+              minWidth: 275,
+              width: "80%",
+              marginBottom: "3rem",
+              backgroundColor: "#bdc8ce",
+            }}
+          >
             <CardContent>
               <Typography
                 sx={{ fontSize: 14 }}
@@ -124,6 +155,7 @@ function FQQuestion() {
               </Typography>
               <Typography variant="h5" component="div">
                 Gwapo bako?
+                <Divider />
               </Typography>
               <Typography variant="body2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -142,7 +174,14 @@ function FQQuestion() {
         </div>
 
         <div className="Cards">
-          <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
+          <Card
+            sx={{
+              minWidth: 275,
+              width: "80%",
+              marginBottom: "3rem",
+              backgroundColor: "#bdc8ce",
+            }}
+          >
             <CardContent>
               <Typography
                 sx={{ fontSize: 14 }}
@@ -153,6 +192,7 @@ function FQQuestion() {
               </Typography>
               <Typography variant="h5" component="div">
                 Gwapo bako?
+                <Divider />
               </Typography>
               <Typography variant="body2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -169,7 +209,14 @@ function FQQuestion() {
             </CardActions>
           </Card>
 
-          <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
+          <Card
+            sx={{
+              minWidth: 275,
+              width: "80%",
+              marginBottom: "3rem",
+              backgroundColor: "#bdc8ce",
+            }}
+          >
             <CardContent>
               <Typography
                 sx={{ fontSize: 14 }}
@@ -180,6 +227,7 @@ function FQQuestion() {
               </Typography>
               <Typography variant="h5" component="div">
                 Gwapo bako?
+                <Divider />
               </Typography>
               <Typography variant="body2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -196,7 +244,14 @@ function FQQuestion() {
             </CardActions>
           </Card>
 
-          <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
+          <Card
+            sx={{
+              minWidth: 275,
+              width: "80%",
+              marginBottom: "3rem",
+              backgroundColor: "#bdc8ce",
+            }}
+          >
             <CardContent>
               <Typography
                 sx={{ fontSize: 14 }}
@@ -207,6 +262,7 @@ function FQQuestion() {
               </Typography>
               <Typography variant="h5" component="div">
                 Gwapo bako?
+                <Divider />
               </Typography>
               <Typography variant="body2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -223,7 +279,14 @@ function FQQuestion() {
             </CardActions>
           </Card>
 
-          <Card sx={{ minWidth: 275, width: "20%", marginBottom: "3rem" }}>
+          <Card
+            sx={{
+              minWidth: 275,
+              width: "80%",
+              marginBottom: "3rem",
+              backgroundColor: "#bdc8ce",
+            }}
+          >
             <CardContent>
               <Typography
                 sx={{ fontSize: 14 }}
@@ -234,6 +297,7 @@ function FQQuestion() {
               </Typography>
               <Typography variant="h5" component="div">
                 Gwapo bako?
+                <Divider />
               </Typography>
               <Typography variant="body2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
