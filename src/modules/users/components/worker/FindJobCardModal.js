@@ -137,14 +137,7 @@ function FindJobCardModal(props) {
   const [openApplyModal, setOpenApplyModal] = React.useState(false);
 
   const handleOpen = () => {
-    if (user && user.role === "Client") {
-      ToastNotification(
-        "error",
-        "You can only create a job post with a Client account!",
-        options
-      );
-      return;
-    } else {
+    if (user && user.role === "Worker") {
       if (isBided) {
         ToastNotification(
           "error",
@@ -154,6 +147,12 @@ function FindJobCardModal(props) {
       } else {
         setOpenApplyModal(!openApplyModal);
       }
+    } else {
+      ToastNotification(
+        "error",
+        `You can only create a job post with a ${user.role} account!`,
+        options
+      );
     }
   };
 
@@ -163,7 +162,7 @@ function FindJobCardModal(props) {
   };
 
   const addToShortlist = (id) => {
-    if (user && user.length !== 0 && user.role !== "Client") {
+    if (user && user.length !== 0 && user.role === "Worker") {
       Http.post(`new/shortlist/post/${id}`)
         .then((res) => {
           if (res.data.code === 200) {
@@ -179,7 +178,7 @@ function FindJobCardModal(props) {
     } else {
       ToastNotification(
         "error",
-        "You are not allowed to add this post to your shortlist",
+        "You are not allowed to add this post to your shortlist!",
         options
       );
     }

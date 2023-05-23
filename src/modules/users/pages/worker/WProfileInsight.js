@@ -125,7 +125,7 @@ const styles = {
 function WProfileInsight() {
   const history = useHistory();
   const user = useSelector((state) => state.users.user);
-  const { fullname, profile, role, uuid } = user;
+  const { fullname, profile, role, uuid, bids } = user;
   const { address, profile_completeness, profile_url } = profile[0];
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -253,7 +253,7 @@ function WProfileInsight() {
 
           <Box>
             <TabPanel value={tab} index={0}>
-              <ProfileInfo score={profile_completeness} />
+              <ProfileInfo score={profile_completeness} proposals={bids} contracts offers />
             </TabPanel>
             <TabPanel value={tab} index={1}>
               Tab 2

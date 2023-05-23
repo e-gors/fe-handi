@@ -2,7 +2,7 @@ import { Box, Chip, Pagination, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
 import FindJobWorkerFilter from "../../components/FindJobWorkerFilter";
-import FindJobCard from "../../components/client/FindJobCard";
+import FindJobCard from "../../components/worker/FindJobCard";
 import noGuardHttp from "../../../register/service";
 
 function CMarketplace() {

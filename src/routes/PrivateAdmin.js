@@ -29,7 +29,7 @@ function PrivateAdmin(props) {
 
   const user = useSelector((state) => state.users.user);
 
-  if (user.role !== role) {
+  if (user && user.role !== role) {
     return <Route render={() => <Redirect to="/forbidden" />} />;
   }
   if (!isAuth()) {

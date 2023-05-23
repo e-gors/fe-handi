@@ -15,6 +15,7 @@ import SelectDropdown from "../../../components/SelectDropdown";
 import ArticleIcon from "@mui/icons-material/Article";
 import DataTable from "../../../components/DataTable";
 import Http from "../../../utils/Http";
+import { useHistory } from "react-router-dom";
 
 const status = ["Pending", "Accepted", "Declined", "Withdrawn"];
 const orderByRate = ["Ascending", "Descending"];
@@ -64,6 +65,7 @@ const columns = [
 function Offers(props) {
   const { role } = props;
 
+  const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [loading, setLoading] = React.useState(false);
@@ -301,7 +303,18 @@ function Offers(props) {
               }}
             />
             {role === "Client" ? (
-              <Typography sx={{ mt: 2 }}>NO OFFERS HAVE BEEN SENT</Typography>
+              <Box>
+                <Typography sx={{ mt: 2 }}>NO OFFERS HAVE BEEN SENT</Typography>
+                <Button
+                  sx={{ width: 120, mt: 2, boxShadow: 5 }}
+                  color="primary"
+                  variant="contained"
+                  size="small"
+                  onClick={() => history.push("/new/job-offer")}
+                >
+                  Send Offer
+                </Button>
+              </Box>
             ) : (
               <Typography sx={{ mt: 2 }}>
                 NO OFFERS HAVE BEEN RECEIVED

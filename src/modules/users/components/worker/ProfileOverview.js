@@ -3,7 +3,6 @@ import React from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ProfileModalEdit from "../ProfileModalEdit";
-import parse from "html-react-parser";
 
 const categoryLimit = 10;
 
@@ -42,15 +41,11 @@ function ProfileOverview(props) {
               <EditOutlinedIcon />
             </IconButton>
           </Box>
-          <Typography
-            sx={{
-              textIndent: 50,
-              textAlign: "justify",
-              fontSize: { xs: 14, md: 16 },
-            }}
-          >
-            {background && parse(background)}
-          </Typography>
+          {background && (
+            <div
+              dangerouslySetInnerHTML={{ __html: background && background }}
+            ></div>
+          )}
         </Box>
 
         <Box>

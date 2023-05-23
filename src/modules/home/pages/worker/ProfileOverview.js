@@ -1,7 +1,6 @@
 import { Box, Chip, Tooltip, Typography } from "@mui/material";
 import React from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import parse from "html-react-parser";
 
 const categoryLimit = 10;
 
@@ -9,7 +8,7 @@ function ProfileOverview(props) {
   const { worker } = props;
 
   const { profile, categories, skills } = worker;
-  const { background } = profile[0];
+  const { background } = profile ? profile[0] : null;
 
   return (
     <Box>
@@ -21,15 +20,11 @@ function ProfileOverview(props) {
           <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
             <Typography>Bio</Typography>
           </Box>
-          <Typography
-            sx={{
-              textIndent: 50,
-              textAlign: "justify",
-              fontSize: { xs: 14, md: 16 },
-            }}
-          >
-            {/* {background && parse(background)} */}
-          </Typography>
+          {background && (
+            <div
+              dangerouslySetInnerHTML={{ __html: background && background }}
+            ></div>
+          )}
         </Box>
 
         <Box>

@@ -5,6 +5,8 @@ const initialState = {
   client: [],
   workers: [],
   clients: [],
+  searchQuery: "",
+  searchResult: [],
 };
 
 export const profileReducer = (state = initialState, { type, payload }) => {
@@ -22,6 +24,16 @@ export const profileReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         worker: filteredWorker ? { ...filteredWorker } : [], // Update the worker property
+      };
+    case ActionTypes.SET_SEARCH_QUERY:
+      return {
+        ...state,
+        searchQuery: payload,
+      };
+    case ActionTypes.SET_SEARCH_RESULT:
+      return {
+        ...state,
+        searchResult: payload,
       };
     default:
       return state;

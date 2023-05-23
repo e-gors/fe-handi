@@ -11,12 +11,15 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 
 import React, { memo, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 
 function DataTable(props) {
   const {
@@ -29,6 +32,8 @@ function DataTable(props) {
     withNumber,
     onDelete,
     onEdit,
+    onRevoked,
+    onView,
     loading,
     ...rest
   } = props;
@@ -65,14 +70,22 @@ function DataTable(props) {
   };
 
   const paginationProps = {
-    rowsPerPageOptions: [25, 50, 100, 150, 250],
+    rowsPerPageOptions: [10, 20, 50, 100, 250],
     component: "div",
     count: 1,
-    rowsPerPage: 25,
+    rowsPerPage: 10,
     page: 1,
     ...rest,
   };
 
+  const handleView = (item) => {
+    setSelectedItem(item);
+    onView && onView(item);
+  };
+  const handleRevoked = (item) => {
+    setSelectedItem(item);
+    onRevoked && onRevoked(item);
+  };
   const handleEdit = (item) => {
     setSelectedItem(item);
     onEdit && onEdit(item);
@@ -117,41 +130,96 @@ function DataTable(props) {
               data.map((item, itemIndex) => (
                 <TableRow key={itemIndex}>
                   {(onDelete || onEdit || withNumber) && (
-                    <TableCell size="small" align="center">
+                    <TableCell
+                      size="small"
+                      align="center"
+                      sx={{ whiteSpace: "noWrap" }}
+                    >
                       {withNumber && itemIndex + 1}
+                      {onView && (
+                        <Tooltip title="View Proposal" arrow>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() => handleView(item)}
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                      {onRevoked && (
+                        <Tooltip title="Cancel Proposal" arrow>
+                          <IconButton
+                            size="small"
+                            sx={{ color: "gray" }}
+                            onClick={() => handleRevoked(item)}
+                          >
+                            <DeleteSweepIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                       {onEdit && (
-                        <IconButton
-                          size="small"
-                          sx={{ color: "#00c853" }}
-                          onClick={() => handleEdit(item)}
-                        >
-                          <EditIcon />
-                        </IconButton>
+                        <Tooltip title="Edit Proposal" arrow>
+                          <IconButton
+                            size="small"
+                            sx={{ color: "#00c853" }}
+                            onClick={() => handleEdit(item)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
                       )}
                       {onDelete && (
-                        <IconButton
-                          size="small"
-                          color="error"
-                          onClick={() => handleDelete(item)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                        <Tooltip title="Delete Proposal" arrow>
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() => handleDelete(item)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
                       )}
                     </TableCell>
                   )}
 
-                  {columns.map((col, colIndex) => (
-                    <TableCell size="small" key={colIndex}>
-                      {col.customBodyRender
-                        ? col.customBodyRender(
-                            getCellValue(item, col),
-                            item,
-                            colIndex,
-                            itemIndex
-                          )
-                        : getCellValue(item, col)}
-                    </TableCell>
-                  ))}
+                  {columns.map((col, colIndex) => {
+                    const cellValue = getCellValue(item, col);
+                    const isStatusColumn = col.name === "status"; // Assuming "status" is the column identifier
+
+                    let cellColor = "inherit";
+                    if (isStatusColumn) {
+                      if (cellValue === "pending") {
+                        cellColor = "red";
+                      } else if (cellValue === "accepted") {
+                        cellColor = "green";
+                      } else if (cellValue === "declined") {
+                        cellColor = "orange";
+                      } else if (cellValue === "withdrawn") {
+                        cellColor = "gray";
+                      }
+                    }
+                    return (
+                      <TableCell
+                        size="small"
+                        key={`${colIndex}-${col.name}`}
+                        sx={{
+                          whiteSpace: "noWrap",
+                          fontWeight: isStatusColumn ? "bold" : "normal",
+                          color: cellColor,
+                        }}
+                      >
+                        {col.customBodyRender
+                          ? col.customBodyRender(
+                              cellValue,
+                              item,
+                              colIndex,
+                              itemIndex
+                            )
+                          : cellValue}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))}
           </TableBody>

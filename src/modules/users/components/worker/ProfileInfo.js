@@ -40,8 +40,68 @@ function a11yProps(index) {
   };
 }
 
+const styles = {
+  wrapper: {
+    backgroundColor: "#EEEEEE",
+    borderRadius: 3,
+    boxShadow: 5,
+    p: 2,
+  },
+  mainWrapper: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  icons: { width: 30, height: 30 },
+  title: { ml: 1, whiteSpace: "noWrap" },
+  tabWrapper: { mt: -2, mb: 2 },
+  tabLabel: { fontSize: 11 },
+  scoreWrapper: { mt: 5, backgroundColor: "#EEEEEE", borderRadius: 3, p: 1 },
+  scoreMainWrapper: { display: "flex", flexWrap: "wrap" },
+  circularWrapper: {
+    width: { xs: 120, md: 150 },
+    height: { xs: 120, md: 150 },
+
+    "@media(max-width: 865px)": {
+      margin: "20px auto",
+    },
+  },
+  score: { fontSize: { xs: 22, md: 28 }, fontWeight: "bold" },
+  profileTitle: { fontSize: { xs: 20, md: 24 }, fontWeight: "bold" },
+  profileCardWrapper: {
+    m: 0.5,
+    border: "1px solid #BEBEBE",
+    boxShadow: 5,
+    p: 1,
+    display: "flex",
+    borderRadius: 2,
+  },
+  info: { ml: 2 },
+  quickAction: {
+    backgroundColor: "#EEEEEE",
+    borderRadius: 3,
+    boxShadow: 5,
+    p: 2,
+  },
+  quickActionCardWrapper: {
+    backgroundColor: "#BEBEBE",
+    borderRadius: 3,
+    boxShadow: 5,
+    p: 2,
+    cursor: "pointer",
+
+    "&:hover": {
+      backgroundColor: "#CCCCCC",
+    },
+  },
+  quickMainWrapper: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  quoteIcon: { color: "green", width: 30, height: 30 },
+};
+
 function ProfileInfo(props) {
-  const {score} = props;
+  const { score, proposals, contracts, offers } = props;
 
   const history = useHistory();
 
@@ -61,30 +121,13 @@ function ProfileInfo(props) {
           <Grid item xs={12} md={12} lg={9.5}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6} lg={4}>
-                <Box
-                  sx={{
-                    backgroundColor: "#EEEEEE",
-                    borderRadius: 3,
-                    boxShadow: 5,
-                    p: 2,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
+                <Box sx={styles.wrapper}>
+                  <Box sx={styles.mainWrapper}>
                     <Box sx={{ display: "flex" }}>
-                      <AccountBoxIcon
-                        color="primary"
-                        sx={{ width: 30, height: 30 }}
-                      />
-                      <Typography sx={{ ml: 1, whiteSpace: "noWrap" }}>
-                        Profile views
-                      </Typography>
+                      <AccountBoxIcon color="primary" sx={styles.icons} />
+                      <Typography sx={styles.title}>Profile views</Typography>
                     </Box>
-                    <Box sx={{ mt: -2, mb: 2 }}>
+                    <Box sx={styles.tabWrapper}>
                       <Tabs
                         value={tab}
                         onChange={handleChangeTab}
@@ -93,12 +136,12 @@ function ProfileInfo(props) {
                         <Tab
                           label="30 days"
                           {...a11yProps(0)}
-                          sx={{ fontSize: 11 }}
+                          sx={styles.tabLabel}
                         />
                         <Tab
                           label="Week"
                           {...a11yProps(1)}
-                          sx={{ fontSize: 11 }}
+                          sx={styles.tabLabel}
                         />
                       </Tabs>
                     </Box>
@@ -108,30 +151,13 @@ function ProfileInfo(props) {
                 </Box>
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
-                <Box
-                  sx={{
-                    backgroundColor: "#EEEEEE",
-                    borderRadius: 3,
-                    boxShadow: 5,
-                    p: 2,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
+                <Box sx={styles.wrapper}>
+                  <Box sx={styles.mainWrapper}>
                     <Box sx={{ display: "flex" }}>
-                      <FindInPageIcon
-                        color="secondary"
-                        sx={{ width: 30, height: 30 }}
-                      />
-                      <Typography sx={{ ml: 1, whiteSpace: "noWrap" }}>
-                        Search results
-                      </Typography>
+                      <FindInPageIcon color="secondary" sx={styles.icons} />
+                      <Typography sx={styles.title}>Search results</Typography>
                     </Box>
-                    <Box sx={{ mt: -2, mb: 2 }}>
+                    <Box sx={styles.tabWrapper}>
                       <Tabs
                         value={tab}
                         onChange={handleChangeTab}
@@ -140,12 +166,12 @@ function ProfileInfo(props) {
                         <Tab
                           label="30 days"
                           {...a11yProps(0)}
-                          sx={{ fontSize: 11 }}
+                          sx={styles.tabLabel}
                         />
                         <Tab
                           label="Week"
                           {...a11yProps(1)}
-                          sx={{ fontSize: 11 }}
+                          sx={styles.tabLabel}
                         />
                       </Tabs>
                     </Box>
@@ -155,30 +181,13 @@ function ProfileInfo(props) {
                 </Box>
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
-                <Box
-                  sx={{
-                    backgroundColor: "#EEEEEE",
-                    borderRadius: 3,
-                    boxShadow: 5,
-                    p: 2,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
+                <Box sx={styles.wrapper}>
+                  <Box sx={styles.mainWrapper}>
                     <Box sx={{ display: "flex" }}>
-                      <StarsIcon
-                        color="warning"
-                        sx={{ width: 30, height: 30 }}
-                      />
-                      <Typography sx={{ ml: 1, whiteSpace: "noWrap" }}>
-                        Reviews
-                      </Typography>
+                      <StarsIcon color="warning" sx={styles.icons} />
+                      <Typography sx={styles.title}>Reviews</Typography>
                     </Box>
-                    <Box sx={{ mt: -2, mb: 2 }}>
+                    <Box sx={styles.tabWrapper}>
                       <Tabs
                         value={tab}
                         onChange={handleChangeTab}
@@ -187,12 +196,12 @@ function ProfileInfo(props) {
                         <Tab
                           label="30 days"
                           {...a11yProps(0)}
-                          sx={{ fontSize: 11 }}
+                          sx={styles.tabLabel}
                         />
                         <Tab
                           label="Week"
                           {...a11yProps(1)}
-                          sx={{ fontSize: 11 }}
+                          sx={styles.tabLabel}
                         />
                       </Tabs>
                     </Box>
@@ -202,37 +211,20 @@ function ProfileInfo(props) {
                 </Box>
               </Grid>
             </Grid>
-            <Box
-              sx={{ mt: 5, backgroundColor: "#EEEEEE", borderRadius: 3, p: 1 }}
-            >
-              <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                <Box
-                  sx={{
-                    width: { xs: 120, md: 150 },
-                    height: { xs: 120, md: 150 },
-
-                    "@media(max-width: 865px)": {
-                      margin: "20px auto",
-                    },
-                  }}
-                >
+            <Box sx={styles.scoreWrapper}>
+              <Box sx={styles.scoreMainWrapper}>
+                <Box sx={styles.circularWrapper}>
                   <CircularProgressbarWithChildren
                     minValue={1}
                     maxValue={10}
                     value={score}
                   >
-                    <Typography
-                      sx={{ fontSize: { xs: 22, md: 28 }, fontWeight: "bold" }}
-                    >
-                      {score}
-                    </Typography>
+                    <Typography sx={styles.score}>{score}</Typography>
                     <Typography>out of 10</Typography>
                   </CircularProgressbarWithChildren>
                 </Box>
-                <Box sx={{ ml: 2 }}>
-                  <Typography
-                    sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: "bold" }}
-                  >
+                <Box sx={styles.info}>
+                  <Typography sx={styles.profileTitle}>
                     Profile Score
                   </Typography>
                   <Typography>
@@ -246,71 +238,26 @@ function ProfileInfo(props) {
                 <Box>
                   <Typography sx={{ ml: 1 }}>Main</Typography>
 
-                  <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                    <Box
-                      sx={{
-                        m: 0.5,
-                        border: "1px solid #BEBEBE",
-                        boxShadow: 5,
-                        p: 1,
-                        display: "flex",
-                        borderRadius: 2,
-                      }}
-                    >
+                  <Box sx={styles.scoreMainWrapper}>
+                    <Box sx={styles.profileCardWrapper}>
                       <Typography>icon</Typography>
-                      <Typography sx={{ ml: 2 }}>Required Info</Typography>
+                      <Typography sx={styles.info}>Required Info</Typography>
                     </Box>
-                    <Box
-                      sx={{
-                        m: 0.5,
-                        border: "1px solid #BEBEBE",
-                        boxShadow: 5,
-                        p: 1,
-                        display: "flex",
-                        borderRadius: 2,
-                      }}
-                    >
+                    <Box sx={styles.profileCardWrapper}>
                       <Typography>icon</Typography>
-                      <Typography sx={{ ml: 2 }}>Required Info</Typography>
+                      <Typography sx={styles.info}>Required Info</Typography>
                     </Box>
-                    <Box
-                      sx={{
-                        m: 0.5,
-                        border: "1px solid #BEBEBE",
-                        boxShadow: 5,
-                        p: 1,
-                        display: "flex",
-                        borderRadius: 2,
-                      }}
-                    >
+                    <Box sx={styles.profileCardWrapper}>
                       <Typography>icon</Typography>
-                      <Typography sx={{ ml: 2 }}>Required Info</Typography>
+                      <Typography sx={styles.info}>Required Info</Typography>
                     </Box>
-                    <Box
-                      sx={{
-                        m: 0.5,
-                        border: "1px solid #BEBEBE",
-                        boxShadow: 5,
-                        p: 1,
-                        display: "flex",
-                        borderRadius: 2,
-                      }}
-                    >
+                    <Box sx={styles.profileCardWrapper}>
                       <Typography>icon</Typography>
-                      <Typography sx={{ ml: 2 }}>Required Info</Typography>
+                      <Typography sx={styles.info}>Required Info</Typography>
                     </Box>
-                    <Box
-                      sx={{
-                        m: 0.5,
-                        border: "1px solid #BEBEBE",
-                        boxShadow: 5,
-                        p: 1,
-                        display: "flex",
-                        borderRadius: 2,
-                      }}
-                    >
+                    <Box sx={styles.profileCardWrapper}>
                       <Typography>icon</Typography>
-                      <Typography sx={{ ml: 2 }}>Required Info</Typography>
+                      <Typography sx={styles.info}>Required Info</Typography>
                     </Box>
                   </Box>
                 </Box>
@@ -318,117 +265,56 @@ function ProfileInfo(props) {
             </Box>
           </Grid>
           <Grid item xs={12} md={12} lg={2.5}>
-            <Box
-              sx={{
-                backgroundColor: "#EEEEEE",
-                borderRadius: 3,
-                boxShadow: 5,
-                p: 2,
-              }}
-            >
-              <Typography
-                sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: "bold" }}
-              >
-                Quick Actions
-              </Typography>
+            <Box sx={styles.quickAction}>
+              <Typography sx={styles.profileTitle}>Quick Actions</Typography>
               <Box sx={{ mt: 2 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={4} lg={12}>
                     <Box
-                      sx={{
-                        backgroundColor: "#BEBEBE",
-                        borderRadius: 3,
-                        boxShadow: 5,
-                        p: 2,
-                        cursor: "pointer",
-
-                        "&:hover": {
-                          backgroundColor: "#CCCCCC",
-                        },
-                      }}
+                      sx={styles.quickActionCardWrapper}
                       onClick={() => handleNavigate("/my-proposals")}
                     >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
+                      <Box sx={styles.quickMainWrapper}>
                         <Box sx={{ display: "flex" }}>
                           <MarkEmailUnreadIcon
                             color="primary"
-                            sx={{ width: 30, height: 30 }}
+                            sx={styles.icons}
                           />
                           <Typography sx={{ ml: 1 }}>
                             Go to Proposals
                           </Typography>
                         </Box>
-                        <Typography>0</Typography>
+                        <Typography>{proposals && proposals.length}</Typography>
                       </Box>
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={12}>
                     <Box
-                      sx={{
-                        backgroundColor: "#BEBEBE",
-                        borderRadius: 3,
-                        boxShadow: 5,
-                        p: 2,
-                        cursor: "pointer",
-
-                        "&:hover": {
-                          backgroundColor: "#CCCCCC",
-                        },
-                      }}
+                      sx={styles.quickActionCardWrapper}
                       onClick={() => handleNavigate("/contracts")}
                     >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
+                      <Box sx={styles.quickMainWrapper}>
                         <Box sx={{ display: "flex" }}>
-                          <NoteAltIcon
-                            color="warning"
-                            sx={{ width: 30, height: 30 }}
-                          />
+                          <NoteAltIcon color="warning" sx={styles.icons} />
                           <Typography sx={{ ml: 1 }}>
                             Go to Contracts
                           </Typography>
                         </Box>
-                        <Typography>0</Typography>
+                        <Typography>{contracts && contracts.length}</Typography>
                       </Box>
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={12}>
                     <Box
-                      sx={{
-                        backgroundColor: "#BEBEBE",
-                        borderRadius: 3,
-                        boxShadow: 5,
-                        p: 2,
-                        cursor: "pointer",
-
-                        "&:hover": {
-                          backgroundColor: "#CCCCCC",
-                        },
-                      }}
+                      sx={styles.quickActionCardWrapper}
                       onClick={() => handleNavigate("/my-offers")}
                     >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
+                      <Box sx={styles.quickMainWrapper}>
                         <Box sx={{ display: "flex" }}>
-                          <RequestQuoteIcon
-                            sx={{ color: "green", width: 30, height: 30 }}
-                          />
+                          <RequestQuoteIcon sx={styles.quoteIcon} />
                           <Typography sx={{ ml: 1 }}>Go to Offers</Typography>
                         </Box>
-                        <Typography>0</Typography>
+                        <Typography>{offers && offers.length}</Typography>
                       </Box>
                     </Box>
                   </Grid>

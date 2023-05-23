@@ -250,7 +250,7 @@ function ProposalForm(props) {
     setProposal(content);
 
     if (content.length <= 51) {
-      setError("Job Description characters must be at least 50 or more.");
+      setError("Your proposal characters must be at least 50 or more.");
     } else {
       setError(null);
     }
@@ -258,7 +258,7 @@ function ProposalForm(props) {
 
   const handleValidate = () => {
     if (!proposal || proposal.trim().length === 0) {
-      setError("Job Description is required.");
+      setError("Your proposal is required.");
       return;
     }
     if (error) {
@@ -297,7 +297,7 @@ function ProposalForm(props) {
         <FormHelperText sx={styles.jobDesHelperText}>
           File size should be less than 3MB. Include work samples or other
           documents to support your proposal. Don't attach your resume - your
-          goLance profile is automatically forwarded to the client with your
+          handi profile is automatically forwarded to the client with your
           proposal.
         </FormHelperText>
         <Box
@@ -349,7 +349,7 @@ function ProposalForm(props) {
                     </Typography>
                     <Typography sx={styles.addFiles}>
                       Add files to support your proposal. Evidences are the key
-                      to success.
+                      to success. You can add
                       <span>up to 10 photos.</span>
                     </Typography>
 

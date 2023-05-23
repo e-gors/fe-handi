@@ -34,7 +34,7 @@ function PrivateWorker(props) {
     return <Route render={() => <Redirect to="/login" />} />;
   }
 
-  if (user.role !== role) {
+  if (user && user.role !== role) {
     return <Route render={() => <Redirect to="/forbidden" />} />;
   }
 

@@ -1,4 +1,11 @@
-import { Box, Button, FormHelperText, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormHelperText,
+  Grid,
+  InputAdornment,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import SelectDropdown from "../../../../components/SelectDropdown";
 import FormField from "../../../../components/FormField";
@@ -328,6 +335,11 @@ function TypeAndBudget(props) {
                     onBlur={() => handleBlur("rate")}
                     onChange={handleChange}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">₱</InputAdornment>
+                      ),
+                    }}
                   />
                 </Box>
               </Grid>
@@ -347,6 +359,11 @@ function TypeAndBudget(props) {
               onBlur={() => handleBlur("budget")}
               onChange={handleChange}
               errors={formValues.errors}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">₱</InputAdornment>
+                ),
+              }}
             />
           </Box>
         )}

@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, InputAdornment, Typography } from "@mui/material";
 import React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FormField from "../../../../components/FormField";
@@ -146,6 +146,11 @@ function RateForm(props) {
               onChange={handleChange}
               onKeyDown={handleKeyPress}
               required
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">₱</InputAdornment>
+                ),
+              }}
             />
           </Box>
         </Box>

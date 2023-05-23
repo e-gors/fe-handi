@@ -8,6 +8,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { filterWorkers } from "../../../../redux/actions/profileActions";
+import noGuardHttp from "../../../register/service";
 
 function Profile() {
   const { uuid } = useParams();
@@ -135,6 +136,17 @@ function Profile() {
     socialText: {
       ml: 1,
     },
+  };
+
+  const inCrementViewedUser = () => {
+    noGuardHttp
+      .post("/increment/view/users")
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   return (

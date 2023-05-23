@@ -160,7 +160,7 @@ const routes = [
   },
   {
     path: "/new/job-offer",
-    component: "modules/users/pages/NewJobOffer",
+    component: "modules/users/pages/worker/NewJobOffer",
     auth: true,
     role: "Client",
   },
@@ -225,6 +225,11 @@ const routes = [
     component: "modules/users/pages/ClientOverview",
     auth: true,
   },
+  // {
+  //   path: "/new/reviews",
+  //   component: "modules/users/components/ReviewForm",
+  //   auth: true,
+  // },
 ];
 
 export default routes;
