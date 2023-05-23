@@ -19,7 +19,7 @@ Http.interceptors.response.use(
     }
 
     switch (error.response && error.response.status) {
-      case 401: 
+      case 401:
         localStorage.removeItem("accessToken");
         window.location.href = "/login";
         break;

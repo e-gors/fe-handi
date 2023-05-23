@@ -3,8 +3,6 @@ import { Redirect, Route } from "react-router-dom";
 import Loader from "../layouts/Loader";
 import { isAuth } from "../utils/helpers";
 import { createTheme, ThemeProvider } from "@mui/material";
-import PrivateAppBarMenu from "../layouts/PrivateAppBarMenu";
-import Footer from "../layouts/Footer";
 import { useSelector } from "react-redux";
 import Default from "../modules/users/admin/layouts/Default";
 

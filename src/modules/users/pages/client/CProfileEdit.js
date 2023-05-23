@@ -9,12 +9,22 @@ import SocialNetworks from "../../components/worker/SocialNetworks";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
 
 function CProfileEdit() {
   const history = useHistory();
   const user = useSelector((state) => state.users.user);
   const { profile, fullname } = user;
-  const { background_url, profile_url, address } = profile[0];
+  const {
+    background_url,
+    profile_url,
+    address,
+    facebook_url,
+    instagram_url,
+    twitter_url,
+  } = profile[0];
 
   const [open, setOpen] = React.useState(false);
   const [type, setType] = React.useState("");
@@ -198,7 +208,7 @@ function CProfileEdit() {
       fontSize: { xs: 16, sm: 18, md: 20 },
     },
     social: {
-      mt: 1,
+      mt: 1.5,
       border: "1px solid #BEBEBE",
       p: 0.3,
       borderRadius: 1,
@@ -211,6 +221,9 @@ function CProfileEdit() {
       "&:hover": {
         backgroundColor: "#BEBEBE",
       },
+    },
+    socialText: {
+      ml: 1,
     },
   };
 
@@ -286,20 +299,56 @@ function CProfileEdit() {
                   <Typography sx={styles.socialNetworkText}>
                     Social Networks
                   </Typography>
-                  <IconButton onClick={() => handleOpen("Social Networks")}>
-                    <EditOutlinedIcon />
-                  </IconButton>
+                  {(facebook_url || instagram_url || twitter_url) && (
+                    <IconButton onClick={() => handleOpen("Social Networks")}>
+                      <EditOutlinedIcon />
+                    </IconButton>
+                  )}
                 </Box>
-                <Box sx={styles.socialNetwork}>
-                  <SocialNetworks
-                    title={"Add Social Networks"}
-                    Icon={ThumbUpOutlinedIcon}
-                    content={
-                      "Adding your social media accounts helps showcase you as a person andcan help to strengthen your reputability."
-                    }
-                    handleOpen={handleOpen}
-                  />
-                </Box>
+                {(!facebook_url || !instagram_url || !twitter_url) && (
+                  <Box sx={styles.socialNetwork}>
+                    <SocialNetworks
+                      title={"Add Social Networks"}
+                      Icon={ThumbUpOutlinedIcon}
+                      content={
+                        "Adding your social media accounts helps showcase you as a person andcan help to strengthen your reputability."
+                      }
+                      handleOpen={handleOpen}
+                    />
+                  </Box>
+                )}
+
+                {facebook_url && (
+                  <Box
+                    sx={styles.social}
+                    onClick={() => window.open(facebook_url)}
+                  >
+                    <FacebookIcon color="primary" />
+                    <Typography sx={styles.socialText}>
+                      Facebook Link
+                    </Typography>
+                  </Box>
+                )}
+                {instagram_url && (
+                  <Box
+                    sx={styles.social}
+                    onClick={() => window.open(instagram_url)}
+                  >
+                    <InstagramIcon color="primary" />
+                    <Typography sx={styles.socialText}>
+                      Instagram Link
+                    </Typography>
+                  </Box>
+                )}
+                {twitter_url && (
+                  <Box
+                    sx={styles.social}
+                    onClick={() => window.open(twitter_url)}
+                  >
+                    <TwitterIcon color="primary" />
+                    <Typography sx={styles.socialText}>Twitter Link</Typography>
+                  </Box>
+                )}
               </Box>
             </Box>
           </Box>

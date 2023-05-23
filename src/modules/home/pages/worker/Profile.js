@@ -1,16 +1,25 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import ProjectReviewTabs from "../../components/worker/ProjectReviewTabs";
-import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import ProjectReviewTabs from "./ProjectReviewTabs";
+import { useDispatch, useSelector } from "react-redux";
 import UserRatingLinearProgress from "../../../../components/UserRatingLinearProgress";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import { filterWorkers } from "../../../../redux/actions/profileActions";
 
-function WProfile() {
-  const user = useSelector((state) => state.users.user);
+function Profile() {
+  const { uuid } = useParams();
+  const dispatch = useDispatch();
 
-  const { profile } = user;
+  React.useEffect(() => {
+    dispatch(filterWorkers(uuid));
+  }, [uuid, dispatch]);
+
+  const worker = useSelector((state) => state.profiles.worker);
+
+  const { profile } = worker;
 
   const profs = profile && profile[0] ? profile[0] : null;
 
@@ -141,7 +150,7 @@ function WProfile() {
                   <Box sx={styles.profileImage}></Box>
                   <Box sx={styles.fullnameWrapper}>
                     <Typography sx={styles.fullnameText}>
-                      {user.fullname}
+                      {worker.fullname}
                     </Typography>
                     <Typography sx={styles.backgroundText}>
                       {profs && profs.address}
@@ -199,7 +208,7 @@ function WProfile() {
               </Box>
               <Box sx={styles.projectReviewTabsWrapper}>
                 <Box>
-                  <ProjectReviewTabs user={user && user} />
+                  <ProjectReviewTabs worker={worker && worker} />
                 </Box>
               </Box>
             </Box>
@@ -210,4 +219,4 @@ function WProfile() {
   );
 }
 
-export default WProfile;
+export default Profile;

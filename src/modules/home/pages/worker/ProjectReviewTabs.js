@@ -35,7 +35,7 @@ function a11yProps(index) {
 }
 
 function ProjectReviewTabs(props) {
-  const { user } = props;
+  const { worker } = props;
 
   const [tab, setTab] = React.useState(0);
 
@@ -60,13 +60,13 @@ function ProjectReviewTabs(props) {
 
         <Box sx={{ mt: 2 }}>
           <TabPanel value={tab} index={0}>
-            <ProfileOverview user={user && user} />
+            <ProfileOverview worker={worker} />
           </TabPanel>
           <TabPanel value={tab} index={1}>
-            <Project user={user && user} />
+            <Project worker={worker} />
           </TabPanel>
           <TabPanel value={tab} index={2}>
-            <Reviews user={user && user} />
+            <Reviews worker={worker} />
           </TabPanel>
         </Box>
       </Box>

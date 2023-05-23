@@ -1,11 +1,20 @@
-import { Avatar, Box, Chip, Grid, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Chip,
+  CircularProgress,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
 
 const categoryLimit = 2;
-const skillLimit = 3;
+const skillLimit = 2;
 
 const styles = {
   wrapper: {
@@ -15,6 +24,15 @@ const styles = {
     backgroundColor: "#EBEBEB",
     p: 2,
     borderRadius: 3,
+    cursor: "pointer",
+
+    "&:hover": {
+      boxShadow: 5,
+
+      ".fullname": {
+        color: "blue",
+      },
+    },
   },
   cardTop: {
     display: "flex",
@@ -89,119 +107,143 @@ const styles = {
 };
 
 function FindWorkerCard(props) {
-  const { workers } = props;
+  const { workers, loading } = props;
+
+  const handleNavigate = (link) => {
+    window.open(link);
+  };
 
   return (
     <Box sx={styles.wrapper}>
+      {loading && (
+        <Box align="center">
+          <CircularProgress size={40} color="primary" />
+        </Box>
+      )}
+
       <Grid container spacing={1}>
-        {workers.map((worker, workerIndex) => {
-          const limitedCategories = worker.categoryChildren.slice(
-            0,
-            categoryLimit
-          );
-          const limitedSkills = worker.skillChildren.slice(0, skillLimit);
-          return (
-            <Grid key={workerIndex} item xs={12} sm={12} md={6} lg={4}>
-              <Box sx={styles.cardWrapper}>
-                <Box sx={styles.cardTop}>
-                  <Avatar
-                    alt={worker.fullname}
-                    src={worker.profile && worker.profile[0]["profile_url"]}
-                  />
-                  <Box sx={styles.categoryWrapper}>
-                    <Box sx={styles.fullname}>
-                      <Typography sx={styles.fullnameText}>
-                        {worker.fullname}
-                      </Typography>
+        {!loading &&
+          workers &&
+          workers.map((worker, workerIndex) => {
+            const limitedCategories = worker.categoryChildren.slice(
+              0,
+              categoryLimit
+            );
+            const limitedSkills = worker.skillChildren.slice(0, skillLimit);
+            return (
+              <Grid key={workerIndex} item xs={12} sm={12} md={6} lg={4}>
+                <Box
+                  sx={styles.cardWrapper}
+                  onClick={() => handleNavigate(worker.profile[0].profile_link)}
+                >
+                  <Box sx={styles.cardTop}>
+                    <Avatar
+                      alt={worker.fullname}
+                      src={worker.profile && worker.profile[0].profile_url}
+                    />
+                    <Box sx={styles.categoryWrapper}>
+                      <Box sx={styles.fullname}>
+                        <Typography
+                          sx={styles.fullnameText}
+                          className="fullname"
+                        >
+                          {worker.fullname}
+                        </Typography>
 
-                      <Box sx={styles.categoryMainWrapper}>
-                        {limitedCategories.map((category, categoryIndex) => {
-                          return (
+                        <Box sx={styles.categoryMainWrapper}>
+                          {limitedCategories.map((category, categoryIndex) => {
+                            return (
+                              <Chip
+                                size="small"
+                                key={categoryIndex}
+                                label={category.name}
+                                variant="contained"
+                                sx={styles.category}
+                              />
+                            );
+                          })}
+                          {worker.categoryChildren.length > categoryLimit && (
                             <Chip
-                              size="medium"
-                              key={categoryIndex}
-                              label={category.name}
-                              variant="contained"
-                              sx={styles.category}
+                              size="small"
+                              key={`${workerIndex}-more`}
+                              label={`+${
+                                worker.categoryChildren.length - categoryLimit
+                              }`}
+                              variant="outlined"
+                              sx={styles.moreCategory}
                             />
-                          );
-                        })}
-                        {worker.categoryChildren.length > categoryLimit && (
-                          <Chip
-                            size="medium"
-                            key={`${workerIndex}-more`}
-                            label={`+${
-                              worker.categoryChildren.length - categoryLimit
-                            }`}
-                            variant="outlined"
-                            sx={styles.moreCategory}
-                          />
-                        )}
+                          )}
+                        </Box>
                       </Box>
+                      <BookmarkBorderIcon sx={styles.bookmark} />
                     </Box>
-                    <BookmarkBorderIcon sx={styles.bookmark} />
                   </Box>
-                </Box>
 
-                <Box sx={styles.backgroundText} align="justify">
-                  <Typography>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                  </Typography>
+                  <Box sx={styles.backgroundText} align="justify">
+                    <Typography>
+                      Lorem Ipsum is simply dummy text of the printing and
+                      typesetting industry. Lorem Ipsum has been the industry's
+                      standard dummy text ever since the 1500s, when an unknown
+                      printer took a galley of type and scrambled it to make a
+                      type specimen book.
+                    </Typography>
 
-                  {/* {worker.profile.map((user, i) => (
+                    {/* {worker.profile.map((user, i) => (
                     <Typography>
                       {user.background && user.background}
                     </Typography>
                   ))} */}
-                </Box>
-                <Stack sx={styles.skillWrapper}>
-                  {limitedSkills.map((skill, skillIndex) => (
-                    <Chip
-                      size="medium"
-                      key={skillIndex}
-                      label={skill.name}
-                      variant="outlined"
-                      sx={styles.skill}
-                    />
-                  ))}
-                  {worker.skills.length > skillLimit && (
-                    <Chip
-                      size="medium"
-                      key={`${workerIndex}-more`}
-                      label={`+${worker.skillChildren.length - skillLimit}`}
-                      variant="outlined"
-                      sx={styles.moreSkill}
-                    />
-                  )}
-                </Stack>
+                  </Box>
+                  <Stack sx={styles.skillWrapper}>
+                    {limitedSkills.map((skill, skillIndex) => (
+                      <Chip
+                        size="small"
+                        key={skillIndex}
+                        label={skill.name}
+                        variant="outlined"
+                        sx={styles.skill}
+                      />
+                    ))}
+                    {worker.skills.length > skillLimit && (
+                      <Chip
+                        size="small"
+                        key={`${workerIndex}-more`}
+                        label={`+${worker.skillChildren.length - skillLimit}`}
+                        variant="outlined"
+                        sx={styles.moreSkill}
+                      />
+                    )}
+                  </Stack>
 
-                <Box sx={styles.projectWrapper}>
-                  <Box sx={styles.project}></Box>
-                  <Box sx={styles.project}></Box>
-                  <Box sx={styles.project}></Box>
-                </Box>
+                  <Box sx={styles.projectWrapper}>
+                    <Box sx={styles.project}></Box>
+                    <Box sx={styles.project}></Box>
+                    <Box sx={styles.project}></Box>
+                  </Box>
 
-                <Box sx={styles.cardBottom}>
-                  {worker.profile.map((user, i) => (
-                    <Box key={i} sx={styles.cardBottomWrapper}>
-                      <Typography>
-                        {user.daily_rate ? user.daily_rate : "No rates"}
-                      </Typography>
-                      <Typography>
-                        {user.rating ? user.rating : "Star 5.0 (5)"}
-                      </Typography>
-                    </Box>
-                  ))}
+                  <Box sx={styles.cardBottom}>
+                    {worker.profile.map((user, i) => (
+                      <Box key={i} sx={styles.cardBottomWrapper}>
+                        <Typography>
+                          {user.daily_rate ? user.daily_rate : "No rates"}
+                        </Typography>
+                        <Typography>
+                          {user.rating ? user.rating : "Star 5.0 (5)"}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Box>
                 </Box>
-              </Box>
-            </Grid>
-          );
-        })}
+              </Grid>
+            );
+          })}
       </Grid>
+
+      {!loading && workers && workers.length === 0 && (
+        <Box align="center">
+          <Typography>No workers found!</Typography>
+        </Box>
+      )}
     </Box>
   );
 }

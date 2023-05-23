@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Chip,
   Divider,
   InputAdornment,
   Menu,
@@ -14,59 +15,23 @@ import SearchIcon from "@mui/icons-material/Search";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import SelectDropdown from "../../../components/SelectDropdown";
 
-const locations = [
-  "Hilongos, Leyte",
-  "Hindang, Leyte",
-  "Bato, Leyte",
-  "Matalom, Leyte",
-];
-
 const sortBy = ["Relevance", "Rating", "Hourly Rate", "Hours Work"];
 
 function FindJobWorkerFilter(props) {
-  const { categories = [], skills = [], type } = props;
+  const {
+    locations,
+    categories = [],
+    skills = [],
+    filterValues,
+    handleFilter,
+    handleClearFilter,
+    filterValuesCount,
+  } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [filterValues, setFilterValues] = React.useState({
-    values: {
-      search: "",
-      sort_by: "",
-      categories: [],
-      location: [],
-      salary_range: [0, 15000],
-      skills: [],
-    },
-  });
 
   const formatSalaryRange = (value) => {
     return `₱${value[0]} - ₱${value[1]}`;
-  };
-
-  const handleChangeFilter = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    const newValue = typeof value === "string" ? value.split(",") : value;
-
-    setFilterValues((prev) => ({
-      ...prev,
-      values: {
-        ...prev.values,
-        [name]: newValue,
-      },
-    }));
-  };
-
-  const handleClearFilter = () => {
-    setFilterValues({
-      values: {
-        search: "",
-        sort_by: "",
-        categories: [],
-        location: [],
-        salary_range: [0, 15000],
-        skills: [],
-      },
-    });
   };
 
   const handleOpen = (event) => {
@@ -97,10 +62,8 @@ function FindJobWorkerFilter(props) {
           name="search"
           size="small"
           variant="outlined"
-          placeholder={
-            type === "jobs" ? "Search by job categories" : "Search by names"
-          }
-          onChange={handleChangeFilter}
+          placeholder="Search by first name, last name or fullname"
+          onChange={handleFilter}
           value={filterValues.values.search}
           InputProps={{
             startAdornment: (
@@ -120,7 +83,7 @@ function FindJobWorkerFilter(props) {
           <SelectDropdown
             label="Sort By"
             name="sort_by"
-            onChange={handleChangeFilter}
+            onChange={handleFilter}
             value={filterValues.values.sort_by}
             options={sortBy}
             sx={{
@@ -137,13 +100,30 @@ function FindJobWorkerFilter(props) {
             color="primary"
             sx={{
               backgroundColor: "white",
-              width: { xs: "50%", md: 120 },
+              width: { xs: "50%", md: 150 },
               maxHeight: 40,
               mt: { xs: 1, md: 1 },
             }}
             onClick={handleOpen}
           >
-            {<FilterAltIcon />} Filter
+            {
+              <Chip
+                label={filterValuesCount}
+                size="small"
+                variant="contained"
+                color="warning"
+              />
+            }{" "}
+            {<FilterAltIcon />}{" "}
+            <span
+              style={{
+                "@media (maxWidth: 500px)": {
+                  display: "none",
+                },
+              }}
+            >
+              Filter
+            </span>
           </Button>
         </Box>
 
@@ -169,13 +149,12 @@ function FindJobWorkerFilter(props) {
           <Divider />
           <MenuItem>
             <SelectDropdown
-              name="categories"
+              name="category"
               label="Categories"
               margin="dense"
-              value={filterValues.values.categories}
-              onChange={handleChangeFilter}
-              multiple
-              options={categories}
+              value={filterValues.values.category}
+              onChange={handleFilter}
+              subCategories={categories}
             />
           </MenuItem>
           <MenuItem>
@@ -184,27 +163,25 @@ function FindJobWorkerFilter(props) {
               label="Location"
               margin="dense"
               value={filterValues.values.location}
-              onChange={handleChangeFilter}
-              multiple
-              options={locations}
+              onChange={handleFilter}
+              categories={locations}
             />
           </MenuItem>
           <MenuItem>
             <SelectDropdown
-              name="skills"
+              name="skill"
               label="Skills"
               margin="dense"
-              value={filterValues.values.skills}
-              onChange={handleChangeFilter}
-              multiple
-              options={skills}
+              value={filterValues.values.skill}
+              onChange={handleFilter}
+              subCategories={skills}
             />
           </MenuItem>
           <MenuItem>
             <Slider
               name="salary_range"
               value={filterValues.values.salary_range}
-              onChange={handleChangeFilter}
+              onChange={handleFilter}
               valueLabelDisplay="auto"
               min={0}
               max={15000}

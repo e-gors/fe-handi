@@ -1,15 +1,22 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import DragIndicatorRoundedIcon from "@mui/icons-material/DragIndicatorRounded";
 import ProfileModalEdit from "../ProfileModalEdit";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Http from "../../../../utils/Http";
 import ToastNotification from "../../../../components/ToastNotification";
 import { options } from "../../../../components/options";
 import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
+import { updateUser } from "../../../../redux/actions/userActions";
 
 const styles = {
   main: { display: "flex", justifyContent: "space-between", mb: 1 },
@@ -20,31 +27,34 @@ const styles = {
   },
 };
 
-const icons = [
-  {
-    icon: <FacebookRoundedIcon sx={styles.icons} />,
-    label: "Facebook",
-    status: "yes",
-  },
-  {
-    icon: <InstagramIcon sx={styles.icons} />,
-    label: "Instagram",
-    status: "no",
-  },
-  {
-    icon: <TwitterIcon sx={styles.icons} />,
-    label: "Twitter",
-    status: "no",
-  },
-];
-
 function UpdateSocialNetworks() {
   const user = useSelector((state) => state.users.user);
-  const { profile } = user;
-  // const {facebook_url, instagram_url, twitter_url} = profile[0];
+  const dispatch = useDispatch();
 
+  const { profile } = user;
+  const { facebook_url, instagram_url, twitter_url } = profile[0];
+
+  const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [type, setType] = React.useState("");
+
+  const icons = [
+    {
+      icon: <FacebookRoundedIcon sx={styles.icons} />,
+      label: "Facebook",
+      status: facebook_url ? "yes" : "no",
+    },
+    {
+      icon: <InstagramIcon sx={styles.icons} />,
+      label: "Instagram",
+      status: instagram_url ? "yes" : "no",
+    },
+    {
+      icon: <TwitterIcon sx={styles.icons} />,
+      label: "Twitter",
+      status: twitter_url ? "yes" : "no",
+    },
+  ];
 
   const handleOpen = (type) => {
     setOpen(true);
@@ -55,18 +65,24 @@ function UpdateSocialNetworks() {
   };
 
   const handleRemove = (params) => {
+    setLoading(true);
     Http.delete(`/delete/social-networks/${params}`)
       .then((res) => {
         if (res.data.code === 200) {
+          dispatch(updateUser(res.data.user));
           ToastNotification("success", res.data.message, options);
+          setLoading(false);
         } else {
           ToastNotification("error", res.data.message, options);
         }
+        setLoading(false);
       })
       .catch((err) => {
         ToastNotification("error", err.message, options);
+        setLoading(false);
       });
   };
+
   return (
     <Box>
       <ToastNotificationContainer />
@@ -94,9 +110,18 @@ function UpdateSocialNetworks() {
                 variant="contained"
                 color="error"
                 size="small"
+                disabled={loading}
                 onClick={() => handleRemove(icon.label)}
               >
-                Remove
+                {loading ? (
+                  <CircularProgress
+                    size={24}
+                    sx={{ color: "white" }}
+                    thickness={5}
+                  />
+                ) : (
+                  "Remove"
+                )}
               </Button>
             )}
           </Box>

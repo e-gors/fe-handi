@@ -28,10 +28,10 @@ import SelectDropdown from "../../../components/SelectDropdown";
 const validator = new ReeValidate.Validator({
   first_name: "required",
   last_name: "required",
-  email: "required|email",
+  email: "required|email|regex:^[a-zA-Z0-9]+.[^s@]+@gmail.com$",
   password: "required|min:6",
   background: "required",
-  number: "required|numeric",
+  number: "required|numeric|regex:^09[0-9]{9}$",
   gender: "required",
   address: "required",
 });
@@ -115,7 +115,7 @@ const styles = {
 
 const genders = ["Male", "Female", "Others", "Better Not Tell"];
 
-function JoinUsClient() {
+function JoinAsClient() {
   let role = localStorage.getItem("selectedRole");
   const history = useHistory();
 
@@ -170,7 +170,7 @@ function JoinUsClient() {
           localStorage.setItem("user", JSON.stringify(res.data.user));
           ToastNotification("success", res.data.message, options);
           localStorage.removeItem("selectedRole");
-          history.push("/confirm-registration");
+          history.push("/login");
         } else {
           setLoading(false);
           ToastNotification("error", res.data.message, options);
@@ -216,7 +216,7 @@ function JoinUsClient() {
   return (
     <Box sx={styles.wrapper}>
       <ToastNotificationContainer />
-      <Box component="form" sx={styles.main}>
+      <Box sx={styles.main}>
         <Typography sx={styles.registerAs}>Register as {role}</Typography>
         <Box component="form">
           <Grid container spacing={0.5}>
@@ -353,6 +353,7 @@ function JoinUsClient() {
                 fullWidth
                 required
               />
+
               <Typography sx={styles.addressHelper}>
                 Purok / Sitio / Subdivision, Barangay, Municipality, Provice
               </Typography>
@@ -372,7 +373,7 @@ function JoinUsClient() {
               labelPlacement="end"
               label={
                 <Typography sx={styles.checkingThis}>
-                  Checking this means that you aggree to our "
+                  Checking this means that you agree to our "
                   <span
                     style={styles.terms}
                     onClick={() => handleOpenNewTab("terms-of-services")}
@@ -437,4 +438,4 @@ function JoinUsClient() {
   );
 }
 
-export default JoinUsClient;
+export default JoinAsClient;

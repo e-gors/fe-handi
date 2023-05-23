@@ -21,17 +21,12 @@ noGuardHttp.interceptors.response.use(
 
 export default noGuardHttp;
 
-
-
-
 export const workerRegister = (role, formValues, expertise) => {
   return axios.post(
     `${api}/join-us/${role}`,
     {
-      params: {
-        formValues: formValues.values,
-        expertise: expertise.values,
-      },
+      formValues: formValues.values,
+      expertise: expertise.values,
     },
     {
       headers: {
@@ -49,4 +44,17 @@ export const clientRegister = (role, formValues) => {
   });
 };
 
-
+export const registerOnApply = (formValues, expertise) => {
+  return axios.post(
+    `${api}/apply/register`,
+    {
+      formValues: formValues.values,
+      expertise: expertise.values,
+    },
+    {
+      headers: {
+        Accept: "application/json",
+      },
+    }
+  );
+};
