@@ -180,89 +180,91 @@ function WProfileInsight() {
   };
 
   return (
-    <Box sx={styles.wrapper}>
-      <Box sx={styles.main}>
-        <DropdownMenuItem
-          open={open}
-          anchorEl={anchorEl}
-          handleClose={handleClose}
-          items={more}
-        />
-        <Box>
-          <Typography sx={styles.profileInsightText}>
-            Profile Insights
-          </Typography>
+		<Box sx={styles.wrapper}>
+			<Box sx={styles.main}>
+				<DropdownMenuItem
+					open={open}
+					anchorEl={anchorEl}
+					handleClose={handleClose}
+					items={more}
+				/>
+				<Box>
+					<Typography sx={styles.profileInsightText}>
+						Profile Insights
+					</Typography>
 
-          {profile_completeness < 10 && (
-            <Box sx={styles.profileCompleteWarning}>
-              <ErrorIcon color="error" />
-              <Typography sx={styles.youNeedToComplete}>
-                You need to complete your profile to show up in the search
-                results and be able to submit proposals
-              </Typography>
-            </Box>
-          )}
-        </Box>
-        <Box sx={styles.profileCardWrapper}>
-          <Box sx={styles.profileLeft}>
-            <Avatar
-              variant="rounded"
-              sx={styles.profileAvatar}
-              src={profile_url && profile_url}
-            >
-              <Typography>Profile</Typography>
-            </Avatar>
-            <Box sx={styles.nameWrapper}>
-              <Typography sx={styles.name}>Efren Goron</Typography>
-              <Typography>Hilongos, Leyte</Typography>
-              <Typography>{online ? "Online" : "Offline"}</Typography>
-              {profile_completeness < 10 && (
-                <Typography sx={styles.incomplete} align="center">
-                  Incomplete
-                </Typography>
-              )}
-            </Box>
-          </Box>
+					{profile_completeness < 10 && (
+						<Box sx={styles.profileCompleteWarning}>
+							<ErrorIcon color="error" />
+							<Typography sx={styles.youNeedToComplete}>
+								You need to complete your profile to show up in the search
+								results and be able to submit proposals
+							</Typography>
+						</Box>
+					)}
+				</Box>
+				<Box sx={styles.profileCardWrapper}>
+					<Box sx={styles.profileLeft}>
+						<Avatar
+							variant="rounded"
+							sx={styles.profileAvatar}
+							src={profile_url && profile_url}>
+							<Typography>Profile</Typography>
+						</Avatar>
+						<Box sx={styles.nameWrapper}>
+							<Typography sx={styles.name}>{fullname}</Typography>
+							<Typography>{address}</Typography>
+							<Typography>{online ? "Online" : "Offline"}</Typography>
+							{profile_completeness < 10 && (
+								<Typography sx={styles.incomplete} align="center">
+									Incomplete
+								</Typography>
+							)}
+						</Box>
+					</Box>
 
-          <Box sx={styles.buttonWrapper}>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={styles.viewProfileButton}
-              onClick={() => handleNavigate("/profile/worker")}
-            >
-              View Profile
-            </Button>
-            <IconButton sx={styles.moreButton} onClick={handleOpenMore}>
-              <MoreVertIcon />
-            </IconButton>
-          </Box>
-        </Box>
+					<Box sx={styles.buttonWrapper}>
+						<Button
+							variant="contained"
+							color="primary"
+							sx={styles.viewProfileButton}
+							onClick={() => handleNavigate("/profile/worker")}>
+							View Profile
+						</Button>
+						<IconButton sx={styles.moreButton} onClick={handleOpenMore}>
+							<MoreVertIcon />
+						</IconButton>
+					</Box>
+				</Box>
 
-        <Box>
-          <Box>
-            <Tabs
-              value={tab}
-              onChange={handleChangeTab}
-              aria-label="basic tabs example"
-            >
-              <Tab label="Profile Info" {...a11yProps(0)} />
-              <Tab label="Reviews" {...a11yProps(1)} />
-            </Tabs>
-          </Box>
+				<Box>
+					<Box>
+						<Tabs
+							value={tab}
+							onChange={handleChangeTab}
+							aria-label="basic tabs example">
+							<Tab label="Profile Info" {...a11yProps(0)} />
+							<Tab label="Reviews" {...a11yProps(1)} />
+						</Tabs>
+					</Box>
 
-          <Box>
-            <TabPanel value={tab} index={0}>
-              <ProfileInfo score={profile_completeness} proposals={bids} contracts offers />
-            </TabPanel>
-            <TabPanel value={tab} index={1}>
-              Tab 2
-            </TabPanel>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
-  );
+					<Box>
+						<TabPanel value={tab} index={0}>
+							<ProfileInfo
+								score={profile_completeness}
+								proposals={bids}
+								contracts
+								offers
+							/>
+						</TabPanel>
+						<TabPanel value={tab} index={1}>
+							Tab 2
+						</TabPanel>
+					</Box>
+				</Box>
+			</Box>
+		</Box>
+	);
 }
 
 export default WProfileInsight;

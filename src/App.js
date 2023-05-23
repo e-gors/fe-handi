@@ -17,7 +17,6 @@ function App() {
   React.useEffect(() => {
     let tokenExpiration = localStorage.getItem("tokenExpiration");
     const expiresAt = Date.now() + 30 * 1000;
-    console.log("useEffect");
     if (currentDate >= expiresAt) {
       console.log("Token expired");
       localStorage.clear();
