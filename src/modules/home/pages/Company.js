@@ -1,3 +1,5 @@
+/** @format */
+
 import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
 import React from "react";
 import BuildBridges from "../../../assets/images/build-bridges.jpeg";
@@ -13,19 +15,19 @@ const dummyData = [
       "I am the team of this company. I am a web developer and I used the React and Laravel framework to build this project. I am responsible for the success of this project for our capstone. We develop this system for the purpose that we will help the skilled workers to find job and client to get the best skilled workers for their projects",
   },
   {
-    fullname: "Efren Goron",
+    fullname: "Marc Mayao",
     job: "Web Developer",
     description:
       "I am the team of this company. I am a web developer and I used the React and Laravel framework to build this project. I am responsible for the success of this project for our capstone. We develop this system for the purpose that we will help the skilled workers to find job and client to get the best skilled workers for their projects",
   },
   {
-    fullname: "Efren Goron",
+    fullname: "Jovelyn Baer",
     job: "Web Developer",
     description:
       "I am the team of this company. I am a web developer and I used the React and Laravel framework to build this project. I am responsible for the success of this project for our capstone. We develop this system for the purpose that we will help the skilled workers to find job and client to get the best skilled workers for their projects",
   },
   {
-    fullname: "Efren Goron",
+    fullname: "Adrian Noterte",
     job: "Web Developer",
     description:
       "I am the team of this company. I am a web developer and I used the React and Laravel framework to build this project. I am responsible for the success of this project for our capstone. We develop this system for the purpose that we will help the skilled workers to find job and client to get the best skilled workers for their projects",
@@ -40,7 +42,12 @@ const innerStyles = {
     transition: "1s",
     p: { xs: "20px 10px 50px 20px", md: 10, lg: 15 },
   },
-  header: { fontSize: { xs: 24, md: 45, lg: 55 }, color: "blue", mb: 1 },
+  header: {
+    fontSize: { xs: 30, md: 45, lg: 55 },
+    color: "black",
+    mb: 1,
+    fontWeight: "bold",
+  },
   description: { maxWidth: 700 },
   buttonWrapper: { mt: 5 },
   buildBridgeImage: { width: "100%" },
@@ -55,13 +62,13 @@ const innerStyles = {
     backgroundColor: "#EEEEEE",
   },
   ourMissionTextWrapper: { p: { xs: 2, md: 5 } },
-  ourMissionText: { fontSize: { xs: 18, md: 24 }, fontWeight: "bold" },
-  whoWeAre: { fontWeight: "bold", fontSize: { xs: 24, md: 36 } },
+  ourMissionText: { fontSize: { xs: 30, md: 24 }, fontWeight: "bold" },
+  whoWeAre: { fontWeight: "bold", fontSize: { xs: 20, md: 36 } },
   companyImage: { width: { xs: "100%", md: 820 }, m: "0 auto" },
   meetOurTeamWrapper: { mt: 5, mb: 5, p: { xs: 2, md: 5 } },
   meetOurTeamText: {
     fontWeight: "bold",
-    fontSize: { xs: 24, md: 36 },
+    fontSize: { xs: 30, md: 36 },
   },
   weAreTech: { maxWidth: 600 },
   cardsWrapper: {
@@ -156,7 +163,7 @@ function Company() {
 
       <Box sx={innerStyles.meetOurTeamWrapper}>
         <Typography sx={innerStyles.meetOurTeamText}>
-          Meet our <br /> amazing team
+          Meet our <br /> Amazing Team
         </Typography>
         <Typography sx={innerStyles.weAreTech}>
           We are technologists, web developer, and designers but first and

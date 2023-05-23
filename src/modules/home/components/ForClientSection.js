@@ -1,3 +1,5 @@
+/** @format */
+
 import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 import client from "../../../assets/images/client-finding.jpg";
@@ -18,7 +20,11 @@ const styles = {
     p: 1,
     width: { xs: "100%", sm: "100%" },
   },
-  forClientText: { fontSize: { xs: 18, md: 24 }, fontWeight: "bold" },
+  forClientText: {
+    fontSize: { xs: 30, md: 24 },
+    fontWeight: "bold",
+    paddingBottom: "20px",
+  },
   forClientSubHeader: { fontWeight: "bold", fontSize: { xs: 24, md: 36 } },
   forClientCard: {
     display: "flex",
@@ -69,9 +75,7 @@ function ForClientSection() {
           {icons.engineeringIcon}
 
           <Box onClick={() => history.push("/find-people")}>
-            <Typography sx={styles.forClientText}>
-              Browse skilled workers
-            </Typography>
+            <Typography sx={styles.findJob}>Browse skilled workers</Typography>
             <Typography>
               Find the best skilled workers base on their rating for your
               project.

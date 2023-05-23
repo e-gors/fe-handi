@@ -1,3 +1,5 @@
+/** @format */
+
 import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 import WorkIcon from "@mui/icons-material/Work";
@@ -10,8 +12,8 @@ const sectionTwoData = [
     icon: (
       <WorkIcon
         sx={{
-          width: { xs: 60, md: 75 },
-          height: { xs: 60, md: 75 },
+          width: { xs: 30, md: 75 },
+          height: { xs: 30, md: 75 },
         }}
       />
     ),
@@ -22,8 +24,8 @@ const sectionTwoData = [
     icon: (
       <EngineeringIcon
         sx={{
-          width: { xs: 60, md: 75 },
-          height: { xs: 60, md: 75 },
+          width: { xs: 30, md: 75 },
+          height: { xs: 30, md: 75 },
         }}
       />
     ),
@@ -34,8 +36,8 @@ const sectionTwoData = [
     icon: (
       <PeopleIcon
         sx={{
-          width: { xs: 60, md: 75 },
-          height: { xs: 60, md: 75 },
+          width: { xs: 30, md: 75 },
+          height: { xs: 30, md: 75 },
         }}
       />
     ),
@@ -46,8 +48,8 @@ const sectionTwoData = [
     icon: (
       <TaskIcon
         sx={{
-          width: { xs: 60, md: 75 },
-          height: { xs: 60, md: 75 },
+          width: { xs: 30, md: 75 },
+          height: { xs: 30, md: 75 },
         }}
       />
     ),
@@ -74,12 +76,12 @@ const styles = {
     p: 2,
   },
   number: {
-    fontSize: { xs: 22, md: 26 },
+    fontSize: { xs: 12, md: 26 },
     fontWeigth: 600,
     textAlign: { xs: "center", md: "left" },
   },
   text: {
-    fontSize: { xs: 18, md: 20 },
+    fontSize: { xs: 12, md: 20 },
     textAlign: { xs: "center", md: "left" },
   },
 };

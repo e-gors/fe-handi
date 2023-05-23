@@ -1,3 +1,5 @@
+/** @format */
+
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import { icons } from "../../../components/Icon";
@@ -16,7 +18,11 @@ const innerStyles = {
   },
   carpenterImage: { width: 420, mb: 3 },
   main: { m: { xs: 0, md: 2 } },
-  joinUsForFree: { fontSize: { xs: 20, md: 24 }, fontWeight: "bold" },
+  joinUsForFree: {
+    fontSize: { xs: 30, md: 24 },
+    fontWeight: "bold",
+    paddingBottom: "20px",
+  },
   card: { display: "flex", alignItems: "center", mb: 2 },
   cardHeader: { fontSize: { xs: 18, md: 20 }, fontWeight: "bold" },
 };
@@ -51,9 +57,7 @@ function JoinUsSection() {
         <Box sx={innerStyles.card}>
           {icons.engineeringIcon}
           <Box>
-            <Typography
-              sx={innerStyles.cardHeader}
-            >
+            <Typography sx={innerStyles.cardHeader}>
               Post a job and hire skilled workers.
             </Typography>
             <Typography>
@@ -66,9 +70,7 @@ function JoinUsSection() {
         <Box sx={innerStyles.card}>
           {icons.workIcon}
           <Box>
-            <Typography
-              sx={innerStyles.cardHeader}
-            >
+            <Typography sx={innerStyles.cardHeader}>
               Work with the best - without breaking the bank.
             </Typography>
             <Typography>
@@ -84,6 +86,14 @@ function JoinUsSection() {
           onClick={() => history.push("/register")}
         >
           Register for free
+        </Button>
+
+        <Button
+          variant="contained"
+          sx={styles.customOrangeButton}
+          onClick={() => history.push("/fq-question")}
+        >
+          Any Questions?
         </Button>
       </Box>
     </Box>
