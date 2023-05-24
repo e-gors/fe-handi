@@ -6,10 +6,10 @@ const categoryLimit = 10;
 
 function ProfileOverview(props) {
 	const { worker } = props;
-	if (!worker) {
-		return console.log(worker);
-	}
 	const { profile, categories, skills } = worker;
+		if (!profile) {
+			return console.log(profile);
+		}
 	const { background } = profile ? profile[0] : null;
 
 	return (
