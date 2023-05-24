@@ -14,8 +14,14 @@ import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 
-function Reviews() {
+function Reviews({ worker }) {
   const [value, setValue] = React.useState(2);
+  const [formData, setFormData] = React.useState({
+    user_id: "",
+    comment: "",
+    rating: "",
+  });
+
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
     borderRadius: 5,
@@ -28,6 +34,15 @@ function Reviews() {
       backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
     },
   }));
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
     <div className="container-fluid px-1 py-5 mx-auto">
       <div className="row justify-content-center">
@@ -152,13 +167,18 @@ function Reviews() {
                     value={value}
                     onChange={(event, newValue) => {
                       setValue(newValue);
+                      setFormData({ rating: newValue });
                     }}
                   />
                 </Box>
               </div>
               <Box component="form" noValidate autoComplete="off">
-                <FormControl sx={{ width: "50ch" }}>
-                  <OutlinedInput placeholder="Please enter your comment.." />
+                <FormControl sx={{ width: "40ch" }}>
+                  <OutlinedInput
+                    placeholder="Please enter your comment.."
+                    name="comment"
+                    onChange={onChange}
+                  />
                 </FormControl>
               </Box>
               <br />

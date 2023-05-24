@@ -1,3 +1,5 @@
+/** @format */
+
 import { Box, Tab, Tabs } from "@mui/material";
 import React from "react";
 import PropTypes from "prop-types";
@@ -36,7 +38,6 @@ function a11yProps(index) {
 
 function ProjectReviewTabs(props) {
   const { worker } = props;
-
   const [tab, setTab] = React.useState(0);
 
   const handleChangeTab = (event, newValue) => {
