@@ -297,7 +297,7 @@ function FQQuestion() {
               </Typography>
               <Typography variant="h5" component="div">
                 Gwapo bako?
-                <Divider />
+                <Divider />   
               </Typography>
               <Typography variant="body2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
