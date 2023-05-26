@@ -20,7 +20,7 @@ const status = ["Pending", "Accepted", "Declined", "Withdrawn"];
 const orderByRate = ["Ascending", "Descending"];
 const orderByDate = ["Ascending", "Descending"];
 
-function Offers(props) {
+function AdminReports(props) {
   const { role } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -194,4 +194,4 @@ function Offers(props) {
   );
 }
 
-export default Offers;
+export default AdminReports;

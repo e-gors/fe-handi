@@ -1,4 +1,6 @@
-import { Box, Button, Typography, Grid, CircularProgress } from "@mui/material";
+/** @format */
+
+import { Box, Button, Typography, Grid } from "@mui/material";
 import React from "react";
 import ImageCarousel from "../components/ImageCarousel";
 import ContactUs from "../components/ContactUs";
