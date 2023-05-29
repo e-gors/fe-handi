@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { lazy, Suspense } from "react";
 import { Redirect, Route, useHistory } from "react-router-dom";
 import Loader from "../layouts/Loader";
