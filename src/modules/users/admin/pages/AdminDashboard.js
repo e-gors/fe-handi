@@ -1,16 +1,10 @@
 /** @format */
-
+import { Box, Grid, Typography } from "@mui/material";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import ArticleIcon from "@mui/icons-material/Article";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import React from "react";
 import "./AdminDashboard.css";
-
-const Card = ({ title, content, className }) => {
-  return (
-    <div className={`card ${className}`}>
-      <h2 className="card-title">{title}</h2>
-      <p className="card-content">{content}</p>
-    </div>
-  );
-};
 
 const RecentJobSales = () => {
   return (
@@ -70,38 +64,112 @@ const TopOfferedJobs = () => {
 
 const AdminDashboard = () => {
   return (
-    <div className="dashboard-content">
-      <div className="cardcontent">
-        <div className="card1">
-          <Card
-            title="Total Users"
-            content="This is the content of card 1."
-            className="card-green"
-          />
-        </div>
-        <div className="card2">
-          <Card
-            title="Offers"
-            content="This is the content of card 2."
-            className="card-yellow"
-          />
-        </div>
-        <div className="card3">
-          <Card
-            title="Total Salary"
-            content="This is the content of card 3."
-            className="card-blue"
-          />
-        </div>
-        <div className="card4">
-          <Card
-            title="Rejections"
-            content="This is the content of card 4."
-            className="card-red"
-          />
-        </div>
-      </div>
+    <div className="container">
+      <Box sx={{ display: "flex", mb: 2, alignItems: "center" }}>
+        <ArticleIcon sx={{ mr: 1, color: "green" }} />
+        <Typography sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: 600 }}>
+          Admin Dashboard
+        </Typography>
+      </Box>
 
+      <Box>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Box
+              sx={{
+                border: "1px solid #BEBEBE",
+                borderRadius: 3,
+                p: 2,
+                boxShadow: 10,
+              }}
+            >
+              <Box sx={{ display: "flex" }}>
+                <VisibilityIcon sx={{ mr: 2 }} />
+                <Typography>Total Users</Typography>
+              </Box>
+              <Typography
+                sx={{
+                  fontSize: { xs: 18, md: 24 },
+                  fontWeigh: 600,
+                  ml: 0.5,
+                }}
+              >
+                0
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Box
+              sx={{
+                border: "1px solid #BEBEBE",
+                borderRadius: 3,
+                p: 2,
+                boxShadow: 10,
+              }}
+            >
+              <Box sx={{ display: "flex" }}>
+                <Typography>Contracts</Typography>
+              </Box>
+              <Typography
+                sx={{
+                  fontSize: { xs: 18, md: 24 },
+                  fontWeigh: 600,
+                  ml: 0.5,
+                }}
+              >
+                0
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Box
+              sx={{
+                border: "1px solid #BEBEBE",
+                borderRadius: 3,
+                p: 2,
+                boxShadow: 10,
+              }}
+            >
+              <Box sx={{ display: "flex" }}>
+                <TextSnippetIcon sx={{ mr: 2, color: "green" }} />
+                <Typography>Total Offers</Typography>
+              </Box>
+              <Typography
+                sx={{
+                  fontSize: { xs: 18, md: 24 },
+                  fontWeigh: 600,
+                  ml: 0.5,
+                }}
+              >
+                0
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Box
+              sx={{
+                border: "1px solid #BEBEBE",
+                borderRadius: 3,
+                p: 2,
+                boxShadow: 10,
+              }}
+            >
+              <Box sx={{ display: "flex" }}>
+                <Typography>Reports</Typography>
+              </Box>
+              <Typography
+                sx={{
+                  fontSize: { xs: 18, md: 24 },
+                  fontWeigh: 600,
+                  ml: 0.5,
+                }}
+              >
+                0
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
       <RecentJobSales />
       <TopOfferedJobs />
     </div>
