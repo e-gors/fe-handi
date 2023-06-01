@@ -30,7 +30,6 @@ function UploadBGImage(props) {
       reader.readAsDataURL(file);
       reader.onload = (event) => {
         setImage(event.target.result);
-        console.log(image);
       };
     }
     return;

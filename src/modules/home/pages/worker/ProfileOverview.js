@@ -9,9 +9,11 @@ const categoryLimit = 10;
 function ProfileOverview(props) {
   const { worker } = props;
   const { profile, categories, skills } = worker;
+
   if (!profile) {
-    return console.log(profile);
+    return;
   }
+
   const { background } = profile ? profile[0] : null;
 
   return (

@@ -5,6 +5,7 @@ import { categoryReducer } from "./categoryReducer";
 import { skillReducer } from "./skillReducer";
 import { postsReducer } from "./postsReducer";
 import { locationReducer } from "./locationReducer";
+import { projectReducer } from "./projectReducer";
 
 const reducers = combineReducers({
   users: userReducer,
@@ -13,6 +14,7 @@ const reducers = combineReducers({
   skills: skillReducer,
   posts: postsReducer,
   locations: locationReducer,
+  projects: projectReducer,
 });
 
 export default reducers;

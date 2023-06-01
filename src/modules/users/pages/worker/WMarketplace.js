@@ -19,7 +19,7 @@ function WMarketplace() {
     meta: {},
   });
   const [limit, setLimit] = React.useState({
-    limit: 10,
+    limit: 12,
     page: 1,
   });
   const [filterValues, setFilterValues] = React.useState({

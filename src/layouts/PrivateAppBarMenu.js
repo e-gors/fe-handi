@@ -94,6 +94,11 @@ const clientNavLinks = [
     icon: <BusinessIcon />,
   },
   {
+    label: "Job Posts",
+    path: "/my-jobs",
+    icon: <WorkIcon />,
+  },
+  {
     label: "Offers",
     path: "/my-offers",
     icon: <TabIcon />,
@@ -445,7 +450,7 @@ export default function PrivateAppBarMenu() {
             ))}
 
           {isAuth() && role === "Client" && (
-            <Box sx={{ "@media(max-width: 965px)": { display: "none" } }}>
+            <Box sx={{ "@media(max-width: 1056px)": { display: "none" } }}>
               <Button
                 size="small"
                 variant="outlined"
