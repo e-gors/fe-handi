@@ -80,7 +80,7 @@ const RecentJobSales = () => {
   const [loading, setLoading] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const [proposals, setProposals] = React.useState({
+  const [users, setUsers] = React.useState({
     data: [],
     meta: {},
   });
@@ -108,14 +108,14 @@ const RecentJobSales = () => {
 
   const fetchingData = (params = {}) => {
     setLoading(true);
-    Http.get("/proposals", {
+    Http.get("/get-user", {
       params: {
         ...limit,
         ...params,
       },
     }).then((res) => {
       if (res.data.data) {
-        setProposals({
+        setUsers({
           data: res.data.data,
           meta: res.data.meta,
         });
@@ -291,11 +291,11 @@ const RecentJobSales = () => {
           onEdit={handleEdit}
           onDelete={handleDelete}
           loading={loading}
-          data={proposals.data}
+          data={users.data}
           columns={columns}
           rowsPerPage={filterValues.values.limit}
-          count={proposals.meta.total || 0}
-          page={proposals.meta.current_page - 1 || 0}
+          count={users.meta.total || 0}
+          page={users.meta.current_page - 1 || 0}
           onChangePage={handleChangePage}
           onRowsChangePage={handleRowChange}
         />
