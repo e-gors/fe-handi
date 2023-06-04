@@ -174,7 +174,8 @@ export default function LoginSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage:
+              "url(https://upraise.io/wp-content/uploads/2017/01/How-To-Efficiently-Give-Feedback-To-Your-Boss-banner-1024x758.webp)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"

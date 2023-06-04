@@ -1,8 +1,10 @@
 /** @format */
 import { Box, Grid, Typography } from "@mui/material";
-import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ArticleIcon from "@mui/icons-material/Article";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import PersonIcon from "@mui/icons-material/Person";
+import GavelIcon from "@mui/icons-material/Gavel";
+import AssessmentIcon from "@mui/icons-material/Assessment";
 import React from "react";
 import "./AdminDashboard.css";
 import { Button, InputAdornment, Menu, MenuItem, Divider } from "@mui/material";
@@ -319,20 +321,6 @@ const RecentJobSales = () => {
     </Box>
   );
 };
-const TopOfferedJobs = () => {
-  const jobs = ["Carpenter", "Plumber", "Mason", "Welder", "Mechanic"];
-
-  return (
-    <div className="top-offered-jobs">
-      <h2>Top Offered Jobs</h2>
-      <ul className="jobs-list">
-        {jobs.map((job, index) => (
-          <li key={index}>{job}</li>
-        ))}
-      </ul>
-    </div>
-  );
-};
 
 const AdminDashboard = () => {
   return (
@@ -356,7 +344,7 @@ const AdminDashboard = () => {
               }}
             >
               <Box sx={{ display: "flex" }}>
-                <VisibilityIcon sx={{ mr: 2 }} />
+                <PersonIcon sx={{ mr: 2, color: "green" }} />
                 <Typography>Total Users</Typography>
               </Box>
               <Typography
@@ -366,7 +354,7 @@ const AdminDashboard = () => {
                   ml: 0.5,
                 }}
               >
-                0
+                100
               </Typography>
             </Box>
           </Grid>
@@ -380,6 +368,7 @@ const AdminDashboard = () => {
               }}
             >
               <Box sx={{ display: "flex" }}>
+                <GavelIcon sx={{ mr: 2, color: "green" }} />
                 <Typography>Contracts</Typography>
               </Box>
               <Typography
@@ -389,7 +378,7 @@ const AdminDashboard = () => {
                   ml: 0.5,
                 }}
               >
-                0
+                324
               </Typography>
             </Box>
           </Grid>
@@ -403,7 +392,7 @@ const AdminDashboard = () => {
               }}
             >
               <Box sx={{ display: "flex" }}>
-                <TextSnippetIcon sx={{ mr: 2, color: "green" }} />
+                <LocalOfferIcon sx={{ mr: 2, color: "green" }} />
                 <Typography>Total Offers</Typography>
               </Box>
               <Typography
@@ -413,7 +402,7 @@ const AdminDashboard = () => {
                   ml: 0.5,
                 }}
               >
-                0
+                60
               </Typography>
             </Box>
           </Grid>
@@ -427,6 +416,7 @@ const AdminDashboard = () => {
               }}
             >
               <Box sx={{ display: "flex" }}>
+                <AssessmentIcon sx={{ mr: 2, color: "green" }} />
                 <Typography>Reports</Typography>
               </Box>
               <Typography
@@ -436,14 +426,13 @@ const AdminDashboard = () => {
                   ml: 0.5,
                 }}
               >
-                0
+                120
               </Typography>
             </Box>
           </Grid>
         </Grid>
       </Box>
       <RecentJobSales />
-      <TopOfferedJobs />
     </div>
   );
 };
