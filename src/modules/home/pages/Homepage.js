@@ -1,6 +1,6 @@
 /** @format */
 
-import { Box, Button, Typography, Grid } from "@mui/material";
+import { Box, Button, Typography, Grid, CircularProgress } from "@mui/material";
 import React from "react";
 import ImageCarousel from "../components/ImageCarousel";
 import ContactUs from "../components/ContactUs";
@@ -79,6 +79,8 @@ function Homepage() {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const [loading, setLoading] = React.useState(true);
+
   React.useEffect(() => {
     fetchWorkers();
     fetchCategories();
@@ -89,7 +91,7 @@ function Homepage() {
 
   const fetchWorkers = () => {
     noGuardHttp
-      .get("workers")
+      .get("user/workers")
       .then((res) => {
         dispatch(setWorkers(res.data.data));
       })
@@ -139,118 +141,128 @@ function Homepage() {
       .catch((err) => {
         ToastNotification("error", err.message, options);
       });
+    setLoading(false);
   };
 
   return (
     <React.Fragment>
-      <Box sx={innerStyles.wrapper}>
-        <ToastNotificationContainer />
-        <Box
-          component="div"
-          className="section section-1"
-          sx={innerStyles.main}
-        >
-          <Box sx={innerStyles.section1}>
-            <Typography sx={innerStyles.header}>
-              Hire Skilled Workers based <br /> on their rating and reviews
-            </Typography>
-            <Typography>
-              Explore thousands of job offers in one place and get the job of
-              your dream
-            </Typography>
-
-            <Box sx={innerStyles.buttonWrapper}>
-              <Button
-                fullWidth
-                variant="contained"
-                sx={[styles.customBlueButton, innerStyles.button]}
-                onClick={() => history.push("/find-jobs")}
-              >
-                Find Job
-              </Button>
-              <Typography align="center" sx={innerStyles.or}>
-                or
+      <ToastNotificationContainer />
+      {loading && (
+        <Box sx={{ mt: 10, minHeight: "100vh" }} align="center">
+          <CircularProgress size={36} />
+        </Box>
+      )}
+      {!loading && (
+        <Box sx={innerStyles.wrapper}>
+          <Box
+            component="div"
+            className="section section-1"
+            sx={innerStyles.main}
+          >
+            <Box sx={innerStyles.section1}>
+              <Typography sx={innerStyles.header}>
+                Hire Skilled Workers based <br /> on their rating and reviews
               </Typography>
-              <Button
-                fullWidth
-                variant="contained"
-                sx={[styles.customOrangeButton, innerStyles.button]}
-                onClick={() => history.push("/find-people")}
-              >
-                Hire Worker
-              </Button>
+              <Typography>
+                Explore thousands of job offers in one place and get the job of
+                your dream
+              </Typography>
+
+              <Box sx={innerStyles.buttonWrapper}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={[styles.customBlueButton, innerStyles.button]}
+                  onClick={() => history.push("/find-jobs")}
+                >
+                  Find Job
+                </Button>
+                <Typography align="center" sx={innerStyles.or}>
+                  or
+                </Typography>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={[styles.customOrangeButton, innerStyles.button]}
+                  onClick={() => history.push("/find-people")}
+                >
+                  Hire Worker
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
 
-        <CardSet />
-        <JoinUsSection />
-        <ForClientSection />
+          <CardSet />
+          <JoinUsSection />
+          <ForClientSection />
 
-        <Box sx={innerStyles.forSkilledWorkerWrapper}>
-          <Typography sx={innerStyles.forSkilledWorkerText}>
-            For skilled workers
-          </Typography>
-          <Typography>
-            Discover the completed projects of our skilled workers.
-          </Typography>
+          <Box sx={innerStyles.forSkilledWorkerWrapper}>
+            <Typography sx={innerStyles.forSkilledWorkerText}>
+              For skilled workers
+            </Typography>
+            <Typography>
+              Discover the completed projects of our skilled workers.
+            </Typography>
 
-          <ImageCarousel />
-        </Box>
+            <ImageCarousel />
+          </Box>
 
-        <Box sx={innerStyles.contactWrapper}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Box>
-                <Box sx={innerStyles.infoCardWrapper}>
-                  <EmailIcon sx={innerStyles.contactIcon} />
-                  <Box>
-                    <Typography sx={innerStyles.cardHeader}>
-                      Email us
-                    </Typography>
-                    <Typography>
-                      Our friendly team is here to help you.
-                    </Typography>
-                    <Typography>handi@gmail.com</Typography>
+          <Box sx={innerStyles.contactWrapper}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Box>
+                  <Box sx={innerStyles.infoCardWrapper}>
+                    <EmailIcon sx={innerStyles.contactIcon} />
+                    <Box>
+                      <Typography sx={innerStyles.cardHeader}>
+                        Email us
+                      </Typography>
+                      <Typography>
+                        Our friendly team is here to help you.
+                      </Typography>
+                      <Typography>handi@gmail.com</Typography>
+                    </Box>
+                  </Box>
+
+                  <Box sx={innerStyles.infoCardWrapper}>
+                    <BusinessIcon sx={innerStyles.contactIcon} />
+                    <Box>
+                      <Typography sx={innerStyles.cardHeader}>
+                        Visit us
+                      </Typography>
+                      <Typography>Come see hello at our office.</Typography>
+                      <Typography>Brgy. Atabay Hilongos, Leyte</Typography>
+                    </Box>
+                  </Box>
+
+                  <Box sx={innerStyles.infoCardWrapper}>
+                    <CallIcon sx={innerStyles.contactIcon} />
+                    <Box>
+                      <Typography sx={innerStyles.cardHeader}>
+                        Call us
+                      </Typography>
+                      <Typography>Mon-Fri from 8am to 5pm.</Typography>
+                      <Typography>(+63)905-417-0203</Typography>
+                    </Box>
                   </Box>
                 </Box>
+              </Grid>
 
-                <Box sx={innerStyles.infoCardWrapper}>
-                  <BusinessIcon sx={innerStyles.contactIcon} />
-                  <Box>
-                    <Typography sx={innerStyles.cardHeader}>
-                      Visit us
-                    </Typography>
-                    <Typography>Come see hello at our office.</Typography>
-                    <Typography>Brgy. Atabay Hilongos, Leyte</Typography>
-                  </Box>
+              <Grid item xs={12} md={6}>
+                <Box sx={innerStyles.contactLeft}>
+                  <Typography sx={innerStyles.contactLeftHeader}>
+                    Chat with us!
+                  </Typography>
+                  <Typography sx={innerStyles.tellUs}>
+                    Tell us more about yourself and what you got in mind.
+                  </Typography>
+                  <ContactUs />
                 </Box>
-
-                <Box sx={innerStyles.infoCardWrapper}>
-                  <CallIcon sx={innerStyles.contactIcon} />
-                  <Box>
-                    <Typography sx={innerStyles.cardHeader}>Call us</Typography>
-                    <Typography>Mon-Fri from 8am to 5pm.</Typography>
-                    <Typography>(+63)905-417-0203</Typography>
-                  </Box>
-                </Box>
-              </Box>
+              </Grid>
             </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Box sx={innerStyles.contactLeft}>
-                <Typography sx={innerStyles.contactLeftHeader}>
-                  Chat with us!
-                </Typography>
-                <Typography sx={innerStyles.tellUs}>
-                  Tell us more about yourself and what you got in mind.
-                </Typography>
-                <ContactUs />
-              </Box>
-            </Grid>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
+      )}
     </React.Fragment>
   );
 }

@@ -352,7 +352,7 @@ function FindJobCardModal(props) {
               </Grid>
 
               <Box>
-                <Box sx={{ mb: 5 }}>
+                <Box sx={{ mb: 5, mt: 2 }}>
                   <Typography sx={styles.categoryTitle}>Category</Typography>
                   <Box sx={styles.chipWrapper}>
                     <Chip

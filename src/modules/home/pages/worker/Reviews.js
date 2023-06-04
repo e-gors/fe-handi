@@ -14,6 +14,7 @@ import LinearProgress, {
 	linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import Http from "../../../../utils/Http";
+import noprofile from "../../../../assets/images/noprofile.jpg";
 
 function Reviews({ worker }) {
 	const [value, setValue] = React.useState(2);
@@ -246,19 +247,24 @@ function Reviews({ worker }) {
 									<div className>
 										<img
 											className="profile-pic"
-											alt=""
-											src="https://i.imgur.com/V3ICjlm.jpg"
+											alt="profile_picture"
+											src={
+												comment.commentator_profile
+													? comment.commentator_profile
+													: noprofile
+											}
 										/>
 									</div>
 									<div className="d-flex flex-column">
-										<h3 className="mt-2 mb-0">Marc Mayao</h3>
+										<h3 className="mt-2 mb-0">
+											{comment.commentator_fullname}
+										</h3>
 										<div>
 											<Box
 												sx={{
 													"& > legend": { mt: 2 },
 												}}>
 												<Typography component="legend">
-													{" "}
 													{comment.rating}
 												</Typography>
 												<Rating

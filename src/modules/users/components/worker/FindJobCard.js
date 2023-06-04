@@ -11,8 +11,6 @@ import React from "react";
 import FindJobCardModal from "./FindJobCardModal";
 import { useSelector } from "react-redux";
 
-const skillLimit = 2;
-
 const styles = {
   wrapper: {
     mt: 5,
@@ -91,6 +89,8 @@ const styles = {
     p: 2,
   },
 };
+
+const skillLimit = 2;
 
 const newPosts = (date) => {
   const oneWeekAgo = new Date();
@@ -183,15 +183,16 @@ function FindJobCard(props) {
                     dangerouslySetInnerHTML={{ __html: job.description }}
                   />
                   <Stack sx={styles.skillWrapper}>
-                    {limitedSkills.map((skill, skillIndex) => (
-                      <Chip
-                        size="small"
-                        key={skillIndex}
-                        label={skill}
-                        variant="contained"
-                        sx={styles.skill}
-                      />
-                    ))}
+                    {limitedSkills &&
+                      limitedSkills.map((skill, skillIndex) => (
+                        <Chip
+                          size="small"
+                          key={skillIndex}
+                          label={skill}
+                          variant="contained"
+                          sx={styles.skill}
+                        />
+                      ))}
                     {job.skills.length > skillLimit && (
                       <Chip
                         size="small"

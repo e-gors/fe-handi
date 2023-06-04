@@ -1,3 +1,5 @@
+/** @format */
+
 import * as React from "react";
 import {
   Avatar,
@@ -124,7 +126,7 @@ export default function Login() {
           let user = res.data.user;
           localStorage.setItem("accessToken", res.data.access_token);
           dispatch(setUser(user));
-            history.push("/dashboard");
+          history.push("/dashboard");
         } else {
           ToastNotification("error", res.data.message, options);
         }

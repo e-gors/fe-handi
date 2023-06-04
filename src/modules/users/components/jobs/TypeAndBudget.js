@@ -32,6 +32,7 @@ const days = [
   "11-20 days",
   "1-10 days",
 ];
+
 const styles = {
   wrapper: {
     mt: 5,
