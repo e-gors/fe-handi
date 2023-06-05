@@ -104,7 +104,7 @@ const newPosts = (date) => {
   }
 };
 function FindJobCard(props) {
-  const { jobs, loading } = props;
+  const { jobs, loading, handleForceUpdate } = props;
 
   const user = useSelector((state) => state.users.user);
 
@@ -128,6 +128,7 @@ function FindJobCard(props) {
         handleClose={handleOpen}
         selectedItem={selectedItem}
         user={user && user}
+        handleForceUpdate={handleForceUpdate}
       />
       <Grid container spacing={1}>
         {!loading &&
@@ -207,10 +208,12 @@ function FindJobCard(props) {
                   <Box sx={styles.cardBottom}>
                     <Box sx={styles.cardBottomWrapper}>
                       <Typography>
-                        {job.rate ? job.rate : "$1 - $3 / Daily rate"} /{" "}
-                        {job.job_type}
+                        ₱ {job.rate ? `${job.rate} / day` : job.budget}
                       </Typography>
-                      <Typography>{job.days ? job.days : "2 weeks"}</Typography>
+                      <Typography>{job.job_type}</Typography>
+                      {job.job_type === "Daily Rate" && (
+                        <Typography>{job.days} days</Typography>
+                      )}
                     </Box>
                   </Box>
                 </Box>

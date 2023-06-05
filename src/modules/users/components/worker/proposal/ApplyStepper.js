@@ -20,7 +20,7 @@ import StepConnector, {
 import ReviewAndSubmit from "./ReviewAndSubmit";
 import ProposalForm from "./ProposalForm";
 import RateForm from "./RateForm";
-import ConfirmationModal from "../../../../components/ConfirmationModal";
+import ConfirmationModal from "../../../../../components/ConfirmationModal";
 
 function LinearProgressWithLabel(props) {
   return (
@@ -183,7 +183,14 @@ const steps = ["Rate", "Proposal", "Review and Submit"];
 const progressVal = 100 / steps.length;
 
 export default function ApplyStepper(props) {
-  const { handleCancel, selectedItem, handleClose, onHandleSubmit } = props;
+  const {
+    handleCancel,
+    selectedItem,
+    handleClose,
+    onHandleSubmit,
+    bid,
+    onEdit,
+  } = props;
 
   const [openConfirmDialogue, setOpenConfirmDialogue] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -191,11 +198,35 @@ export default function ApplyStepper(props) {
   const [progress, setprogress] = React.useState(progressVal);
 
   // rate states
-  const [formValues, setFormValues] = React.useState();
+  const [rate, setRate] = React.useState({
+    values: {
+      rate: "",
+    },
+  });
 
   //proposal states
   const [proposal, setProposal] = React.useState("");
   const [images, setImages] = React.useState([]);
+
+  React.useEffect(() => {
+    if (bid) {
+      const savedRate = bid.rate;
+      const savedProposal = bid.proposal;
+      const savedImages = bid.images && bid.images;
+
+      setRate((prev) => ({
+        ...prev,
+        values: {
+          rate: savedRate,
+        },
+      }));
+      setProposal(savedProposal);
+
+      if (savedImages) {
+        setImages(savedImages);
+      }
+    }
+  }, []);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -275,8 +306,8 @@ export default function ApplyStepper(props) {
                 handleCancel={handleConfirmDialogue}
                 handleBack={handleBack}
                 handleNext={handleNext}
-                rate={formValues}
-                setRate={setFormValues}
+                rate={rate.values}
+                setRate={setRate}
               />
             )}
             {activeStep === 1 && (
@@ -299,12 +330,12 @@ export default function ApplyStepper(props) {
                 handleCancel={handleConfirmDialogue}
                 handleNext={handleNext}
                 handleBack={handleBack}
-                handleClose={handleClose}
                 onHandleSubmit={onHandleSubmit}
-                rate={formValues.rate}
+                rate={rate}
                 proposal={proposal}
                 images={images}
-                id={selectedItem.id}
+                id={onEdit ? bid.id : selectedItem.id}
+                onEdit={onEdit}
               />
             )}
           </Box>

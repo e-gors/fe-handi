@@ -230,6 +230,7 @@ function JoinAsClient() {
                 name="first_name"
                 fullWidth
                 required
+                autoFocus
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -257,7 +258,6 @@ function JoinAsClient() {
                 fullWidth
                 label="Working Email "
                 autoComplete="email"
-                autoFocus
                 InputProps={{
                   style: {
                     background: "rgba(255, 255, 255, 0.5)",

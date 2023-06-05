@@ -62,7 +62,7 @@ function FindJobWorkerFilter(props) {
           name="search"
           size="small"
           variant="outlined"
-          placeholder="Search by first name, last name or fullname"
+          placeholder="Search..."
           onChange={handleFilter}
           value={filterValues.values.search}
           InputProps={{

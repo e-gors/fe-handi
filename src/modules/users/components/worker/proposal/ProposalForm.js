@@ -14,9 +14,9 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "react-quill/dist/quill.snow.css";
-import ToastNotification from "../../../../components/ToastNotification";
-import { options } from "../../../../components/options";
-import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
+import ToastNotification from "../../../../../components/ToastNotification";
+import { options } from "../../../../../components/options";
+import ToastNotificationContainer from "../../../../../components/ToastNotificationContainer";
 
 const styles = {
   wrapper: {
@@ -293,7 +293,7 @@ function ProposalForm(props) {
       </Box>
 
       <Box>
-        <Typography>File Attachment</Typography>
+        <Typography>File Attachment (Optional)</Typography>
         <FormHelperText sx={styles.jobDesHelperText}>
           File size should be less than 3MB. Include work samples or other
           documents to support your proposal. Don't attach your resume - your

@@ -14,6 +14,9 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
+import StarIcon from "@mui/icons-material/Star";
+import ImageIcon from "@mui/icons-material/Image";
+import noImage from "../../../../assets/images/no-img-trans-bg.png";
 
 const categoryLimit = 2;
 const skillLimit = 2;
@@ -87,7 +90,8 @@ const styles = {
   moreSkill: { border: "2px solid white", boxShadow: 1 },
   projectWrapper: {
     mt: 1,
-    display: "inlineFlex",
+    display: "flex",
+    flexDirection: "row",
     overflowX: "scroll",
 
     "::-webkit-scrollbar": {
@@ -95,10 +99,9 @@ const styles = {
     },
   },
   project: {
-    width: 200,
-    height: 150,
-    backgroundColor: "#BEBEBE",
-    m: 1,
+    display: "block",
+    minWidth: 200,
+    height: 110,
   },
   cardBottom: { mt: 1 },
   cardBottomWrapper: {
@@ -217,21 +220,54 @@ function FindWorkerCard(props) {
                     )}
                   </Stack>
 
-                  <Box sx={styles.projectWrapper}>
-                    <Box sx={styles.project}></Box>
-                    <Box sx={styles.project}></Box>
-                    <Box sx={styles.project}></Box>
-                  </Box>
+                  {worker && worker.projects.length === 0 && (
+                    <Box sx={styles.projectWrapper}>
+                      <Box component="img" src={noImage} sx={styles.project} />
+                      <Box component="img" src={noImage} sx={styles.project} />
+                      <Box component="img" src={noImage} sx={styles.project} />
+                    </Box>
+                  )}
+                  {worker && worker.projects.length > 0 && (
+                    <Box sx={styles.projectWrapper}>
+                      {worker.projects.map((project, i) => (
+                        <Box
+                          key={i}
+                          sx={{
+                            background: `url(${project.image})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            minWidth: 210,
+                            height: 110,
+                            mt: 2,
+                            mb: 2,
+                            mr: 1,
+                            boxShadow: 5,
+                            borderRadius: 3,
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  )}
 
                   <Box sx={styles.cardBottom}>
                     {worker.profile.map((user, i) => (
                       <Box key={i} sx={styles.cardBottomWrapper}>
                         <Typography>
-                          {user.daily_rate ? user.daily_rate : "No rates"}
+                          ₱ {user.rate ? user.rate : "0"} / day
                         </Typography>
-                        <Typography>
-                          {user.rating ? user.rating : "Star 5.0 (5)"}
-                        </Typography>
+                        {user.rating && (
+                          <Box sx={{ display: "flex" }}>
+                            <StarIcon color="warning" />
+                            <Typography>{user.rating}</Typography>
+                            {/* <Typography>4.5</Typography> */}
+                            {/* <Typography sx={{ ml: 1 }}>(10000000)</Typography> */}
+                          </Box>
+                        )}
+                        {!user.rating && (
+                          <Box sx={{ display: "flex" }}>
+                            <Typography>No Rating</Typography>
+                          </Box>
+                        )}
                       </Box>
                     ))}
                   </Box>

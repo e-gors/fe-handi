@@ -51,26 +51,15 @@ function ProfileOverview(props) {
                 <Box key={categoryIndex}>
                   <Typography>{category.name}</Typography>
                   {category.children &&
-                    category.children
-                      .slice(categoryIndex, categoryLimit)
-                      .map((child, childIndex) => (
-                        <Chip
-                          key={childIndex}
-                          label={child.name}
-                          variant="outlined"
-                          color="primary"
-                          sx={{ m: 0.5 }}
-                        />
-                      ))}
-                  {category.children.length > categoryLimit && (
-                    <Chip
-                      key={categoryIndex}
-                      label={`+${category.children.length - categoryLimit}`}
-                      variant="outlined"
-                      color="primary"
-                      sx={{ m: 0.5 }}
-                    />
-                  )}
+                    category.children.map((child, childIndex) => (
+                      <Chip
+                        key={childIndex}
+                        label={child.name}
+                        variant="outlined"
+                        color="primary"
+                        sx={{ m: 0.5 }}
+                      />
+                    ))}
                   {category.children.length <= 0 && (
                     <Chip
                       key={categoryIndex}
@@ -101,26 +90,15 @@ function ProfileOverview(props) {
                 <Box key={skillIndex}>
                   <Typography>{skill.name}</Typography>
                   {skill.children &&
-                    skill.children
-                      .slice(skillIndex, categoryLimit)
-                      .map((child, childIndex) => (
-                        <Chip
-                          key={childIndex}
-                          label={child.name}
-                          variant="outlined"
-                          color="primary"
-                          sx={{ m: 0.5 }}
-                        />
-                      ))}
-                  {skill.children.length > categoryLimit && (
-                    <Chip
-                      key={skillIndex}
-                      label={`+${skill.children.length - categoryLimit}`}
-                      variant="outlined"
-                      color="primary"
-                      sx={{ m: 0.5 }}
-                    />
-                  )}
+                    skill.children.map((child, childIndex) => (
+                      <Chip
+                        key={childIndex}
+                        label={child.name}
+                        variant="outlined"
+                        color="primary"
+                        sx={{ m: 0.5 }}
+                      />
+                    ))}
                   {skill.children.length <= 0 && (
                     <Chip
                       key={skillIndex}

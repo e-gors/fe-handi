@@ -126,6 +126,29 @@ function WProfile() {
     socialText: {
       ml: 1,
     },
+    members: {
+      width: { xs: "105%", sm: "102%", md: "100%" },
+      mt: 3,
+      backgroundColor: "#EEEEEE",
+      borderRadius: 3,
+      p: 1,
+      boxShadow: 5,
+      ml: { xs: -2, md: 0 },
+      display: "flex",
+      justifyContent: "space-between",
+    },
+    membersEachWrapper: {
+      display: "flex",
+      flexDirection: "column",
+      textAlign: "center",
+    },
+    value: {
+      fontWeight: "bold",
+      fontSize: { xs: 14, md: 11 },
+    },
+    label: {
+      fontSize: { xs: 12, md: 9 },
+    },
   };
 
   return (
@@ -146,6 +169,20 @@ function WProfile() {
                     <Typography sx={styles.backgroundText}>
                       {profs && profs.address}
                     </Typography>
+                  </Box>
+                </Box>
+                <Box sx={styles.members}>
+                  <Box sx={styles.membersEachWrapper}>
+                    <Typography sx={styles.value}>2023</Typography>
+                    <Typography sx={styles.label}>Member Since</Typography>
+                  </Box>
+                  <Box sx={styles.membersEachWrapper}>
+                    <Typography sx={styles.value}>₱ 350.00</Typography>
+                    <Typography sx={styles.label}>Rates</Typography>
+                  </Box>
+                  <Box sx={styles.membersEachWrapper}>
+                    <Typography sx={styles.value}>49</Typography>
+                    <Typography sx={styles.label}>Completed Jobs</Typography>
                   </Box>
                 </Box>
                 <Box sx={styles.userRatingWrapper}>

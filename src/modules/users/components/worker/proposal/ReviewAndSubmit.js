@@ -1,13 +1,13 @@
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Http from "../../../../utils/Http";
-import ToastNotification from "../../../../components/ToastNotification";
-import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
-import { options } from "../../../../components/options";
-import { formatValue } from "../../../../utils/helpers";
+import Http from "../../../../../utils/Http";
+import ToastNotification from "../../../../../components/ToastNotification";
+import ToastNotificationContainer from "../../../../../components/ToastNotificationContainer";
+import { options } from "../../../../../components/options";
+import { formatValue } from "../../../../../utils/helpers";
 import { useDispatch } from "react-redux";
-import { updateUser } from "../../../../redux/actions/userActions";
+import { updateUser } from "../../../../../redux/actions/userActions";
 
 const styles = {
   wrapper: {
@@ -15,7 +15,7 @@ const styles = {
   },
   rateLabel: {
     fontWeight: "bold",
-    fontSize: 24,
+    fontSize: { xs: 20, md: 24 },
     mb: 2,
   },
   rateText: {
@@ -85,23 +85,63 @@ function ReviewAndSubmit(props) {
   const {
     activeStep,
     handleCancel,
-    handleClose,
     onHandleSubmit,
     handleBack,
     proposal,
     rate,
     images,
     id,
+    onEdit,
   } = props;
 
   const dispatch = useDispatch();
 
   const [loading, setLoading] = React.useState(false);
 
+  const submit = () => {
+    if (onEdit) {
+      handleSubmitEdit();
+    } else {
+      handleSubmit();
+    }
+  };
+
+  const handleSubmitEdit = () => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("rate", rate.values.rate);
+    formData.append("proposal", proposal);
+    if (images && images.length > 0) {
+      images.forEach((image) => {
+        formData.append("images[]", image.file);
+      });
+    }
+
+    Http.post(`/update/proposal/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        if (res.data.code === 200) {
+          ToastNotification("success", res.data.message, options);
+          dispatch(updateUser(res.data.user));
+          onHandleSubmit();
+        } else {
+          ToastNotification("error", res.data.message, options);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        ToastNotification("error", err.message, options);
+      });
+  };
+
   const handleSubmit = () => {
     setLoading(true);
     const formData = new FormData();
-    formData.append("rate", rate);
+    formData.append("rate", rate.values.rate);
     formData.append("proposal", proposal);
     if (images && images.length > 0) {
       images.forEach((image) => {
@@ -129,6 +169,7 @@ function ReviewAndSubmit(props) {
         ToastNotification("error", err.message, options);
       });
   };
+
   return (
     <Box sx={styles.wrapper}>
       <ToastNotificationContainer />
@@ -137,7 +178,7 @@ function ReviewAndSubmit(props) {
           <Box sx={{ mb: 2 }}>
             <Typography sx={styles.rateLabel}>Rate</Typography>
             <Typography sx={styles.rateText} component="span">
-              ₱ {rate && formatValue(rate)}
+              ₱ {rate && formatValue(rate.values.rate)}
             </Typography>
           </Box>
         )}
@@ -185,7 +226,7 @@ function ReviewAndSubmit(props) {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleSubmit}
+            onClick={submit}
             size="small"
             sx={styles.next}
             disabled={loading}

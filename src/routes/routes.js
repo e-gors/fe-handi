@@ -144,6 +144,12 @@ const routes = [
     auth: true,
     role: "Worker",
   },
+  {
+    path: "/profile/worker",
+    component: "modules/users/pages/worker/WProfile",
+    auth: true,
+    role: "Worker",
+  },
 
   // Client Routes
   {

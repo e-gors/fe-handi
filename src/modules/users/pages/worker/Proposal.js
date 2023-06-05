@@ -111,7 +111,7 @@ function Proposal() {
 
   const fetchingData = (params = {}) => {
     setLoading(true);
-    Http.get("/proposals", {
+    Http.get("/user/proposals", {
       params: {
         ...limit,
         ...params,
@@ -303,22 +303,24 @@ function Proposal() {
           onChangePage={handleChangePage}
           onRowsChangePage={handleRowChange}
         />
-        {/* {proposals.data.length === 0 && (
-          <Box align="center" sx={{ mt: 5, p: 2 }}>
-            <ArticleIcon sx={styles.articleIcon} />
-            <Typography sx={{ mt: 2 }}>YOU HAVE NO PROPOSALS</Typography>
-            <Typography sx={{ mt: 2 }}>
-              This is where you'll be able to track all your proposals
-            </Typography>
-            <Button
-              variant="text"
-              color="primary"
-              onClick={() => handleNavigate("/marketplace/work")}
-            >
-              Take me to marketplace to find a job
-            </Button>
-          </Box>
-        )} */}
+        {/* {!loading &&
+          !filterValues.values.search &&
+          proposals.data.length === 0 && (
+            <Box align="center" sx={{ mt: 5, p: 2 }}>
+              <ArticleIcon sx={styles.articleIcon} />
+              <Typography sx={{ mt: 2 }}>YOU HAVE NO PROPOSALS</Typography>
+              <Typography sx={{ mt: 2 }}>
+                This is where you'll be able to track all your proposals
+              </Typography>
+              <Button
+                variant="text"
+                color="primary"
+                onClick={() => handleNavigate("/marketplace/work")}
+              >
+                Take me to marketplace to find a job
+              </Button>
+            </Box>
+          )} */}
       </Box>
     </Box>
   );

@@ -1,9 +1,9 @@
 import { Box, Button, InputAdornment, Typography } from "@mui/material";
 import React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import FormField from "../../../../components/FormField";
+import FormField from "../../../../../components/FormField";
 import Reevalidate from "ree-validate-18";
-import { formatValue } from "../../../../utils/helpers";
+import { formatValue } from "../../../../../utils/helpers";
 
 const styles = {
   wrapper: {
@@ -70,7 +70,7 @@ function RateForm(props) {
         },
       });
     }
-  }, []);
+  }, [rate]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -110,7 +110,7 @@ function RateForm(props) {
   const handleValidate = () => {
     validator.validateAll(formValues.values).then((success) => {
       if (success) {
-        setRate(formValues.values);
+        setRate(formValues);
         handleNext();
       } else {
         setFormValues((prev) => ({
@@ -130,7 +130,9 @@ function RateForm(props) {
   return (
     <Box sx={styles.wrapper}>
       <Box>
-        <Typography sx={{ fontWeight: "bold", fontSize: 30, mb: 1 }}>
+        <Typography
+          sx={{ fontWeight: "bold", fontSize: { xs: 24, md: 30 }, mb: 1 }}
+        >
           Terms
         </Typography>
 

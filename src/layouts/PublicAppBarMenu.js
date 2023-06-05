@@ -18,7 +18,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import DrawerMenu from "./PublicDrawerMenu";
 import HomeIcon from "@mui/icons-material/Home";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -136,6 +136,8 @@ const clientAnchorItemsOnLaptop = [
 export default function PublicAppBarMenu() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const location = useLocation();
+
   const user = useSelector((state) => state.users.user);
   const profile_url =
     user && user.role !== "Super Admin" && user.profile
@@ -351,7 +353,11 @@ export default function PublicAppBarMenu() {
             sx={{ ml: 10, flexGrow: 1, display: { xs: "none", md: "flex" } }}
           >
             {singleLink.map((page, i) => (
-              <MenuItem key={i} onClick={() => handleNavigate(page.path)}>
+              <MenuItem
+                key={i}
+                onClick={() => handleNavigate(page.path)}
+                selected={page.path === location.pathname}
+              >
                 <Typography textAlign="center">{page.label}</Typography>
               </MenuItem>
             ))}

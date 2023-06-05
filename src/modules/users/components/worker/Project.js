@@ -66,7 +66,26 @@ function Project() {
 
   const [loading, setLoading] = React.useState(false);
   const [loadingOnDelete, setLoadingOnDelete] = React.useState(false);
+  const [loadingOnFetch, setLoadingOnFetch] = React.useState(true);
   const [images, setImages] = React.useState([]);
+
+  React.useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = () => {
+    Http.get("projects")
+      .then((res) => {
+        if (res.data.data) {
+          dispatch(setProjects(res.data.data));
+        }
+        setLoadingOnFetch(false);
+      })
+      .catch((err) => {
+        setLoadingOnFetch(false);
+        console.warn(err.message);
+      });
+  };
 
   const handleChangeMultipleImages = (e) => {
     const files = e.target.files;
@@ -134,7 +153,7 @@ function Project() {
     Http.post("new/projects", formData)
       .then((res) => {
         if (res.data.code === 200) {
-          dispatch(setProjects(res.data.projects));
+          dispatch(updateProjects(res.data.projects));
         } else {
           ToastNotification("error", res.data.message, options);
         }
@@ -165,103 +184,112 @@ function Project() {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexWrap: { xs: "noWrap", sm: "noWrap", md: "wrap" },
-        overflowX: "auto",
-      }}
-    >
-      <ToastNotificationContainer />
-      <Box
-        component="form"
-        encType="multipart/form-data"
-        sx={styles.addImagesWrapper}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-      >
-        <input
-          id="multiple-images"
-          type="file"
-          accept="image/*"
-          multiple
-          style={{ display: "none" }}
-          onChange={handleChangeMultipleImages}
-        />
-        <Box
-          component="label"
-          htmlFor="multiple-images"
-          sx={{ cursor: "pointer", width: "100%", height: "100%" }}
-        >
-          <Box sx={styles.addButtonWrapper}>
-            <AddIcon className="add-btn" />
-          </Box>
-        </Box>
-      </Box>
-
-      {loading && (
-        <Box sx={styles.loadingWrapper}>
+    <React.Fragment>
+      {loadingOnFetch && (
+        <Box align="center">
           <CircularProgress size={36} />
         </Box>
       )}
-
-      {!loading &&
-        projects &&
-        projects.length > 0 &&
-        projects.map((image, i) => (
+      {!loadingOnFetch && (
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: { xs: "noWrap", sm: "noWrap", md: "wrap" },
+            overflowX: "auto",
+          }}
+        >
+          <ToastNotificationContainer />
           <Box
-            key={i}
-            sx={{
-              minWidth: 210,
-              height: 280,
-              background: `url(${image.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              borderRadius: 3,
-              boxShadow: 3,
-              m: 1,
-              position: "relative",
-
-              "&::after": {
-                content: "''",
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: "rgba(0, 0, 0, 0.5)",
-                opacity: 0,
-                transition: "opacity 0.5s",
-                borderRadius: 3,
-              },
-
-              "&:hover::after": {
-                opacity: 1,
-              },
-
-              "&:hover .remove-btn": {
-                display: "block",
-              },
-            }}
+            component="form"
+            encType="multipart/form-data"
+            sx={styles.addImagesWrapper}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
           >
-            <IconButton
-              className="remove-btn"
-              sx={styles.deleteButton}
-              onClick={() => handleRemoveImage(image.id)}
+            <input
+              id="multiple-images"
+              type="file"
+              accept="image/*"
+              multiple
+              style={{ display: "none" }}
+              onChange={handleChangeMultipleImages}
+            />
+            <Box
+              component="label"
+              htmlFor="multiple-images"
+              sx={{ cursor: "pointer", width: "100%", height: "100%" }}
             >
-              {loadingOnDelete ? (
-                <CircularProgress size={24} />
-              ) : (
-                <DeleteIcon
-                  color="error"
+              <Box sx={styles.addButtonWrapper}>
+                <AddIcon className="add-btn" />
+              </Box>
+            </Box>
+          </Box>
+
+          {loading && (
+            <Box sx={styles.loadingWrapper}>
+              <CircularProgress size={36} />
+            </Box>
+          )}
+
+          {!loading &&
+            projects &&
+            projects.length > 0 &&
+            projects.map((image, i) => (
+              <Box
+                key={i}
+                sx={{
+                  minWidth: 210,
+                  height: 280,
+                  background: `url(${image.image})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  borderRadius: 3,
+                  boxShadow: 3,
+                  m: 1,
+                  position: "relative",
+
+                  "&::after": {
+                    content: "''",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: "rgba(0, 0, 0, 0.5)",
+                    opacity: 0,
+                    transition: "opacity 0.5s",
+                    borderRadius: 3,
+                  },
+
+                  "&:hover::after": {
+                    opacity: 1,
+                  },
+
+                  "&:hover .remove-btn": {
+                    display: "block",
+                  },
+                }}
+              >
+                <IconButton
                   className="remove-btn"
                   sx={styles.deleteButton}
-                />
-              )}
-            </IconButton>
-          </Box>
-        ))}
-    </Box>
+                  onClick={() => handleRemoveImage(image.id)}
+                >
+                  {loadingOnDelete ? (
+                    <CircularProgress size={24} />
+                  ) : (
+                    <DeleteIcon
+                      color="error"
+                      className="remove-btn"
+                      sx={styles.deleteButton}
+                    />
+                  )}
+                </IconButton>
+              </Box>
+            ))}
+        </Box>
+      )}
+    </React.Fragment>
   );
 }
 

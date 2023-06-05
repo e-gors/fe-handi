@@ -1,5 +1,5 @@
 import { Box, Chip, Pagination, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useReducer } from "react";
 import { useSelector } from "react-redux";
 import FindJobWorkerFilter from "../../components/FindJobWorkerFilter";
 import FindJobCard from "../../components/worker/FindJobCard";
@@ -10,6 +10,7 @@ function CMarketplace() {
   const skills = useSelector((state) => state.skills.skills);
   const locations = useSelector((state) => state.locations.locations);
 
+  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
   const [loading, setLoading] = React.useState(false);
   const [onLoadLoading, setOnLoadLoading] = React.useState(false);
   const [showMore, setShowMore] = React.useState(false);
@@ -39,7 +40,7 @@ function CMarketplace() {
       page: 1,
     }));
     optimizedFn(filterValues.values);
-  }, [filterValues.values]); // eslint-disable-line
+  }, [ignored, filterValues.values]); // eslint-disable-line
 
   const fetchingData = (params = {}) => {
     setLoading(true);
@@ -244,7 +245,11 @@ function CMarketplace() {
             filterValuesCount={filterValuesCount}
           />
         </Box>
-        <FindJobCard jobs={jobs.data} loading={loading} />
+        <FindJobCard
+          jobs={jobs.data}
+          loading={loading}
+          handleForceUpdate={() => forceUpdate()}
+        />
         {jobs.data && jobs.data.length !== 0 && (
           <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
             <Pagination

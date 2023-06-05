@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Box,
   Button,
   Chip,
@@ -16,13 +17,15 @@ import ReportIcon from "@mui/icons-material/Report";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import ApplyModal from "./ApplyModal";
+import ApplyModal from "./proposal/ApplyModal";
 import ToastNotification from "../../../../components/ToastNotification";
 import { options } from "../../../../components/options";
 import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
 import Http from "../../../../utils/Http";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../../../redux/actions/userActions";
+import { isAuth } from "../../../../utils/helpers";
+import BidsModal from "./proposal/BidsModal";
 
 const style = {
   position: "absolute",
@@ -122,7 +125,7 @@ const styles = {
 };
 
 function FindJobCardModal(props) {
-  const { open, handleClose, selectedItem, user } = props;
+  const { open, handleClose, selectedItem, user, handleForceUpdate } = props;
 
   const dispatch = useDispatch();
 
@@ -134,31 +137,38 @@ function FindJobCardModal(props) {
 
   const isBided =
     user && user.bids && user.bids.some((item) => item.post_id === id);
+
   const [openApplyModal, setOpenApplyModal] = React.useState(false);
+  const [openBidsModal, setOpenBidsModal] = React.useState(false);
 
   const handleOpen = () => {
-    if (user && user.role === "Worker") {
-      if (isBided) {
+    if (isAuth()) {
+      if (user && user.role === "Worker") {
+        if (isBided) {
+          ToastNotification(
+            "error",
+            "You cannot bid again! Only one bid per job post.",
+            options
+          );
+        } else {
+          setOpenApplyModal(!openApplyModal);
+        }
+      } else {
         ToastNotification(
           "error",
-          "You cannot bid again! Only one bid per job post.",
+          `You can only create a job post with a ${user.role} account!`,
           options
         );
-      } else {
-        setOpenApplyModal(!openApplyModal);
       }
     } else {
-      ToastNotification(
-        "error",
-        `You can only create a job post with a ${user.role} account!`,
-        options
-      );
+      setOpenApplyModal(!openApplyModal);
     }
   };
 
   const onHandleClose = () => {
     setOpenApplyModal(false);
     handleClose();
+    handleForceUpdate();
   };
 
   const addToShortlist = (id) => {
@@ -199,6 +209,9 @@ function FindJobCardModal(props) {
       });
   };
 
+  const proposalsCount =
+    selectedItem && selectedItem.bids && selectedItem.bids.length;
+
   return (
     <Box>
       <Modal
@@ -215,13 +228,20 @@ function FindJobCardModal(props) {
             onHandleSubmit={onHandleClose}
             selectedItem={selectedItem}
           />
+          <BidsModal
+            open={openBidsModal}
+            handleClose={() => setOpenBidsModal(false)}
+            bids={selectedItem && selectedItem.bids}
+            selectedItem={selectedItem}
+            handleForceUpdate={handleForceUpdate}
+          />
           <Box sx={styles.exitIconWrapper}>
             <IconButton onClick={handleClose} sx={styles.exitIconButton}>
               <CancelIcon color="error" />
             </IconButton>
           </Box>
 
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: 1 }}>
             <Typography sx={styles.jobTitle}>
               {selectedItem && selectedItem.title}
             </Typography>
@@ -259,6 +279,25 @@ function FindJobCardModal(props) {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box sx={{ display: "flex" }} align="center">
+                    <Badge
+                      color="primary"
+                      badgeContent={proposalsCount && proposalsCount}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "left",
+                      }}
+                    >
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        sx={{ mr: 0.5 }}
+                        onClick={() => setOpenBidsModal(true)}
+                      >
+                        Bids
+                      </Button>
+                    </Badge>
+
                     {!isFavorite && (
                       <Button
                         variant="outlined"
@@ -290,7 +329,7 @@ function FindJobCardModal(props) {
                       color="primary"
                       size="small"
                       startIcon={<ReportIcon />}
-                      sx={{ ml: 1 }}
+                      sx={{ ml: 0.5 }}
                     >
                       Report
                     </Button>
@@ -311,24 +350,43 @@ function FindJobCardModal(props) {
                           {selectedItem && selectedItem.job_type}
                         </Typography>
                       </Box>
-                      <Box sx={styles.rate}>
-                        <Box sx={styles.jobTypeEachWrapper}>
-                          <LocalAtmIcon sx={styles.workIcon} />
-                          <Typography>Rate</Typography>
-                        </Box>
-                        <Typography sx={styles.jobTypeValue}>
-                          {selectedItem && selectedItem.rate}
-                        </Typography>
-                      </Box>
-                      <Box sx={styles.rate}>
-                        <Box sx={styles.jobTypeEachWrapper}>
-                          <CalendarMonthIcon sx={styles.workIcon} />
-                          <Typography>Days</Typography>
-                        </Box>
-                        <Typography sx={styles.jobTypeValue}>
-                          {selectedItem && selectedItem.days}
-                        </Typography>
-                      </Box>
+                      {selectedItem &&
+                        selectedItem.job_type === "Daily Rate" && (
+                          <React.Fragment>
+                            <Box sx={styles.rate}>
+                              <Box sx={styles.jobTypeEachWrapper}>
+                                <LocalAtmIcon sx={styles.workIcon} />
+                                <Typography>Rate</Typography>
+                              </Box>
+                              <Typography sx={styles.jobTypeValue}>
+                                ₱ {selectedItem && selectedItem.rate}
+                              </Typography>
+                            </Box>
+                            <Box sx={styles.rate}>
+                              <Box sx={styles.jobTypeEachWrapper}>
+                                <CalendarMonthIcon sx={styles.workIcon} />
+                                <Typography>Days</Typography>
+                              </Box>
+                              <Typography sx={styles.jobTypeValue}>
+                                {selectedItem && selectedItem.days} days
+                              </Typography>
+                            </Box>
+                          </React.Fragment>
+                        )}
+                      {selectedItem &&
+                        selectedItem.job_type === "Fixed Budget" && (
+                          <React.Fragment>
+                            <Box sx={styles.rate}>
+                              <Box sx={styles.jobTypeEachWrapper}>
+                                <LocalAtmIcon sx={styles.workIcon} />
+                                <Typography>budget</Typography>
+                              </Box>
+                              <Typography sx={styles.jobTypeValue}>
+                                ₱ {selectedItem && selectedItem.budget}
+                              </Typography>
+                            </Box>
+                          </React.Fragment>
+                        )}
                     </Box>
                     <Button
                       size="small"

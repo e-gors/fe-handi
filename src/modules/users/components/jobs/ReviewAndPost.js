@@ -176,9 +176,19 @@ function ReviewAndPost(props) {
       <Box>
         <Box sx={{ mb: 1, p: 2 }}>
           {typeAndBudget && (
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+              }}
+            >
               <Box align="left">
-                <Typography sx={{ fontSize: 24 }}>{titles}</Typography>
+                <Typography
+                  sx={{ fontSize: { xs: 20, md: 24 }, fontWeight: "bold" }}
+                >
+                  {titles}
+                </Typography>
 
                 <Typography>
                   {typeAndBudget.category}{" "}
@@ -227,13 +237,12 @@ function ReviewAndPost(props) {
           {typeAndBudget && typeAndBudget.type === "Daily Rate" && (
             <Box>
               <Typography>
-                <span style={{ fontWeigth: "bold" }}>Estimated days:</span>{" "}
-                {typeAndBudget.days}
+                <span>Estimated days:</span> {typeAndBudget.days}
               </Typography>
             </Box>
           )}
           {locations && (
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", mt: 1 }}>
               <Typography>Prefered Worker Location: </Typography>
               <Box sx={{ ml: 1 }}>
                 {locations &&
@@ -251,7 +260,7 @@ function ReviewAndPost(props) {
           )}
 
           {skillses && skillses.length !== 0 && (
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", mt: 1 }}>
               <Typography>Skills:</Typography>
               <Box sx={{ ml: 1 }}>
                 {skillses &&

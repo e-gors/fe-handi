@@ -102,6 +102,28 @@ function UpdateSocialNetwork(props) {
       });
   };
 
+  const handleValidate = () => {
+    if (type === "Instagram") {
+      if (url.values.instagram || url.values.instagram.length > 0) {
+        handleSubmit();
+      } else {
+        ToastNotification("error", `${type} Url is required!`, options);
+      }
+    } else if (type === "Twitter") {
+      if (url.values.twitter || url.values.twitter.length > 0) {
+        handleSubmit();
+      } else {
+        ToastNotification("error", `${type} Url is required!`, options);
+      }
+    } else {
+      if (url.values.facebook || url.values.facebook.length > 0) {
+        handleSubmit();
+      } else {
+        ToastNotification("error", `${type} Url is required!`, options);
+      }
+    }
+  };
+
   return (
     <Box>
       <ToastNotificationContainer />
@@ -177,7 +199,7 @@ function UpdateSocialNetwork(props) {
           variant="contained"
           color="primary"
           sx={{ ml: 1 }}
-          onClick={handleSubmit}
+          onClick={handleValidate}
           disabled={loading}
         >
           {loading ? (
