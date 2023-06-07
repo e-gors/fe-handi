@@ -142,7 +142,16 @@ const routes = [
     path: "/account/settings/notifications",
     component: "modules/users/pages/worker/NotificationSettings",
     auth: true,
-    role: "Worker",
+  },
+  {
+    path: "/my-account",
+    component: "modules/users/pages/worker/MyAccount",
+    auth: true,
+  },
+  {
+    path: "/settings",
+    component: "modules/users/pages/worker/Settings",
+    auth: true,
   },
   {
     path: "/profile/worker",

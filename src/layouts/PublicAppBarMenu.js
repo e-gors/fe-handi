@@ -106,7 +106,7 @@ const workerAnchorItemsOnLaptop = [
     label: "Profile",
   },
   {
-    path: "/account",
+    path: "/my-account",
     label: "My Account",
   },
   {
@@ -124,7 +124,7 @@ const clientAnchorItemsOnLaptop = [
     label: "Profile",
   },
   {
-    path: "/account",
+    path: "/my-account",
     label: "My Account",
   },
   {

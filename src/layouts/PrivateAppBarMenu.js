@@ -1,3 +1,5 @@
+/** @format */
+
 import * as React from "react";
 import {
   AppBar,
@@ -12,7 +14,7 @@ import {
   Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+// import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -151,7 +153,7 @@ const workerAnchorItemsOnLaptop = [
     label: "Profile",
   },
   {
-    path: "/account",
+    path: "/my-account",
     label: "My Account",
   },
   {
@@ -166,7 +168,7 @@ const clientAnchorItemsOnLaptop = [
     label: "Profile",
   },
   {
-    path: "/account",
+    path: "/my-account",
     label: "My Account",
   },
   {
