@@ -175,7 +175,7 @@ export default function LoginSide() {
           md={7}
           sx={{
             backgroundImage:
-              "url(https://upraise.io/wp-content/uploads/2017/01/How-To-Efficiently-Give-Feedback-To-Your-Boss-banner-1024x758.webp)",
+              "url(https://img.freepik.com/premium-vector/happy-labour-day-construction-workers-are-working-building-labour-day-1-may-illustration_138260-738.jpg?w=2000)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
