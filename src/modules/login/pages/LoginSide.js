@@ -174,7 +174,8 @@ export default function LoginSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage:
+              "url(https://img.freepik.com/premium-vector/happy-labour-day-construction-workers-are-working-building-labour-day-1-may-illustration_138260-738.jpg?w=2000)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
