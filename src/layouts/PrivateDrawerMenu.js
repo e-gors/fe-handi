@@ -10,7 +10,7 @@ import {
   SwipeableDrawer,
   IconButton,
 } from "@mui/material";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { isAuth } from "../utils/helpers";
 import logo from "../assets/images/handi-logo.png";
 import { icons } from "../components/Icon";
@@ -28,8 +28,9 @@ export default function PrivateDrawerMenu(props) {
     handleOpenDrawer,
     anchor,
   } = props;
-  const history = useHistory();
 
+  const history = useHistory();
+  const location = useLocation();
 
   const handleNavigate = (link) => {
     history.push(link);
@@ -56,7 +57,10 @@ export default function PrivateDrawerMenu(props) {
         {singleLink &&
           singleLink.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={(e) => handleNavigate(data.path)}>
+              <ListItemButton
+                onClick={(e) => handleNavigate(data.path)}
+                selected={data.path === location.pathname}
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.label} />
               </ListItemButton>
@@ -65,7 +69,10 @@ export default function PrivateDrawerMenu(props) {
         {firstLink &&
           firstLink.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={(e) => handleNavigate(data.path)}>
+              <ListItemButton
+                onClick={(e) => handleNavigate(data.path)}
+                selected={data.path === location.pathname}
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.label} />
               </ListItemButton>
@@ -77,7 +84,10 @@ export default function PrivateDrawerMenu(props) {
         {mobileSecondLink &&
           mobileSecondLink.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={(e) => handleNavigate(data.path)}>
+              <ListItemButton
+                onClick={(e) => handleNavigate(data.path)}
+                selected={data.path === location.pathname}
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.label} />
               </ListItemButton>
@@ -88,7 +98,10 @@ export default function PrivateDrawerMenu(props) {
         {secondLink &&
           secondLink.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={(e) => handleNavigate(data.path)}>
+              <ListItemButton
+                onClick={(e) => handleNavigate(data.path)}
+                selected={data.path === location.pathname}
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.label} />
               </ListItemButton>
@@ -100,7 +113,10 @@ export default function PrivateDrawerMenu(props) {
           accountLink &&
           accountLink.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={(e) => handleNavigate(data.path)}>
+              <ListItemButton
+                onClick={(e) => handleNavigate(data.path)}
+                selected={data.path === location.pathname}
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.label} />
               </ListItemButton>

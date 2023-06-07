@@ -106,6 +106,8 @@ function ReviewAndSubmit(props) {
     }
   };
 
+  console.log(images);
+
   const handleSubmitEdit = () => {
     setLoading(true);
     const formData = new FormData();
@@ -113,7 +115,11 @@ function ReviewAndSubmit(props) {
     formData.append("proposal", proposal);
     if (images && images.length > 0) {
       images.forEach((image) => {
-        formData.append("images[]", image.file);
+        if (image.file) {
+          formData.append("images[]", image.file);
+        } else {
+          formData.append("images[]", image.url);
+        }
       });
     }
 

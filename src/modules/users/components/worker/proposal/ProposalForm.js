@@ -266,9 +266,7 @@ function ProposalForm(props) {
       return;
     }
     setLetter(proposal);
-    if (images && images.length > 0) {
-      setImagesContainer(images);
-    }
+    setImagesContainer(images);
     handleNext();
   };
 

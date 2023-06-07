@@ -10,7 +10,7 @@ import {
   SwipeableDrawer,
   IconButton,
 } from "@mui/material";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { isAuth } from "../utils/helpers";
 import logo from "../assets/images/handi-logo.png";
 import { icons } from "../components/Icon";
@@ -27,6 +27,8 @@ export default function PublicDrawerMenu(props) {
     handleOpenDrawer,
     anchor,
   } = props;
+
+  const location = useLocation();
   const history = useHistory();
 
   const handleNavigate = (link) => {
@@ -54,7 +56,10 @@ export default function PublicDrawerMenu(props) {
         {singleLink &&
           singleLink.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={(e) => handleNavigate(data.path)}>
+              <ListItemButton
+                onClick={(e) => handleNavigate(data.path)}
+                selected={data.path === location.pathname}
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.label} />
               </ListItemButton>
@@ -63,7 +68,10 @@ export default function PublicDrawerMenu(props) {
         {firstLink &&
           firstLink.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={(e) => handleNavigate(data.path)}>
+              <ListItemButton
+                onClick={(e) => handleNavigate(data.path)}
+                selected={data.path === location.pathname}
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.label} />
               </ListItemButton>
@@ -75,7 +83,10 @@ export default function PublicDrawerMenu(props) {
         {secondLink &&
           secondLink.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={(e) => handleNavigate(data.path)}>
+              <ListItemButton
+                onClick={(e) => handleNavigate(data.path)}
+                selected={data.path === location.pathname}
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.label} />
               </ListItemButton>
@@ -87,7 +98,10 @@ export default function PublicDrawerMenu(props) {
           accountLink &&
           accountLink.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={(e) => handleNavigate(data.path)}>
+              <ListItemButton
+                onClick={(e) => handleNavigate(data.path)}
+                selected={data.path === location.pathname}
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.label} />
               </ListItemButton>

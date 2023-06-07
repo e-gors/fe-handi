@@ -233,7 +233,7 @@ function FindJobCardModal(props) {
             handleClose={() => setOpenBidsModal(false)}
             bids={selectedItem && selectedItem.bids}
             selectedItem={selectedItem}
-            handleForceUpdate={handleForceUpdate}
+            handleForceUpdate={onHandleClose}
           />
           <Box sx={styles.exitIconWrapper}>
             <IconButton onClick={handleClose} sx={styles.exitIconButton}>

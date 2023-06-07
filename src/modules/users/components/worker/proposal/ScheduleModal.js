@@ -125,13 +125,17 @@ function ScheduleModal(props) {
   const { startDate, endDate } = calculateDates();
 
   const handleSubmit = (dates) => {
+    setLoading(true);
     Http.post(`choose/proposal/${bid.id}/${selectedItem.id}`, dates)
       .then((res) => {
         if (res.data.code === 200) {
           console.log(res.data.message);
+          handleClose();
         }
+        setLoading(false);
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err.message);
       });
   };

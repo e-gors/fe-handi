@@ -16,7 +16,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import PrivateDrawerMenu from "./PrivateDrawerMenu";
 import HomeIcon from "@mui/icons-material/Home";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -192,6 +192,8 @@ export default function PrivateAppBarMenu() {
     user && user.role !== "Super Admin" && user.profile
       ? user.profile[0].profile_url
       : "";
+
+  const location = useLocation();
 
   const [loading, setLoading] = React.useState(false);
   const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
@@ -425,12 +427,20 @@ export default function PrivateAppBarMenu() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {user && user.role === "Worker"
               ? workerNavLinks.map((page, i) => (
-                  <MenuItem key={i} onClick={() => handleNavigate(page.path)}>
+                  <MenuItem
+                    key={i}
+                    onClick={() => handleNavigate(page.path)}
+                    selected={page.path === location.pathname}
+                  >
                     <Typography textAlign="center">{page.label}</Typography>
                   </MenuItem>
                 ))
               : clientNavLinks.map((page, i) => (
-                  <MenuItem key={i} onClick={() => handleNavigate(page.path)}>
+                  <MenuItem
+                    key={i}
+                    onClick={() => handleNavigate(page.path)}
+                    selected={page.path === location.pathname}
+                  >
                     <Typography textAlign="center">{page.label}</Typography>
                   </MenuItem>
                 ))}
