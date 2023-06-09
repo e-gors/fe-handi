@@ -44,7 +44,6 @@ import { useHistory } from "react-router-dom";
 import ConfirmationModal from "../../../../components/ConfirmationModal";
 
 const validator = new Reevalidate.Validator({
-  title: "required|min: 5",
   type: "required",
   rate: "required",
   budget: "required",
@@ -171,6 +170,7 @@ function NewJobOffer() {
   const searchResult =
     useSelector((state) => state.profiles.searchResult) ?? [];
   const workers = useSelector((state) => state.profiles.workers) ?? [];
+  const posts = useSelector((state) => state.users.user.jobs) ?? [];
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -184,6 +184,7 @@ function NewJobOffer() {
   const [formValues, setFormValues] = React.useState({
     values: {
       contractor: "",
+      post: "",
       title: "",
       rate: "",
       days: "",
@@ -205,6 +206,7 @@ function NewJobOffer() {
         ...prev,
         values: {
           contractor: prev.values.contractor,
+          post: prev.values.post,
           title: prev.values.title,
           rate: prev.values.rate,
           days: prev.values.days,
@@ -217,6 +219,7 @@ function NewJobOffer() {
         ...prev,
         values: {
           contractor: prev.values.contractor,
+          post: prev.values.post,
           title: prev.values.title,
           type: prev.values.type,
           budget: "",
@@ -330,6 +333,16 @@ function NewJobOffer() {
     setSelectedItem(item);
   };
 
+  const handleChangePost = (e, item) => {
+    setFormValues((prev) => ({
+      ...prev,
+      values: {
+        ...prev.values,
+        post: item.id,
+      },
+    }));
+  };
+
   const handleBlur = (fieldName) => {
     const formattedValue = formatValue(formValues.values[fieldName]);
     setFormValues((prevState) => ({
@@ -382,7 +395,19 @@ function NewJobOffer() {
   const handleValidate = () => {
     validator.validateAll(formValues.values).then((success) => {
       if (success) {
-        handleSubmit();
+        if (selectedItem) {
+          if (formValues.values.post || formValues.values.title) {
+            handleSubmit();
+          } else {
+            ToastNotification(
+              "error",
+              "Either Post or Title is required!",
+              options
+            );
+          }
+        } else {
+          ToastNotification("error", "Contractor is required!", options);
+        }
       } else {
         setFormValues((prev) => ({
           ...prev,
@@ -502,14 +527,36 @@ function NewJobOffer() {
               </Box>
             </Box>
           )}
+          <Typography>Posted Jobs *</Typography>
+          <Autocomplete
+            name="post"
+            size="small"
+            options={posts}
+            getOptionLabel={(post) => post.title}
+            renderInput={(params) => (
+              <FormField
+                size="small"
+                {...params}
+                label="Posted Jobs"
+                name="post"
+                variant="outlined"
+                value={formValues.values.post}
+                onChange={handleInputChange}
+              />
+            )}
+            onChange={handleChangePost}
+          />
           <Typography>Title *</Typography>
           <FormField
             name="title"
-            label="Title"
+            label={
+              formValues.values.post ? "You selected a posted job" : "Title"
+            }
             fullWidth
-            value={formValues.values.title}
+            value={formValues.values.post ? "" : formValues.values.title}
             errors={formValues.errors}
             onChange={handleChangeFormValues}
+            disabled={formValues.values.post ? true : false}
           />
         </Box>
         <Box sx={{ backgroundColor: "#CCCCCC", p: 2 }}>
@@ -548,23 +595,23 @@ function NewJobOffer() {
               }}
             >
               <Typography>
-                For pay by the hour contracts, your freelancer should use our
-                goMeter so you can:
+                For pay by the day contracts, your freelancer should provide you
+                with accurate time tracking details so you can:
               </Typography>
               <Box sx={{ ml: 2 }}>
                 <Typography component="li">
-                  Track your freelancer's time
+                  Track your freelancer's working hours
                 </Typography>
                 <Typography component="li">
-                  See programs and websites your freelancer is using
+                  Stay informed about their activity level
                 </Typography>
                 <Typography component="li">
-                  See screenshots of their work
+                  If you have specific requirements or tasks for the freelancer,
+                  ensure they provide progress updates
                 </Typography>
-                <Typography component="li">See their activity level</Typography>
                 <Typography component="li">
-                  If you don't require your freelancer to use the goMeter, you
-                  should allow them to add manual time below
+                  For accurate payment, you may request the freelancer to
+                  provide manual time tracking details
                 </Typography>
               </Box>
             </Box>

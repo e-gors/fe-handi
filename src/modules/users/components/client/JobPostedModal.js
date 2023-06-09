@@ -1,8 +1,9 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
+import FindJobCardModal from "../worker/FindJobCardModal";
 import React from "react";
 
 function JobPostedModal(props) {
-  const { jobs, setSelectedItem, selectedItem, handleNext, handleBack } = props;
+  const { jobs, setSelectedItem, selectedItem, handleNext, handleBack, user } = props;
 
   return (
     <Box>
@@ -24,12 +25,12 @@ function JobPostedModal(props) {
             p: 4,
           }}
         >
-          <Typography id="job-modal" variant="h6" component="h2">
-            Job Details
-          </Typography>
-          <Typography id="job-details" sx={{ mt: 2 }}>
-            {/* Render the selected data here */}
-          </Typography>
+          <FindJobCardModal
+            open={selectedItem !== null}
+            handleClose={() => setSelectedItem(null)}
+            selectedItem={selectedItem}
+            user={user && user}
+          />
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Button
               onClick={handleBack}

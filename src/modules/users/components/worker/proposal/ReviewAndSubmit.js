@@ -106,8 +106,6 @@ function ReviewAndSubmit(props) {
     }
   };
 
-  console.log(images);
-
   const handleSubmitEdit = () => {
     setLoading(true);
     const formData = new FormData();

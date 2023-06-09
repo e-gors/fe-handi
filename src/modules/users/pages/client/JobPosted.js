@@ -17,6 +17,7 @@ import FormField from "../../../../components/FormField";
 import SelectDropdown from "../../../../components/SelectDropdown";
 import DataTable from "../../../../components/DataTable";
 import JobPostedModal from "../../components/client/JobPostedModal";
+import { useSelector } from "react-redux";
 
 const status = ["Pending", "Accepted", "Declined", "Withdrawn"];
 const orderByRate = ["Ascending", "Descending"];
@@ -24,39 +25,28 @@ const orderByDate = ["Ascending", "Descending"];
 
 const columns = [
   {
-    name: "contractor",
-    label: "Contractor",
+    name: "bids.length",
+    label: "Proposals",
   },
   {
-    name: "contract_name",
-    label: "Contract Name",
+    name: "title",
+    label: "Title",
   },
   {
-    name: "worker",
-    label: "Worker",
+    name: "locations",
+    label: "Locations",
   },
   {
-    name: "type",
+    name: "job_type",
     label: "Type",
-    customBodyRender: (item) => {
-      return item.password;
-    },
-  },
-  {
-    name: "start_date",
-    label: "Start Date",
   },
   {
     name: "rate",
     label: "Rate",
   },
   {
-    name: "today",
-    label: "Today",
-  },
-  {
-    name: "this_week",
-    label: "This Week",
+    name: "budget",
+    label: "Budget",
   },
   {
     name: "status",
@@ -65,6 +55,8 @@ const columns = [
 ];
 function JobPosted(props) {
   const { role } = props;
+
+  const user = useSelector((state) => state.users.user);
 
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -100,13 +92,13 @@ function JobPosted(props) {
 
   const fetchingData = (params = {}) => {
     setLoading(true);
-    Http.get("/jobs", {
+    Http.get("user/jobs", {
       params: {
         ...limit,
         ...params,
       },
     }).then((res) => {
-      if (res.data) {
+      if (res.data.data) {
         setJobs({
           data: res.data.data,
           meta: res.data.meta,
@@ -172,6 +164,7 @@ function JobPosted(props) {
   };
 
   const handleOpen = (event) => {
+    console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 
@@ -207,6 +200,7 @@ function JobPosted(props) {
         handleNext={handleNext}
         handleBack={handleBack}
         jobs={jobs.data}
+        user={user && user}
       />
       <Box>
         <Box>

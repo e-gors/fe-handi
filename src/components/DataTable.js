@@ -191,8 +191,13 @@ function DataTable(props) {
                     if (isStatusColumn) {
                       if (cellValue === "pending") {
                         cellColor = "red";
-                      } else if (cellValue === "accepted") {
+                      } else if (
+                        cellValue === "accepted" ||
+                        cellValue === "in progress"
+                      ) {
                         cellColor = "green";
+                      } else if (cellValue === "completed") {
+                        cellColor = "blue";
                       } else if (cellValue === "declined") {
                         cellColor = "orange";
                       } else if (cellValue === "withdrawn") {

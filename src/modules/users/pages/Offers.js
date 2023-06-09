@@ -23,39 +23,27 @@ const orderByDate = ["Ascending", "Descending"];
 
 const columns = [
   {
-    name: "contractor",
+    name: "worker",
     label: "Contractor",
+    customBodyRender: (item) => {
+      return item.full_name;
+    },
   },
   {
     name: "contract_name",
     label: "Contract Name",
   },
   {
-    name: "worker",
-    label: "Worker",
-  },
-  {
-    name: "type",
-    label: "Type",
-    customBodyRender: (item) => {
-      return item.password;
-    },
-  },
-  {
-    name: "start_date",
-    label: "Start Date",
+    name: "days",
+    label: "Days",
   },
   {
     name: "rate",
     label: "Rate",
   },
   {
-    name: "today",
-    label: "Today",
-  },
-  {
-    name: "this_week",
-    label: "This Week",
+    name: "budget",
+    label: "Budget",
   },
   {
     name: "status",
@@ -103,7 +91,7 @@ function Offers(props) {
         ...params,
       },
     }).then((res) => {
-      if (res.data) {
+      if (res.data.data) {
         setOffers({
           data: res.data.data,
           meta: res.data.meta,
@@ -281,6 +269,8 @@ function Offers(props) {
 
         <DataTable
           withPagination
+          onEdit
+          onDelete
           loading={loading}
           data={offers.data}
           columns={columns}

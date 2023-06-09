@@ -61,13 +61,13 @@ export default function DefaultContracts() {
 
         <Box>
           <TabPanel value={tab} index={0}>
-            <Contracts />
+            <Contracts type="all" />
           </TabPanel>
           <TabPanel value={tab} index={1}>
-            <Contracts />
+            <Contracts type="Daily Rate" />
           </TabPanel>
           <TabPanel value={tab} index={2}>
-            <Contracts />
+            <Contracts type="Fixed Budget" />
           </TabPanel>
         </Box>
       </Box>

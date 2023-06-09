@@ -120,7 +120,7 @@ const clientNavLinks = [
 const clientMobileSecondLink = [
   {
     label: "Hire",
-    path: "/marketplace",
+    path: "/new/job-offer",
     icon: <PeopleIcon />,
   },
   {
@@ -467,7 +467,7 @@ export default function PrivateAppBarMenu() {
                 size="small"
                 variant="outlined"
                 sx={{ mr: 0.5 }}
-                onClick={() => handleNavigate("/marketplace")}
+                onClick={() => handleNavigate("/new/job-offer")}
               >
                 Hire
               </Button>

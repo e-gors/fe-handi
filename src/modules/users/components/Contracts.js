@@ -18,28 +18,43 @@ import SearchIcon from "@mui/icons-material/Search";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import SelectDropdown from "../../../components/SelectDropdown";
 
-const status = ["Closed", "Disputing", "Feedback Pending", "Open", "Paused"];
+const status = [
+  "pending",
+  "in progress",
+  "feedback pending",
+  "completed",
+  "closed",
+];
 const orderByRate = ["Ascending", "Descending"];
 const orderByDate = ["Ascending", "Descending"];
 
 const columns = [
   {
-    name: "contractor",
+    name: "bid",
     label: "Contractor",
+    customBodyRender: (item) => {
+      return item.user?.full_name;
+    },
   },
   {
-    name: "contract_name",
+    name: "post.user",
+    label: "Client",
+    customBodyRender: (item) => {
+      return item.full_name;
+    },
+  },
+  {
+    name: "post",
     label: "Contract Name",
+    customBodyRender: (item) => {
+      return item?.title;
+    },
   },
   {
-    name: "worker",
-    label: "Worker",
-  },
-  {
-    name: "type",
+    name: "post",
     label: "Type",
     customBodyRender: (item) => {
-      return item.password;
+      return item?.job_type;
     },
   },
   {
@@ -47,16 +62,15 @@ const columns = [
     label: "Start Date",
   },
   {
-    name: "rate",
-    label: "Rate",
+    name: "end_date",
+    label: "End Date",
   },
   {
-    name: "today",
-    label: "Today",
-  },
-  {
-    name: "this_week",
-    label: "This Week",
+    name: "post",
+    label: "Rate/Budget",
+    customBodyRender: (item) => {
+      return item.rate ? item.rate : item.budget;
+    },
   },
   {
     name: "status",
@@ -65,58 +79,100 @@ const columns = [
 ];
 
 export default function Contracts(props) {
-  // const {columns, data} = props;
+  const { type } = props;
 
   const [loading, setLoading] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [userList, setUserList] = React.useState({
+  const [contracts, setContracts] = React.useState({
     data: [],
     meta: {},
   });
-
+  const [limit, setLimit] = React.useState({
+    limit: 10,
+    page: 1,
+  });
   const [filterValues, setFilterValues] = React.useState({
     values: {
-      limit: 10,
       search: "",
       status: "",
       order_by_date: "",
       order_by_rate: "",
+      type: "",
     },
   });
 
-  //   React.useEffect(() => {
-  //     fetchingData();
-  //   }, []); // eslint-disable-line
+  React.useEffect(() => {
+    setFilterValues((prev) => ({
+      ...prev,
+      values: {
+        ...prev.values,
+        type: type,
+      },
+    }));
+  }, [type]);
+
+  React.useEffect(() => {
+    setLimit((prev) => ({
+      limit: prev.limit,
+      page: 1,
+    }));
+    optimizedFn(filterValues.values);
+  }, [filterValues.values]); // eslint-disable-line
 
   const fetchingData = (params = {}) => {
-    // setLoading(true);
-    // Http.get("/attendances", {
-    //   params: {
-    //     ...filterValues.values,
-    //     ...params,
-    //   },
-    // }).then((res) => {
-    //   if (res.data.data) {
-    //     setUserList({
-    //       data: res.data.data,
-    //       meta: res.data.meta,
-    //     });
-    //   }
-    //   setLoading(false);
-    // });
+    setLoading(true);
+    Http.get("/contracts", {
+      params: {
+        ...limit,
+        ...params,
+      },
+    })
+      .then((res) => {
+        if (res.data.data) {
+          setContracts({
+            data: res.data.data,
+            meta: res.data.meta,
+          });
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err.message);
+      });
   };
+
+  const debounce = (func) => {
+    let timer;
+    return function (...args) {
+      const context = this;
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        timer = null;
+        func.apply(context, args);
+      }, 700);
+    };
+  };
+
+  const optimizedFn = React.useCallback(debounce(fetchingData), []); // eslint-disable-line
 
   const handleChangeFilter = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    const newValue = typeof value === "string" ? value.split(",") : value;
 
     setFilterValues((prev) => ({
       ...prev,
       values: {
         ...prev.values,
-        [name]: newValue,
+        [name]: value,
       },
+    }));
+  };
+
+  const handleChangeLimit = (name, value) => {
+    setLimit((prev) => ({
+      ...prev,
+      [name]: value,
     }));
   };
 
@@ -127,6 +183,7 @@ export default function Contracts(props) {
         status: "",
         order_by_date: "",
         order_by_rate: "",
+        type: "all",
       },
     });
   };
@@ -138,8 +195,15 @@ export default function Contracts(props) {
     }));
   };
 
-  const handleChangePage = (newPage) => {
-    fetchingData({ page: newPage + 1 });
+  const handleChangePage = (e, newPage) => {
+    if (limit.page !== newPage) {
+      setLoading(true);
+      setLimit((prev) => ({
+        limit: prev.limit,
+        page: newPage,
+      }));
+      optimizedFn({ page: newPage });
+    }
   };
 
   const handleRowChange = (value) => {
@@ -270,11 +334,11 @@ export default function Contracts(props) {
         onEdit={handleEdit}
         onDelete={handleDelete}
         loading={loading}
-        data={userList.data}
+        data={contracts.data}
         columns={columns}
         rowsPerPage={filterValues.values.limit}
-        count={userList.meta.total || 0}
-        page={userList.meta.current_page - 1 || 0}
+        count={contracts.meta.total || 0}
+        page={contracts.meta.current_page - 1 || 0}
         onChangePage={handleChangePage}
         onRowsChangePage={handleRowChange}
       />

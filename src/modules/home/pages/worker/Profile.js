@@ -25,7 +25,7 @@ function Profile() {
   const { profile } = worker;
 
   const profs = profile && profile[0] ? profile[0] : null;
-  const year = new Date(profs.created_at).getFullYear();
+  const year = new Date(profs?.created_at).getFullYear();
   const rate = profs && profs.rate;
 
   const styles = {
