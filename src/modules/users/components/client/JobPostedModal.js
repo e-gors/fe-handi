@@ -3,7 +3,15 @@ import FindJobCardModal from "../worker/FindJobCardModal";
 import React from "react";
 
 function JobPostedModal(props) {
-  const { jobs, setSelectedItem, selectedItem, handleNext, handleBack, user } = props;
+  const {
+    jobs,
+    setSelectedItem,
+    selectedItem,
+    handleNext,
+    handleBack,
+    user,
+    handleForceUpdate,
+  } = props;
 
   return (
     <Box>
@@ -30,6 +38,7 @@ function JobPostedModal(props) {
             handleClose={() => setSelectedItem(null)}
             selectedItem={selectedItem}
             user={user && user}
+            handleForceUpdate={handleForceUpdate}
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Button

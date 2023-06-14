@@ -24,6 +24,7 @@ function CProfileEdit() {
     facebook_url,
     instagram_url,
     twitter_url,
+    background,
   } = profile[0];
 
   const [open, setOpen] = React.useState(false);
@@ -217,6 +218,7 @@ function CProfileEdit() {
       boxShadow: 3,
       display: "flex",
       justifyContent: "center",
+      width: { xs: "100%", sm: "40%", md: "30%" },
 
       "&:hover": {
         backgroundColor: "#BEBEBE",
@@ -225,6 +227,32 @@ function CProfileEdit() {
     socialText: {
       ml: 1,
     },
+
+    about: {
+      mt: 1,
+      p: 1,
+      border: "1px solid #BEBEBE",
+      cursor: "pointer",
+      borderRadius: 3,
+
+      "&:hover": {
+        ".title": {
+          color: "blue",
+        },
+      },
+    },
+    aboutMain: {
+      display: "flex",
+      alignItems: "center",
+    },
+    textsWrapper: {
+      ml: 2,
+    },
+    title: {
+      fontWeight: "bold",
+      fontSize: { xs: 12, md: 14 },
+    },
+    text: { fontSize: { xs: 11, md: 12 } },
   };
 
   return (
@@ -261,16 +289,16 @@ function CProfileEdit() {
                       {fullname && fullname}
                     </Typography>
                     <IconButton onClick={() => handleOpen("Fullname")}>
-                      <EditOutlinedIcon />
+                      <EditOutlinedIcon sx={{ fontSize: 16 }} />
                     </IconButton>
                   </Box>
                   <Box sx={styles.socialNetworkMain}>
                     <Typography sx={styles.backgroundText}>
-                      {address && address}
+                      {address && address}{" "}
+                      <IconButton onClick={() => handleOpen("Address")}>
+                        <EditOutlinedIcon sx={{ fontSize: 16 }} />
+                      </IconButton>
                     </Typography>
-                    <IconButton onClick={() => handleOpen("Address")}>
-                      <EditOutlinedIcon />
-                    </IconButton>
                   </Box>
                 </Box>
               </Box>
@@ -279,20 +307,40 @@ function CProfileEdit() {
               <Box sx={styles.socialMediaWrapper}>
                 <Box sx={styles.socialNetworkMain}>
                   <Typography sx={styles.socialNetworkText}>About</Typography>
-                  <IconButton onClick={() => handleOpen("Social Networks")}>
-                    <EditOutlinedIcon />
-                  </IconButton>
+                  {background && (
+                    <IconButton onClick={() => handleOpen("Background")}>
+                      <EditOutlinedIcon sx={{ fontSize: 16 }} />
+                    </IconButton>
+                  )}
                 </Box>
-                <Box sx={styles.socialNetwork}>
-                  <SocialNetworks
-                    title={"Add info about yourself"}
-                    Icon={FormatAlignRightIcon}
-                    content={
-                      "Make a great impression by giving people a snapshot of who you are."
-                    }
-                    handleOpen={handleOpen}
-                  />
-                </Box>
+                {background && (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: background && background,
+                    }}
+                  ></div>
+                )}
+                {!background && (
+                  <Box sx={styles.socialNetwork}>
+                    <Box
+                      sx={styles.about}
+                      onClick={() => handleOpen("Background")}
+                    >
+                      <Box sx={styles.aboutMain}>
+                        <FormatAlignRightIcon color="primary" />
+                        <Box sx={styles.textsWrapper}>
+                          <Typography sx={styles.title} className="title">
+                            Add info about yourself
+                          </Typography>
+                          <Typography sx={styles.text}>
+                            Make a great impression by giving people a snapshot
+                            of who you are."
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
               </Box>
               <Box sx={styles.socialMediaWrapper}>
                 <Box sx={styles.socialNetworkMain}>
@@ -301,11 +349,11 @@ function CProfileEdit() {
                   </Typography>
                   {(facebook_url || instagram_url || twitter_url) && (
                     <IconButton onClick={() => handleOpen("Social Networks")}>
-                      <EditOutlinedIcon />
+                      <EditOutlinedIcon sx={{ fontSize: 16 }} />
                     </IconButton>
                   )}
                 </Box>
-                {(!facebook_url || !instagram_url || !twitter_url) && (
+                {!(facebook_url || instagram_url || twitter_url) && (
                   <Box sx={styles.socialNetwork}>
                     <SocialNetworks
                       title={"Add Social Networks"}

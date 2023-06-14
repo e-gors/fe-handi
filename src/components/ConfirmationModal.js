@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   CircularProgress,
   DialogActions,

@@ -24,6 +24,9 @@ import ToastNotificationContainer from "../../../components/ToastNotificationCon
 import ToastNotification from "../../../components/ToastNotification";
 import { options } from "../../../components/options";
 import SelectDropdown from "../../../components/SelectDropdown";
+import Http from "../../../utils/Http";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../redux/actions/userActions";
 
 const validator = new ReeValidate.Validator({
   first_name: "required",
@@ -118,6 +121,7 @@ const genders = ["Male", "Female", "Others", "Better Not Tell"];
 function JoinAsClient() {
   let role = localStorage.getItem("selectedRole");
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [isChecked, setIsChecked] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -167,10 +171,19 @@ function JoinAsClient() {
       .clientRegister(role, formValues)
       .then((res) => {
         if (res.data.code === 200) {
-          localStorage.setItem("user", JSON.stringify(res.data.user));
-          ToastNotification("success", res.data.message, options);
+          Http.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${res.data.access_token}`;
+          const user = res.data.user;
+          localStorage.setItem("accessToken", res.data.access_token);
+          localStorage.setItem("tokenExpiration", res.data.expires_in);
+          dispatch(setUser(user));
+          if (user.role === "Super Admin") {
+            history.push("/admin/dashboard");
+          } else {
+            history.push("/dashboard");
+          }
           localStorage.removeItem("selectedRole");
-          history.push("/login");
         } else {
           setLoading(false);
           ToastNotification("error", res.data.message, options);

@@ -6,57 +6,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import PeopleIcon from "@mui/icons-material/People";
 import TaskIcon from "@mui/icons-material/Task";
-
-const sectionTwoData = [
-  {
-    icon: (
-      <WorkIcon
-        sx={{
-          width: { xs: 30, md: 75 },
-          height: { xs: 30, md: 75 },
-        }}
-      />
-    ),
-    num: 100000,
-    text: "Job Offers",
-  },
-  {
-    icon: (
-      <EngineeringIcon
-        sx={{
-          width: { xs: 30, md: 75 },
-          height: { xs: 30, md: 75 },
-        }}
-      />
-    ),
-    num: 100000,
-    text: "Skilled Workers",
-  },
-  {
-    icon: (
-      <PeopleIcon
-        sx={{
-          width: { xs: 30, md: 75 },
-          height: { xs: 30, md: 75 },
-        }}
-      />
-    ),
-    num: 100000,
-    text: "Active Clients",
-  },
-  {
-    icon: (
-      <TaskIcon
-        sx={{
-          width: { xs: 30, md: 75 },
-          height: { xs: 30, md: 75 },
-        }}
-      />
-    ),
-    num: 100000,
-    text: "Completed Projects",
-  },
-];
+import { useSelector } from "react-redux";
 
 const styles = {
   wrapper: {
@@ -87,6 +37,62 @@ const styles = {
 };
 
 function CardSet() {
+  const jobs = useSelector((state) => state.posts.posts);
+  const workers = useSelector((state) => state.profiles.workers);
+  const clients = useSelector((state) => state.profiles.clients);
+  const projects = useSelector((state) => state.projects.projects);
+
+  const sectionTwoData = [
+    {
+      icon: (
+        <WorkIcon
+          sx={{
+            width: { xs: 30, md: 75 },
+            height: { xs: 30, md: 75 },
+          }}
+        />
+      ),
+      num: jobs ? jobs.length : 0,
+      text: "Job Offers",
+    },
+    {
+      icon: (
+        <EngineeringIcon
+          sx={{
+            width: { xs: 30, md: 75 },
+            height: { xs: 30, md: 75 },
+          }}
+        />
+      ),
+      num: workers ? workers.length : 0,
+      text: "Skilled Workers",
+    },
+    {
+      icon: (
+        <PeopleIcon
+          sx={{
+            width: { xs: 30, md: 75 },
+            height: { xs: 30, md: 75 },
+          }}
+        />
+      ),
+      num: clients ? clients.length : 0,
+      text: "Active Clients",
+    },
+    {
+      icon: (
+        <TaskIcon
+          sx={{
+            width: { xs: 30, md: 75 },
+            height: { xs: 30, md: 75 },
+          }}
+        />
+      ),
+      num: projects ? projects.length : 0,
+      text: "Completed Projects",
+    },
+  ];
+
   return (
     <Box component="div" sx={styles.wrapper}>
       <Grid container spacing={2}>

@@ -14,7 +14,6 @@ import {
   Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-// import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -36,19 +35,23 @@ import PeopleIcon from "@mui/icons-material/People";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../redux/actions/userActions";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import HubIcon from "@mui/icons-material/Hub";
+import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 
 const userAnchorItemsOnSmallDevice = [
   {
     label: "Messages",
     ariaLabel: "show 4 new mails",
     badgeContent: 4,
-    icon: <MailIcon />,
+    icon: <MailIcon color="primary" />,
   },
   {
     label: "Notifications",
     ariaLabel: "show 17 new notifications",
     badgeContent: 17,
-    icon: <NotificationsIcon />,
+    icon: <NotificationsIcon color="primary" />,
   },
 ];
 
@@ -56,77 +59,77 @@ const workerNavLinks = [
   {
     label: "Dashboard",
     path: "/dashboard",
-    icon: <HomeIcon />,
+    icon: <HomeIcon color="primary" />,
   },
   {
     label: "Contracts",
     path: "/contracts",
-    icon: <BusinessIcon />,
+    icon: <BusinessIcon color="primary" />,
   },
   {
     label: "Offers",
     path: "/my-offers",
-    icon: <TabIcon />,
+    icon: <TabIcon color="primary" />,
   },
   {
     label: "Proposals",
     path: "/my-proposals",
-    icon: <PersonSearchIcon />,
+    icon: <PersonSearchIcon color="primary" />,
   },
   {
     label: "Marketplace",
     path: "/marketplace",
-    icon: <WorkIcon />,
+    icon: <HubIcon color="primary" />,
   },
-  {
-    label: "Reports",
-    path: "/reports",
-    icon: <AssessmentIcon />,
-  },
+  // {
+  //   label: "Reports",
+  //   path: "/reports",
+  //   icon: <AssessmentIcon color="primary" />,
+  // },
 ];
 const clientNavLinks = [
   {
     label: "Dashboard",
     path: "/dashboard",
-    icon: <HomeIcon />,
+    icon: <HomeIcon color="primary" />,
   },
   {
     label: "Contracts",
     path: "/contracts",
-    icon: <BusinessIcon />,
+    icon: <BusinessIcon color="primary" />,
   },
   {
     label: "Job Posts",
     path: "/my-jobs",
-    icon: <WorkIcon />,
+    icon: <WorkIcon color="primary" />,
   },
   {
     label: "Offers",
     path: "/my-offers",
-    icon: <TabIcon />,
+    icon: <TabIcon color="primary" />,
   },
   {
     label: "Marketplace",
     path: "/marketplace",
-    icon: <WorkIcon />,
+    icon: <HubIcon color="primary" />,
   },
-  {
-    label: "Reports",
-    path: "/reports",
-    icon: <AssessmentIcon />,
-  },
+  // {
+  //   label: "Reports",
+  //   path: "/reports",
+  //   icon: <AssessmentIcon color="primary" />,
+  // },
 ];
 
 const clientMobileSecondLink = [
   {
     label: "Hire",
     path: "/new/job-offer",
-    icon: <PeopleIcon />,
+    icon: <PeopleIcon color="primary" />,
   },
   {
     label: "Post Job",
     path: "/new/job-post",
-    icon: <WorkIcon />,
+    icon: <HomeRepairServiceIcon color="primary" />,
   },
 ];
 
@@ -136,14 +139,14 @@ const accountLinks = [
     path: "/login",
     style: styles.customBlueButton,
     variant: "contained",
-    icon: <LockOpenIcon />,
+    icon: <LockOpenIcon color="primary" />,
   },
   {
     label: "Register",
     path: "/register",
     style: styles.registerStyleButton,
     variant: "outlined",
-    icon: <HowToRegIcon />,
+    icon: <HowToRegIcon color="primary" />,
   },
 ];
 
@@ -151,14 +154,16 @@ const workerAnchorItemsOnLaptop = [
   {
     path: "/overview/worker",
     label: "Profile",
-  },
-  {
-    path: "/my-account",
-    label: "My Account",
+    icon: <AccountCircleRoundedIcon color="primary" />,
   },
   {
     path: "/account/settings",
-    label: "Settings",
+    label: "Account Settings",
+    icon: <SettingsRoundedIcon color="primary" />,
+  },
+  {
+    label: "Logout",
+    icon: <LogoutIcon color="primary" />,
   },
 ];
 
@@ -166,14 +171,16 @@ const clientAnchorItemsOnLaptop = [
   {
     path: "/overview/client",
     label: "Profile",
-  },
-  {
-    path: "/my-account",
-    label: "My Account",
+    icon: <AccountCircleRoundedIcon color="primary" />,
   },
   {
     path: "/account/settings",
-    label: "Settings",
+    label: "Account Settings",
+    icon: <SettingsRoundedIcon color="primary" />,
+  },
+  {
+    label: "Logout",
+    icon: <LogoutIcon color="primary" />,
   },
 ];
 
@@ -283,17 +290,28 @@ export default function PrivateAppBarMenu() {
       {role && role === "Worker"
         ? workerAnchorItemsOnLaptop &&
           workerAnchorItemsOnLaptop.map((page, i) => (
-            <MenuItem onClick={(e) => handleNavigate(page.path)} key={i}>
-              {page.label}
+            <MenuItem
+              onClick={(e) =>
+                !page.path ? handleConfirmLogout() : handleNavigate(page.path)
+              }
+              key={i}
+            >
+              <IconButton>{page.icon}</IconButton>
+              <Typography>{page.label}</Typography>
             </MenuItem>
           ))
         : clientAnchorItemsOnLaptop &&
           clientAnchorItemsOnLaptop.map((page, i) => (
-            <MenuItem onClick={(e) => handleNavigate(page.path)} key={i}>
-              {page.label}
+            <MenuItem
+              onClick={(e) =>
+                !page.path ? handleConfirmLogout() : handleNavigate(page.path)
+              }
+              key={i}
+            >
+              <IconButton>{page.icon}</IconButton>
+              <Typography>{page.label}</Typography>
             </MenuItem>
           ))}
-      <MenuItem onClick={handleConfirmLogout}>Logout</MenuItem>
     </Menu>
   );
 

@@ -5,7 +5,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import Project from "./Project";
 import ProfileOverview from "./ProfileOverview";
-import Reviews from "./Reviews";
+import NewReview from "../../../users/components/NewReview";
+import { useSelector } from "react-redux";
+import { isAuth } from "../../../../utils/helpers";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -40,6 +42,10 @@ function ProjectReviewTabs(props) {
   const { worker } = props;
   const [tab, setTab] = React.useState(0);
 
+  const user = useSelector((state) => state.users.user);
+
+  const isOwner = isAuth() && user.id === worker.user_id ? true : false;
+
   const handleChangeTab = (event, newValue) => {
     setTab(newValue);
   };
@@ -67,7 +73,7 @@ function ProjectReviewTabs(props) {
             <Project worker={worker} />
           </TabPanel>
           <TabPanel value={tab} index={2}>
-            <Reviews worker={worker} />
+            <NewReview worker={worker} isOwner={isOwner} user={user} />
           </TabPanel>
         </Box>
       </Box>

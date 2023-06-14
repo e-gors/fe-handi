@@ -124,7 +124,7 @@ export const SocialLinkRegex = (data, type) => {
     "i"
   );
   const twitter = new RegExp(
-    "^(?:https?://)?(?:www.)?twitter.com/[a-zA-Z0-9_]{1,15}(?:/w+)*$",
+    "^(?:https?://)?(?:www.)?twitter.com/[a-zA-Z0-9-_.]{1,15}(?:/w+)*$",
     "i"
   );
 

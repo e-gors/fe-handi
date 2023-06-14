@@ -6,17 +6,17 @@ import {
   FormHelperText,
 } from "@mui/material";
 import React from "react";
-import FormField from "../../../../components/FormField";
+import FormField from "../../../components/FormField";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import Http from "../../../../utils/Http";
-import ToastNotification from "../../../../components/ToastNotification";
-import { options } from "../../../../components/options";
-import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
+import Http from "../../../utils/Http";
+import ToastNotification from "../../../components/ToastNotification";
+import { options } from "../../../components/options";
+import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
 import { useDispatch } from "react-redux";
-import { updateUser } from "../../../../redux/actions/userActions";
-import { SocialLinkRegex } from "../../../../utils/helpers";
+import { updateUser } from "../../../redux/actions/userActions";
+import { SocialLinkRegex } from "../../../utils/helpers";
 
 const styles = {
   iconTextWrapper: { mb: 5 },

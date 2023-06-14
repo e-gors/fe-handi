@@ -20,10 +20,6 @@ import {
 import React, { useRef } from "react";
 import FormField from "../../../../components/FormField";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setSearchQuery,
-  setSearchResult,
-} from "../../../../redux/actions/profileActions";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import Reevalidate from "ree-validate-18";
 import SelectDropdown from "../../../../components/SelectDropdown";
@@ -42,12 +38,14 @@ import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import Http from "../../../../utils/Http";
 import { useHistory } from "react-router-dom";
 import ConfirmationModal from "../../../../components/ConfirmationModal";
+import noGuardHttp from "../../../register/service";
 
 const validator = new Reevalidate.Validator({
   type: "required",
   rate: "required",
   budget: "required",
   days: "required",
+  title: "min:5|max:20",
 });
 
 const days = [
@@ -166,18 +164,17 @@ const styles = {
 const MAX_IMAGES = 10;
 
 function NewJobOffer() {
-  const searchQuery = useSelector((state) => state.profiles.searchQuery) ?? "";
-  const searchResult =
-    useSelector((state) => state.profiles.searchResult) ?? [];
-  const workers = useSelector((state) => state.profiles.workers) ?? [];
   const posts = useSelector((state) => state.users.user.jobs) ?? [];
 
   const history = useHistory();
   const dispatch = useDispatch();
   const imageContainerRef = useRef(null);
 
+  const [search, setSearch] = React.useState("");
+  const [workers, setWorkers] = React.useState([]);
   const [openCancelModal, setOpenCancelModal] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [loadingOnLoad, setLoadingOnLoad] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState({});
   const [instruction, setInstruction] = React.useState("");
   const [images, setImages] = React.useState([]);
@@ -194,10 +191,25 @@ function NewJobOffer() {
   });
   const [isOpen, setIsOpen] = React.useState(false);
 
-  // Update search results when searchQuery or users change
   React.useEffect(() => {
-    performSearch();
-  }, [searchQuery, workers]);
+    fetchWorkers();
+  }, []);
+
+  const fetchWorkers = () => {
+    setLoadingOnLoad(true);
+    noGuardHttp
+      .get("/user/workers")
+      .then((res) => {
+        if (res.data.data) {
+          setWorkers(res.data.data);
+        }
+        setLoadingOnLoad(false);
+      })
+      .catch((err) => {
+        setLoadingOnLoad(false);
+        console.warn(err.message);
+      });
+  };
 
   const type = formValues.values.type;
   React.useEffect(() => {
@@ -314,19 +326,8 @@ function NewJobOffer() {
     setImages(newImages);
   };
 
-  const handleInputChange = (event, value) => {
-    dispatch(setSearchQuery(value));
-  };
-
-  const performSearch = () => {
-    const filterWorkers =
-      workers &&
-      workers.filter((worker) => {
-        return worker.fullname
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase());
-      });
-    dispatch(setSearchResult(filterWorkers));
+  const handleChangeSearch = (event, value) => {
+    setSearch(value);
   };
 
   const handleChangeSelectedItem = (e, item) => {
@@ -338,7 +339,7 @@ function NewJobOffer() {
       ...prev,
       values: {
         ...prev.values,
-        post: item.id,
+        post: item ? item.id : null,
       },
     }));
   };
@@ -380,7 +381,7 @@ function NewJobOffer() {
       .then((res) => {
         if (res.data.code === 200) {
           ToastNotification("success", res.data.message, options);
-          setTimeout(() => history.goBack(), 500);
+          setTimeout(() => history.push('/my-offers'), 500);
         } else {
           ToastNotification("error", res.data.message, options);
         }
@@ -421,6 +422,14 @@ function NewJobOffer() {
     setOpenCancelModal(true);
   };
 
+  // Calculate the average rating
+  const length = selectedItem.ratings?.length;
+  const averageRating =
+    length > 0
+      ? selectedItem.ratings.reduce((sum, rating) => sum + rating.rating, 0) /
+        length
+      : 0;
+
   return (
     <Box sx={styles.wrapper}>
       <ConfirmationModal
@@ -448,7 +457,8 @@ function NewJobOffer() {
           <Autocomplete
             name="contractor"
             size="small"
-            options={searchResult}
+            loading={loadingOnLoad}
+            options={workers}
             getOptionLabel={(worker) => worker.fullname}
             renderInput={(params) => (
               <FormField
@@ -456,8 +466,7 @@ function NewJobOffer() {
                 {...params}
                 label="Contractor"
                 variant="outlined"
-                value={searchQuery}
-                onChange={handleInputChange}
+                value={selectedItem ? selectedItem.fullname : ""}
               />
             )}
             onChange={handleChangeSelectedItem}
@@ -487,20 +496,20 @@ function NewJobOffer() {
                   </Typography>
                   {selectedItem &&
                     selectedItem.profile &&
-                    selectedItem.profile[0].background && (
+                    selectedItem.profile.about && (
                       <div
                         style={{ fontSize: 11 }}
                         dangerouslySetInnerHTML={{
                           __html:
                             selectedItem &&
                             selectedItem.profile &&
-                            selectedItem.profile[0].background,
+                            selectedItem.profile.about,
                         }}
                       />
                     )}
                   {selectedItem &&
                     selectedItem.profile &&
-                    selectedItem.profile[0].background === null && (
+                    selectedItem.profile.about === null && (
                       <Typography sx={{ fontSize: 11 }}>
                         The user has no background set
                       </Typography>
@@ -511,17 +520,15 @@ function NewJobOffer() {
                 <Typography sx={{ mr: 2, fontWeight: "bold" }}>
                   {selectedItem &&
                   selectedItem.profile &&
-                  selectedItem.profile[0].daily_rate
-                    ? selectedItem.profile[0].daily_rate
+                  selectedItem.profile.daily_rate
+                    ? selectedItem.profile.daily_rate
                     : 0}{" "}
                   /hr
                 </Typography>
                 <Box sx={{ display: "flex" }}>
                   <StarBorderIcon />
                   <Typography sx={{ fontWeight: "bold" }}>
-                    {selectedItem && selectedItem.rating && selectedItem.rating
-                      ? selectedItem.rating.length
-                      : 0}
+                    {averageRating ? averageRating : 0}
                   </Typography>
                 </Box>
               </Box>
@@ -541,7 +548,7 @@ function NewJobOffer() {
                 name="post"
                 variant="outlined"
                 value={formValues.values.post}
-                onChange={handleInputChange}
+                onChange={handleChangeSearch}
               />
             )}
             onChange={handleChangePost}

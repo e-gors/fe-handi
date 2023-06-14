@@ -2,9 +2,11 @@ import { ActionTypes } from "../types/action-types";
 
 const initialState = {
   worker: [],
-  client: [],
   workers: [],
+  workersCount: "",
+  client: [],
   clients: [],
+  clientsCount: "",
   searchQuery: "",
   searchResult: [],
 };
@@ -34,6 +36,21 @@ export const profileReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         searchResult: payload,
+      };
+    case ActionTypes.UPDATE_WORKER:
+      return {
+        ...state,
+        worker: payload,
+      };
+    case ActionTypes.SET_WORKERS_COUNT:
+      return {
+        ...state,
+        workersCount: payload,
+      };
+    case ActionTypes.SET_CLIENTS_COUNT:
+      return {
+        ...state,
+        clientsCount: payload,
       };
     default:
       return state;

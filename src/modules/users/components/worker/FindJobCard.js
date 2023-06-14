@@ -10,6 +10,7 @@ import {
 import React from "react";
 import FindJobCardModal from "./FindJobCardModal";
 import { useSelector } from "react-redux";
+import { formatValue } from "../../../../utils/helpers";
 
 const styles = {
   wrapper: {
@@ -134,7 +135,11 @@ function FindJobCard(props) {
         {!loading &&
           jobs &&
           jobs.map((job, postIndex) => {
-            const limitedSkills = job.skills.slice(0, skillLimit);
+            const limitedSkills =
+              job.skills &&
+              job.skills?.length > 2 &&
+              jobs.skills?.length > skillLimit &&
+              jobs.skills.slice(0, skillLimit);
             return (
               <Grid key={postIndex} item xs={12} sm={12} md={6}>
                 <Box sx={styles.cardWrapper} onClick={() => handleOpen(job)}>
@@ -194,25 +199,30 @@ function FindJobCard(props) {
                           sx={styles.skill}
                         />
                       ))}
-                    {job.skills.length > skillLimit && (
-                      <Chip
-                        size="small"
-                        key={`${postIndex}-more`}
-                        label={`+${job.skills.length - skillLimit}`}
-                        variant="contained"
-                        sx={styles.moreSkill}
-                      />
-                    )}
+                    {job.skills &&
+                      job.skills?.length > 2 &&
+                      jobs.skils?.length > skillLimit && (
+                        <Chip
+                          size="small"
+                          key={`${postIndex}-more`}
+                          label={`+${job.skills.length - skillLimit}`}
+                          variant="contained"
+                          sx={styles.moreSkill}
+                        />
+                      )}
                   </Stack>
 
                   <Box sx={styles.cardBottom}>
                     <Box sx={styles.cardBottomWrapper}>
                       <Typography>
-                        ₱ {job.rate ? `${job.rate} / day` : job.budget}
+                        ₱{" "}
+                        {job.rate
+                          ? `${formatValue(job.rate)} / day`
+                          : formatValue(job.budget)}
                       </Typography>
                       <Typography>{job.job_type}</Typography>
                       {job.job_type === "Daily Rate" && (
-                        <Typography>{job.days} days</Typography>
+                        <Typography>{job.days}</Typography>
                       )}
                     </Box>
                   </Box>

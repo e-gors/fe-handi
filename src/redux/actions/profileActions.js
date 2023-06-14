@@ -34,3 +34,23 @@ export const setSearchResult = (result) => {
     payload: result,
   };
 };
+
+export const updateWorker = (worker) => {
+  return {
+    type: ActionTypes.UPDATE_WORKER,
+    payload: worker,
+  };
+};
+
+export const setWorkersCount = (data) => {
+  return {
+    type: ActionTypes.SET_WORKERS_COUNT,
+    payload: data,
+  };
+};
+export const setClientsCount = (data) => {
+  return {
+    type: ActionTypes.SET_CLIENTS_COUNT,
+    payload: data,
+  };
+};

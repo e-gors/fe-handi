@@ -1,16 +1,41 @@
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import React from "react";
-import ToastNotification from "../../../../components/ToastNotification";
-import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
-import { options } from "../../../../components/options";
-import Http from "../../../../utils/Http";
+import ToastNotification from "../../../components/ToastNotification";
+import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
+import { options } from "../../../components/options";
+import Http from "../../../utils/Http";
 import { useDispatch } from "react-redux";
-import { updateUser } from "../../../../redux/actions/userActions";
+import { updateUser } from "../../../redux/actions/userActions";
 import Cropper from "react-easy-crop";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
-import { CropImage } from "../../../../utils/helpers";
+import { CropImage } from "../../../utils/helpers";
 
-function UploadBGImage(props) {
+const styles = {
+  wrapper: { width: "100%", height: "100%" },
+  descriptionWrapper: {
+    width: { xs: "100%", sm: "50%", md: "50%" },
+    m: "0 auto",
+  },
+  descriptions: { fontSize: { xs: 12, md: 14 } },
+  description: { fontSize: "inherit" },
+  imageCropWrapper: {
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    minHeight: 260,
+    p: 2,
+
+    img: {
+      width: "100%",
+      height: "100%",
+      objectFit: "contain",
+      objectPosition: "center",
+    },
+  },
+  buttonsWrapper: { backgroundColor: "#F4F5FB", p: 2, borderRadius: 3, mt: 5 },
+};
+
+function UploadProfileImage(props) {
   const { handleClose, onConfirm } = props;
   const dispatch = useDispatch();
 
@@ -48,11 +73,10 @@ function UploadBGImage(props) {
     setLoading(true);
     try {
       const croppedImg = await CropImage(image, croppedArea);
-
       const formData = new FormData();
-      formData.append("background_img", croppedImg);
+      formData.append("profile_img", croppedImg);
 
-      const res = await Http.post("/upload/bg-image", formData, {
+      const res = await Http.post("/upload/profile-image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -82,7 +106,7 @@ function UploadBGImage(props) {
   };
 
   return (
-    <Box sx={{ width: "100%", height: "100%" }}>
+    <Box sx={styles.wrapper}>
       <ToastNotificationContainer />
       <form encType="multipart/form-data">
         <input
@@ -97,17 +121,15 @@ function UploadBGImage(props) {
 
       {!image && (
         <Box>
-          <Box
-            sx={{ width: { xs: "100%", sm: "50%", md: "50%" }, m: "0 auto" }}
-          >
-            <Box sx={{ fontSize: { xs: 12, md: 14 } }}>
-              <Typography component="li" sx={{ fontSize: "inherit" }}>
-                Recommended dimensions 1440 x 180 px
+          <Box sx={styles.descriptionWrapper}>
+            <Box sx={styles.descriptions}>
+              <Typography component="li" sx={styles.description}>
+                Recommended dimensions 400 x 400 px
               </Typography>
-              <Typography component="li" sx={{ fontSize: "inherit" }}>
+              <Typography component="li" sx={styles.description}>
                 JPG, JPEG, PNG
               </Typography>
-              <Typography component="li" sx={{ fontSize: "inherit" }}>
+              <Typography component="li" sx={styles.description}>
                 Max size: 5mb
               </Typography>
             </Box>
@@ -129,26 +151,11 @@ function UploadBGImage(props) {
       )}
 
       {image && (
-        <Box
-          sx={{
-            position: "relative",
-            width: "100%",
-            height: "100%",
-            minHeight: 260,
-            p: 2,
-
-            img: {
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              objectPosition: "center",
-            },
-          }}
-        >
+        <Box sx={styles.imageCropWrapper}>
           <Cropper
             image={image}
             crop={crop}
-            aspect={4 / 1}
+            aspect={1}
             onCropChange={handleCropChange}
             cropShape="rect"
             showGrid
@@ -186,10 +193,7 @@ function UploadBGImage(props) {
         </Box>
       )}
 
-      <Box
-        align="right"
-        sx={{ backgroundColor: "#F4F5FB", p: 2, borderRadius: 3, mt: 5 }}
-      >
+      <Box align="right" sx={styles.buttonsWrapper}>
         <Button size="small" variant="outlined" onClick={handleClose}>
           Cancel
         </Button>
@@ -212,4 +216,4 @@ function UploadBGImage(props) {
   );
 }
 
-export default UploadBGImage;
+export default UploadProfileImage;

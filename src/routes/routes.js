@@ -50,20 +50,24 @@ const routes = [
     component: "modules/register/pages/JoinAsClient",
   },
   {
-    path: "/confirm-registration",
-    component: "modules/register/pages/ConfirmRegistration",
-  },
-  {
     path: "/fq-question",
     component: "modules/home/pages/FQQuestion",
   },
   {
-    path: "/confirmed/:id",
-    component: "modules/register/pages/ConfirmedUser",
-  },
-  {
     path: "/worker/profile/overview/:uuid",
     component: "modules/home/pages/worker/Profile",
+  },
+  {
+    path: "/confirm-registration",
+    component: "modules/register/pages/ConfirmRegistration",
+  },
+  {
+    path: "/review",
+    component: "modules/users/components/NewReview",
+  },
+  {
+    path: "/confirmed/:id",
+    component: "modules/register/pages/ConfirmedUser",
   },
 
   // Private components
@@ -139,18 +143,8 @@ const routes = [
     role: "Worker",
   },
   {
-    path: "/account/settings/notifications",
-    component: "modules/users/pages/worker/NotificationSettings",
-    auth: true,
-  },
-  {
-    path: "/my-account",
-    component: "modules/users/pages/worker/MyAccount",
-    auth: true,
-  },
-  {
-    path: "/settings",
-    component: "modules/users/pages/worker/Settings",
+    path: "/account/settings",
+    component: "modules/users/pages/Settings",
     auth: true,
   },
   {
@@ -240,11 +234,6 @@ const routes = [
     component: "modules/users/pages/ClientOverview",
     auth: true,
   },
-  // {
-  //   path: "/new/reviews",
-  //   component: "modules/users/components/ReviewForm",
-  //   auth: true,
-  // },
 ];
 
 export default routes;

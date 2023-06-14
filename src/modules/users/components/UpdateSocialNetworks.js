@@ -1,22 +1,13 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import React from "react";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import DragIndicatorRoundedIcon from "@mui/icons-material/DragIndicatorRounded";
-import ProfileModalEdit from "../ProfileModalEdit";
+import ProfileModalEdit from "./ProfileModalEdit";
 import { useDispatch, useSelector } from "react-redux";
-import Http from "../../../../utils/Http";
-import ToastNotification from "../../../../components/ToastNotification";
-import { options } from "../../../../components/options";
-import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
-import { updateUser } from "../../../../redux/actions/userActions";
+import Http from "../../../utils/Http";
+import { updateUser } from "../../../redux/actions/userActions";
 
 const styles = {
   main: { display: "flex", justifyContent: "space-between", mb: 1 },
@@ -70,22 +61,17 @@ function UpdateSocialNetworks() {
       .then((res) => {
         if (res.data.code === 200) {
           dispatch(updateUser(res.data.user));
-          ToastNotification("success", res.data.message, options);
           setLoading(false);
-        } else {
-          ToastNotification("error", res.data.message, options);
         }
         setLoading(false);
       })
       .catch((err) => {
-        ToastNotification("error", err.message, options);
         setLoading(false);
       });
   };
 
   return (
     <Box>
-      <ToastNotificationContainer />
       <ProfileModalEdit open={open} type={type} handleClose={handleClose} />
       {icons &&
         icons.map((icon, i) => (

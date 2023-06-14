@@ -82,7 +82,7 @@ function Homepage() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    fetchWorkers();
+    // fetchWorkers();
     fetchCategories();
     fetchSkills();
     fetchSkillChildren();

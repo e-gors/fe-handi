@@ -20,6 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
+import AddTaskIcon from "@mui/icons-material/AddTask";
 
 function DataTable(props) {
   const {
@@ -32,7 +33,10 @@ function DataTable(props) {
     withNumber,
     onDelete,
     onEdit,
+    onComplete,
     onRevoked,
+    onWithdrawn,
+    onCancel,
     onView,
     loading,
     ...rest
@@ -50,13 +54,14 @@ function DataTable(props) {
     let value = item;
 
     keys.forEach((key) => {
-      value =
-        value[key] !== undefined &&
-        value[key] !== null &&
-        col.name !== "qrcode_url"
-          ? value[key]
-          : "";
+      value = value[key] !== undefined && value[key] !== null ? value[key] : "";
     });
+
+    // Check if the value is an array (multiple locations)
+    if (Array.isArray(value)) {
+      // Join the locations with a comma
+      value = value.join(", ");
+    }
 
     return value;
   };
@@ -81,6 +86,10 @@ function DataTable(props) {
   const handleView = (item) => {
     setSelectedItem(item);
     onView && onView(item);
+  };
+  const handleComplete = (item) => {
+    setSelectedItem(item);
+    onComplete && onComplete(item);
   };
   const handleRevoked = (item) => {
     setSelectedItem(item);
@@ -109,7 +118,12 @@ function DataTable(props) {
             }}
           >
             <TableRow>
-              {(onDelete || onEdit || withNumber) && (
+              {(onDelete ||
+                onComplete ||
+                onEdit ||
+                onView ||
+                onRevoked ||
+                withNumber) && (
                 <TableCell size="small" align="center">
                   #
                 </TableCell>
@@ -129,7 +143,12 @@ function DataTable(props) {
             {!loading &&
               data.map((item, itemIndex) => (
                 <TableRow key={itemIndex}>
-                  {(onDelete || onEdit || withNumber) && (
+                  {(onDelete ||
+                    onEdit ||
+                    onView ||
+                    onComplete ||
+                    onRevoked ||
+                    withNumber) && (
                     <TableCell
                       size="small"
                       align="center"
@@ -137,7 +156,7 @@ function DataTable(props) {
                     >
                       {withNumber && itemIndex + 1}
                       {onView && (
-                        <Tooltip title="View Proposal" arrow>
+                        <Tooltip title="View" arrow>
                           <IconButton
                             size="small"
                             color="primary"
@@ -147,8 +166,19 @@ function DataTable(props) {
                           </IconButton>
                         </Tooltip>
                       )}
+                      {onComplete && (
+                        <Tooltip title="Complete contract?" arrow>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() => handleComplete(item)}
+                          >
+                            <AddTaskIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                       {onRevoked && (
-                        <Tooltip title="Cancel Proposal" arrow>
+                        <Tooltip title="Cancel" arrow>
                           <IconButton
                             size="small"
                             sx={{ color: "gray" }}
@@ -159,7 +189,7 @@ function DataTable(props) {
                         </Tooltip>
                       )}
                       {onEdit && (
-                        <Tooltip title="Edit Proposal" arrow>
+                        <Tooltip title="Edit" arrow>
                           <IconButton
                             size="small"
                             sx={{ color: "#00c853" }}
@@ -170,7 +200,7 @@ function DataTable(props) {
                         </Tooltip>
                       )}
                       {onDelete && (
-                        <Tooltip title="Delete Proposal" arrow>
+                        <Tooltip title="Delete" arrow>
                           <IconButton
                             size="small"
                             color="error"
@@ -193,7 +223,8 @@ function DataTable(props) {
                         cellColor = "red";
                       } else if (
                         cellValue === "accepted" ||
-                        cellValue === "in progress"
+                        cellValue === "in progress" ||
+                        cellValue === "posted"
                       ) {
                         cellColor = "green";
                       } else if (cellValue === "completed") {

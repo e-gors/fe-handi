@@ -17,6 +17,12 @@ import FormField from "../../../components/FormField";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import SelectDropdown from "../../../components/SelectDropdown";
+import ConfirmationModal from "../../../components/ConfirmationModal";
+import ToastNotification from "../../../components/ToastNotification";
+import { options } from "../../../components/options";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../../redux/actions/userActions";
+import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
 
 const status = [
   "pending",
@@ -81,6 +87,11 @@ const columns = [
 export default function Contracts(props) {
   const { type } = props;
 
+  const dispatch = useDispatch();
+
+  const [openCompleteContract, setOpenCompleteContract] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState({});
+  const [onLoadingConfirm, setLoadingConfirm] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [contracts, setContracts] = React.useState({
@@ -211,6 +222,30 @@ export default function Contracts(props) {
     handleFilterChange("limit", value);
   };
 
+  const onComplete = (item) => {
+    setSelectedItem(item);
+    setOpenCompleteContract(true);
+  };
+
+  const handleCompleteContract = () => {
+    setLoadingConfirm(true);
+    Http.post(`/contract/complete/${selectedItem.id}`)
+      .then((res) => {
+        if (res.data.code === 200) {
+          dispatch(updateUser(res.data.user));
+          ToastNotification("success", res.data.message, options);
+          setOpenCompleteContract(false);
+        } else {
+          ToastNotification("error", res.data.message, options);
+        }
+        setLoadingConfirm(false);
+      })
+      .catch((err) => {
+        setLoadingConfirm(false);
+        ToastNotification("error", err.message, options);
+      });
+  };
+
   const handleEdit = (values) => {
     console.log(values);
   };
@@ -229,6 +264,15 @@ export default function Contracts(props) {
 
   return (
     <Box>
+      <ToastNotificationContainer />
+      <ConfirmationModal
+        title="Complete Contract?"
+        message="You are about to change the status of your contract from 'in progress' to 'complete'"
+        loading={onLoadingConfirm}
+        open={openCompleteContract}
+        onClose={() => setOpenCompleteContract(false)}
+        onConfirm={handleCompleteContract}
+      />
       <Box
         sx={{
           width: "100%",
@@ -331,6 +375,7 @@ export default function Contracts(props) {
       </Box>
       <DataTable
         withPagination
+        onComplete={onComplete}
         onEdit={handleEdit}
         onDelete={handleDelete}
         loading={loading}

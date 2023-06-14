@@ -3,7 +3,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import Project from "./Project";
 import ProfileOverview from "./ProfileOverview";
-import Reviews from "./Reviews";
+import NewReview from "../NewReview";
+import { isAuth } from "../../../../utils/helpers";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,7 +67,7 @@ function ProjectReviewTabs(props) {
             <Project user={user && user} />
           </TabPanel>
           <TabPanel value={tab} index={2}>
-            <Reviews user={user && user} />
+            <NewReview worker={user && user} isOwner={true} user={user} />
           </TabPanel>
         </Box>
       </Box>

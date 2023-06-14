@@ -183,23 +183,27 @@ function WDashboard() {
         }}
       >
         <Typography sx={{ fontWeight: "bold" }}>Recommended Jobs</Typography>
-        {jobs.data && jobs.data.length > 0 && (
-          <FindJobCard jobs={jobs.data} loading={loading} />
-        )}
-        {jobs.data && jobs.data.length > 0 && (
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
-            <Pagination
-              count={Math.ceil(jobs.meta.total / limit.limit)}
-              page={limit.page}
-              onChange={handleChangePage}
-              disabled={onLoadLoading} // Disable pagination when loading more jobs
-              color="primary"
-              variant="outlined"
-              shape="rounded"
-            />
-          </Box>
-        )}
-        {jobs.data.length === 0 && (
+        {jobs.data &&
+          jobs.data.length > 0 &&
+          profile[0].profile_completeness > 7 && (
+            <FindJobCard jobs={jobs.data} loading={loading} />
+          )}
+        {jobs.data &&
+          jobs.data.length > 0 &&
+          profile[0].profile_completeness > 7 && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+              <Pagination
+                count={Math.ceil(jobs.meta.total / limit.limit)}
+                page={limit.page}
+                onChange={handleChangePage}
+                disabled={onLoadLoading} // Disable pagination when loading more jobs
+                color="primary"
+                variant="outlined"
+                shape="rounded"
+              />
+            </Box>
+          )}
+        {(jobs.data.length === 0 || profile[0].profile_completeness < 6) && (
           <Box>
             <Box sx={{ maxWidth: 600, margin: "10px auto", p: 2 }}>
               <Box sx={{ textAlign: "center" }}>

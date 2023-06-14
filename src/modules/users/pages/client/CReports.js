@@ -66,7 +66,7 @@ function CReports(props) {
     setAnchorEl(null);
   };
   return (
-    <Box>
+    <Box sx={{ p: 2, mt: 8 }}>
       <Box>
         <Box>
           <Typography sx={{ fontSize: { xs: 20, md: 24 }, m: 2 }}>

@@ -8,27 +8,32 @@ import {
   MenuItem,
   Divider,
 } from "@mui/material";
-import FormField from "../../../components/FormField";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import SelectDropdown from "../../../components/SelectDropdown";
 import ArticleIcon from "@mui/icons-material/Article";
-import DataTable from "../../../components/DataTable";
-import Http from "../../../utils/Http";
 import { useHistory } from "react-router-dom";
+import Http from "../../../../utils/Http";
+import FormField from "../../../../components/FormField";
+import SelectDropdown from "../../../../components/SelectDropdown";
+import DataTable from "../../../../components/DataTable";
+import JobPostedModal from "../../components/client/JobPostedModal";
+import { useSelector } from "react-redux";
 
 const status = ["Pending", "Accepted", "Declined", "Withdrawn"];
 const orderByRate = ["Ascending", "Descending"];
 const orderByDate = ["Ascending", "Descending"];
 
-function Offers(props) {
-  const { type, role, columns } = props;
+function Jobs(props) {
+  const { type, columns } = props;
+
+  const user = useSelector((state) => state.users.user);
 
   const history = useHistory();
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const [ignored, forceUpdate] = React.useReducer((x) => x + 1, 0);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const [offers, setOffers] = React.useState({
+  const [jobs, setJobs] = React.useState({
     data: [],
     meta: {},
   });
@@ -47,6 +52,8 @@ function Offers(props) {
     page: 1,
   });
 
+  const [selectedItem, setSelectedItem] = React.useState(null);
+
   React.useEffect(() => {
     setFilterValues((prev) => ({
       ...prev,
@@ -63,18 +70,18 @@ function Offers(props) {
       page: 1,
     }));
     optimizedFn(filterValues.values);
-  }, [filterValues.values]); // eslint-disable-line
+  }, [ignored, filterValues.values]); // eslint-disable-line
 
   const fetchingData = (params = {}) => {
     setLoading(true);
-    Http.get("/offers", {
+    Http.get("user/jobs", {
       params: {
         ...limit,
         ...params,
       },
     }).then((res) => {
       if (res.data.data) {
-        setOffers({
+        setJobs({
           data: res.data.data,
           meta: res.data.meta,
         });
@@ -139,6 +146,7 @@ function Offers(props) {
   };
 
   const handleOpen = (event) => {
+    console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 
@@ -146,12 +154,37 @@ function Offers(props) {
     setAnchorEl(null);
   };
 
-  const handleRevoked = (item) => {
-    console.log(item);
+  const handleView = (item) => {
+    setSelectedItem(item);
+  };
+
+  const handleNext = () => {
+    const currentIndex = jobs.data.findIndex((item) => item === selectedItem);
+    const nextData = jobs.data[currentIndex + 1];
+    if (nextData) {
+      setSelectedItem(nextData);
+    }
+  };
+
+  const handleBack = () => {
+    const currentIndex = jobs.data.findIndex((item) => item === selectedItem);
+    const previousData = jobs.data[currentIndex - 1];
+    if (previousData) {
+      setSelectedItem(previousData);
+    }
   };
 
   return (
     <Box>
+      <JobPostedModal
+        selectedItem={selectedItem}
+        setSelectedItem={setSelectedItem}
+        handleNext={handleNext}
+        handleBack={handleBack}
+        jobs={jobs.data}
+        user={user && user}
+        handleForceUpdate={forceUpdate}
+      />
       <Box>
         <Box>
           <Box
@@ -253,18 +286,18 @@ function Offers(props) {
 
         <DataTable
           withPagination
-          onRevoked={handleRevoked}
+          onView={handleView}
           loading={loading}
-          data={offers.data}
+          data={jobs.data}
           columns={columns}
           rowsPerPage={filterValues.values.limit}
-          count={offers.meta.total || 0}
-          page={offers.meta.current_page - 1 || 0}
+          count={jobs.meta.total || 0}
+          page={jobs.meta.current_page - 1 || 0}
           onChangePage={handleChangePage}
           onRowsChangePage={handleRowChange}
         />
 
-        {offers && offers.data.length === 0 && (
+        {jobs && jobs.data.length === 0 && (
           <Box align="center" sx={{ mt: 5, p: 2 }}>
             <ArticleIcon
               sx={{
@@ -275,24 +308,19 @@ function Offers(props) {
                 borderRadius: 3,
               }}
             />
-            {role === "Client" ? (
-              <Box>
-                <Typography sx={{ mt: 2 }}>NO OFFERS HAVE BEEN SENT</Typography>
-                <Button
-                  sx={{ width: 120, mt: 2, boxShadow: 5 }}
-                  color="primary"
-                  variant="contained"
-                  size="small"
-                  onClick={() => history.push("/new/job-offer")}
-                >
-                  Send Offer
-                </Button>
-              </Box>
-            ) : (
-              <Typography sx={{ mt: 2 }}>
-                NO OFFERS HAVE BEEN RECEIVED
-              </Typography>
-            )}
+            <Box>
+              <Typography sx={{ mt: 2 }}>YOU DON'T HAVE JOB POSTS.</Typography>
+              <Typography>CREATE ONE.</Typography>
+              <Button
+                sx={{ width: 150, mt: 2, boxShadow: 5 }}
+                color="primary"
+                variant="contained"
+                size="small"
+                onClick={() => history.push("/new/job-post")}
+              >
+                Create Job Post
+              </Button>
+            </Box>
           </Box>
         )}
       </Box>
@@ -300,4 +328,4 @@ function Offers(props) {
   );
 }
 
-export default Offers;
+export default Jobs;

@@ -28,11 +28,10 @@ const styles = {
 function ConfirmRegistration() {
   const history = useHistory();
 
-  const verifiedUser = useSelector((state) => state.users.user);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = useSelector((state) => state.users.user);
 
   React.useEffect(() => {
-    if (verifiedUser && verifiedUser.email_verified_at !== null) {
+    if (user && user.email_verified_at !== null) {
       history.push("/dashboard");
     }
   }, []);
@@ -41,8 +40,8 @@ function ConfirmRegistration() {
     <Box sx={styles.wrapper}>
       <Box sx={styles.main}>
         <Typography sx={styles.headerHello}>
-          Hello there {user && user.first_name}, thank you for
-          Joining {process.env.REACT_APP_NAME}!
+          Hello there {user && user.first_name}, thank you for Joining{" "}
+          {process.env.REACT_APP_NAME}!
         </Typography>
         <Typography sx={styles.descriptions}>
           We have sent you an activation email on{" "}

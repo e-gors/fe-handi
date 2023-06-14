@@ -38,9 +38,9 @@ function PrivateWorker(props) {
     return <Route render={() => <Redirect to="/forbidden" />} />;
   }
 
-  // if (user && user.email_verified_at === null) {
-  //   return <Route render={() => <Redirect to="/confirm-registration" />} />;
-  // }
+  if (user && user.email_verified_at === null) {
+    return <Route render={() => <Redirect to="/confirm-registration" />} />;
+  }
 
   return (
     <Route

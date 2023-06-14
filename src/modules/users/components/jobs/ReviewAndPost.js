@@ -16,6 +16,8 @@ import { options } from "../../../../components/options";
 import Http from "../../../../utils/Http";
 import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../../../redux/actions/userActions";
 
 const styles = {
   wrapper: {
@@ -120,6 +122,8 @@ function ReviewAndPost(props) {
   } = props;
 
   const history = useHistory();
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = React.useState(false);
   const [visibility, setVisibility] = React.useState("Public");
 
@@ -158,6 +162,7 @@ function ReviewAndPost(props) {
         if (res.data.code === 200) {
           ToastNotification("success", res.data.message, options);
           localStorage.setItem("postedUrl", res.data.url);
+          dispatch(updateUser(res.data.user));
           setTimeout(() => history.push("/new/job/posted"), 2000);
         } else {
           ToastNotification("error", res.data.message, options);
@@ -219,64 +224,76 @@ function ReviewAndPost(props) {
             <div dangerouslySetInnerHTML={{ __html: descriptions }} />
           )}
 
-          <Box sx={styles.selectedImagesWrapper}>
-            {imagesContainer &&
-              imagesContainer.length > 0 &&
-              imagesContainer.map((image, i) => (
-                <Box key={i} sx={{ m: 0.5 }}>
-                  <img style={styles.image} src={image.url} alt={image.name} />
+          {imagesContainer && imagesContainer.length > 0 && (
+            <Box sx={styles.selectedImagesWrapper}>
+              {imagesContainer &&
+                imagesContainer.length > 0 &&
+                imagesContainer.map((image, i) => (
+                  <Box key={i} sx={{ m: 0.5 }}>
+                    <img
+                      style={styles.image}
+                      src={image.url}
+                      alt={image.name}
+                    />
+                  </Box>
+                ))}
+            </Box>
+          )}
+        </Box>
+
+        {(imagesContainer.length > 0 ||
+          typeAndBudget.length > 0 ||
+          ques.length > 0 ||
+          skillses.length > 0 ||
+          locations) && (
+          <Box sx={{ mb: 1, p: 2 }}>
+            <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
+              Details
+            </Typography>
+            {typeAndBudget && typeAndBudget.type === "Daily Rate" && (
+              <Box>
+                <Typography>
+                  <span>Estimated days:</span> {typeAndBudget.days}
+                </Typography>
+              </Box>
+            )}
+            {locations && (
+              <Box sx={{ display: "flex", mt: 1 }}>
+                <Typography>Location: </Typography>
+                <Box sx={{ ml: 1 }}>
+                  {locations &&
+                    locations.map((location, i) => (
+                      <Chip
+                        key={i}
+                        label={location}
+                        color="primary"
+                        variant="outlined"
+                        sx={{ m: 0.2 }}
+                      />
+                    ))}
                 </Box>
-              ))}
+              </Box>
+            )}
+
+            {skillses && skillses.length !== 0 && (
+              <Box sx={{ display: "flex", mt: 1 }}>
+                <Typography>Skills:</Typography>
+                <Box sx={{ ml: 1 }}>
+                  {skillses &&
+                    skillses.map((skill, i) => (
+                      <Chip
+                        key={i}
+                        label={skill}
+                        color="primary"
+                        variant="outlined"
+                        sx={{ m: 0.2 }}
+                      />
+                    ))}
+                </Box>
+              </Box>
+            )}
           </Box>
-        </Box>
-
-        <Box sx={{ mb: 1, p: 2 }}>
-          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
-            Details
-          </Typography>
-          {typeAndBudget && typeAndBudget.type === "Daily Rate" && (
-            <Box>
-              <Typography>
-                <span>Estimated days:</span> {typeAndBudget.days}
-              </Typography>
-            </Box>
-          )}
-          {locations && (
-            <Box sx={{ display: "flex", mt: 1 }}>
-              <Typography>Prefered Worker Location: </Typography>
-              <Box sx={{ ml: 1 }}>
-                {locations &&
-                  locations.map((location, i) => (
-                    <Chip
-                      key={i}
-                      label={location}
-                      color="primary"
-                      variant="outlined"
-                      sx={{ m: 0.2 }}
-                    />
-                  ))}
-              </Box>
-            </Box>
-          )}
-
-          {skillses && skillses.length !== 0 && (
-            <Box sx={{ display: "flex", mt: 1 }}>
-              <Typography>Skills:</Typography>
-              <Box sx={{ ml: 1 }}>
-                {skillses &&
-                  skillses.map((skill, i) => (
-                    <Chip
-                      key={i}
-                      label={skill}
-                      color="primary"
-                      variant="outlined"
-                      sx={{ m: 0.2 }}
-                    />
-                  ))}
-              </Box>
-            </Box>
-          )}
-        </Box>
+        )}
 
         {ques && ques.length > 0 && (
           <Box sx={{ mb: 2, p: 2 }}>

@@ -78,6 +78,8 @@ const styles = {
   },
 };
 
+const today = dayjs();
+
 function ScheduleModal(props) {
   const { open, handleClose, selectedItem, bid } = props;
 
@@ -102,24 +104,33 @@ function ScheduleModal(props) {
 
   const calculateDates = () => {
     const currentDate = new Date();
-    const daysRange = "31-40 days";
-    const [startDay, endDay] = daysRange.split("-").map((str) => parseInt(str));
+    const daysRange = selectedItem?.days;
 
     // Calculate the next Monday
     const nextMonday = new Date();
     nextMonday.setDate(currentDate.getDate() + (1 + 7 - currentDate.getDay()));
-
     const startDate =
       schedule.values.type === "Default"
         ? nextMonday
         : schedule.values.start_date;
 
-    const endDate = dayjs(startDate).add(endDay, "day");
+    if (daysRange) {
+      const [startDay, endDay] = daysRange
+        .split("-")
+        .map((str) => parseInt(str));
 
-    return {
-      startDate: dayjs(startDate),
-      endDate: endDate,
-    };
+      const endDate = dayjs(startDate).add(endDay, "day");
+
+      return {
+        startDate: dayjs(startDate),
+        endDate: endDate,
+      };
+    } else {
+      return {
+        startDate: dayjs(startDate),
+        endDate: dayjs(startDate).add(41, "day"),
+      };
+    }
   };
 
   const { startDate, endDate } = calculateDates();
@@ -129,14 +140,16 @@ function ScheduleModal(props) {
     Http.post(`choose/proposal/${bid.id}/${selectedItem.id}`, dates)
       .then((res) => {
         if (res.data.code === 200) {
-          console.log(res.data.message);
+          ToastNotification("success", res.data.message, options);
           handleClose();
+        } else {
+          ToastNotification("error", res.data.message, options);
         }
         setLoading(false);
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err.message);
+        ToastNotification("error", err.message, options);
       });
   };
 
@@ -262,7 +275,7 @@ function ScheduleModal(props) {
                         disablePast
                         readOnly
                         required
-                        name="start_date"
+                        name="end_date"
                       />
                     </Box>
                   </Box>
@@ -287,7 +300,8 @@ function ScheduleModal(props) {
                         value={schedule.values.start_date}
                         onChange={(date) => handleChange("start_date", date)}
                         disablePast
-                        name="end_date"
+                        minDate={today.add(3, "days")}
+                        name="start_date"
                         required
                       />
                     </Box>

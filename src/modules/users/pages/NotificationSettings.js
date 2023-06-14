@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import MailIcon from "@mui/icons-material/Mail";
 import Typography from "@mui/material/Typography";
@@ -10,6 +10,7 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import FormHelperText from "@mui/material/FormHelperText";
+import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 
 function NotificationSettings() {
   const [state, setState] = React.useState({
@@ -30,10 +31,10 @@ function NotificationSettings() {
   const error = [gilad, jason, antoine].filter((v) => v).length !== 2;
 
   return (
-    <Box>
+    <Box sx={{ p: 2 }}>
       <Box sx={{ display: "flex", mb: 1 }}>
         <MailIcon sx={{ mr: 2, color: "green" }} />
-        <Typography sx={{ fontWeight: 700 }}>Email Notification</Typography>
+        <Typography sx={{ fontWeight: 700 }}>EMAIL NOTIFICATIONS</Typography>
       </Box>
       <Box sx={{ display: "flex" }}>
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
@@ -81,7 +82,17 @@ function NotificationSettings() {
             />
           </FormGroup>
           <FormHelperText>
-            Or unsubscribe from all email at once.
+            Or{" "}
+            <span
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                color: "blue",
+              }}
+            >
+              unsubscribe
+            </span>{" "}
+            from all email at once.
           </FormHelperText>
         </FormControl>
       </Box>

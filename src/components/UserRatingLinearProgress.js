@@ -1,5 +1,5 @@
-import { Box, Grid, LinearProgress, Stack, Typography } from "@mui/material";
 import React from "react";
+import { Box, Grid, LinearProgress, Stack, Typography } from "@mui/material";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import UserRating from "./UserRating";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
@@ -75,7 +75,62 @@ const styles = {
   },
 };
 
-export default function UserRatingLinearProgress() {
+const UserRatingLinearProgress = (props) => {
+  const { ratings } = props;
+
+  const [ratingsData, setRatingsData] = React.useState([
+    {
+      value: 5,
+      count: 0,
+      style: styles.linear5,
+    },
+    {
+      value: 4,
+      count: 0,
+      style: styles.linear4,
+    },
+    {
+      value: 3,
+      count: 0,
+      style: styles.linear3,
+    },
+    {
+      value: 2,
+      count: 0,
+      style: styles.linear2,
+    },
+    {
+      value: 1,
+      count: 0,
+      style: styles.linear1,
+    },
+  ]);
+
+  // Total reviews
+  const totalRatings = ratings?.length;
+
+  React.useEffect(() => {
+    if (ratings && ratings.length > 0) {
+      const updatedRatingsData = [...ratingsData];
+      ratings.forEach((rating) => {
+        const ratingValue = rating.rating;
+        const index = updatedRatingsData.findIndex(
+          (data) => data.value === ratingValue
+        );
+        if (index !== -1) {
+          updatedRatingsData[index].count++;
+        }
+      });
+      setRatingsData(updatedRatingsData);
+    }
+  }, [totalRatings]);
+
+  // Calculate the average rating
+  const averageRating =
+    totalRatings > 0
+      ? ratings.reduce((sum, rating) => sum + rating.rating, 0) / totalRatings
+      : 0;
+
   return (
     <Box>
       <Box>
@@ -84,67 +139,55 @@ export default function UserRatingLinearProgress() {
             <Box>
               <Box>
                 <Typography>
-                  <span style={styles.rating}>4.5</span> / 5
+                  <span style={styles.rating}>{averageRating.toFixed(1)}</span>{" "}
+                  / 5
                 </Typography>
-                <UserRating value={4.5} />
+                <UserRating
+                  value={parseInt(averageRating.toFixed(1))}
+                  precision={0.5}
+                />
               </Box>
               <Box sx={styles.overAllUserWhoRate}>
                 <PersonOutlinedIcon />
-                <Typography>144,405,054 total</Typography>
+                <Typography>{ratings?.length} total</Typography>
               </Box>
             </Box>
           </Grid>
           <Grid item xs={12} sm={9} md={12}>
             <Stack sx={styles.linearWrapper}>
-              <Box sx={styles.linearMain}>
-                <Typography sx={styles.linearRanking}>5</Typography>
-                <StarBorderOutlinedIcon />
-                <LinearProgress
-                  variant="determinate"
-                  value={89}
-                  sx={styles.linear5}
-                />
-              </Box>
-              <Box sx={styles.linearMain}>
-                <Typography sx={styles.linearRanking}>4</Typography>
-                <StarBorderOutlinedIcon />
-                <LinearProgress
-                  variant="determinate"
-                  value={95}
-                  sx={styles.linear4}
-                />
-              </Box>
-              <Box sx={styles.linearMain}>
-                <Typography sx={styles.linearRanking}>3</Typography>
-                <StarBorderOutlinedIcon />
-                <LinearProgress
-                  variant="determinate"
-                  value={24}
-                  sx={styles.linear3}
-                />
-              </Box>
-              <Box sx={styles.linearMain}>
-                <Typography sx={styles.linearRanking}>2</Typography>
-                <StarBorderOutlinedIcon />
-                <LinearProgress
-                  variant="determinate"
-                  value={38}
-                  sx={styles.linear2}
-                />
-              </Box>
-              <Box sx={styles.linearMain}>
-                <Typography sx={styles.linearRanking}>1</Typography>
-                <StarBorderOutlinedIcon />
-                <LinearProgress
-                  variant="determinate"
-                  value={3}
-                  sx={styles.linear1}
-                />
-              </Box>
+              {ratingsData &&
+                ratingsData.map((rating) => {
+                  const value =
+                    rating.count > 0 ? (rating.count / totalRatings) * 100 : 0;
+                  return (
+                    <Box key={rating.value} sx={styles.linearMain}>
+                      <Typography sx={styles.linearRanking}>
+                        {rating.value}
+                      </Typography>
+                      <StarBorderOutlinedIcon />
+                      <LinearProgress
+                        variant="determinate"
+                        value={value}
+                        sx={rating.style}
+                      >
+                        <Typography
+                          level="body3"
+                          fontWeight="xl"
+                          textColor="common.white"
+                          sx={{ mixBlendMode: "difference" }}
+                        >
+                          {rating.count}
+                        </Typography>
+                      </LinearProgress>
+                    </Box>
+                  );
+                })}
             </Stack>
           </Grid>
         </Grid>
       </Box>
     </Box>
   );
-}
+};
+
+export default UserRatingLinearProgress;

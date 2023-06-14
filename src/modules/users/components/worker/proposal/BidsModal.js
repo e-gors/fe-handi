@@ -113,6 +113,11 @@ function BidsModal(props) {
     setOpenScheduleModal(true);
   };
 
+  const onClose = () => {
+    setOpenScheduleModal(false);
+    handleClose();
+  };
+
   return (
     <Box>
       <Modal
@@ -131,7 +136,7 @@ function BidsModal(props) {
           />
           <ScheduleModal
             open={openScheduleModal}
-            handleClose={() => setOpenScheduleModal(false)}
+            handleClose={onClose}
             selectedItem={selectedItem}
             bid={selectedBid}
           />
@@ -162,6 +167,7 @@ function BidsModal(props) {
                 bids.map((bid, i) => {
                   const limitedCategories =
                     bid.user.categoryChildren &&
+                    bid.user.categoryChildren?.length > limit &&
                     bid.user.categoryChildren.slice(0, limit);
                   const isProposalOwner =
                     isAuth() &&

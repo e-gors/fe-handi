@@ -6,33 +6,37 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useHistory } from "react-router-dom";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import DataTable from "../../../../components/DataTable";
-import PropTypes from "prop-types";
-import dayjs from "dayjs";
-import Badge from "@mui/material/Badge";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { PickersDay } from "@mui/x-date-pickers/PickersDay";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
+import Http from "../../../../utils/Http";
+import Schedule from "../../components/client/Schedule";
+import FindJobCard from "../../components/worker/FindJobCard";
 
 const columns = [
   {
-    name: "contractor",
+    name: "bid",
     label: "Contractor",
+    customBodyRender: (item) => {
+      return item.user?.full_name;
+    },
   },
   {
-    name: "contract_name",
-    label: "Contract Name",
-  },
-  {
-    name: "client",
+    name: "post.user",
     label: "Client",
+    customBodyRender: (item) => {
+      return item.full_name;
+    },
   },
   {
-    name: "type",
+    name: "post",
+    label: "Contract Name",
+    customBodyRender: (item) => {
+      return item?.title;
+    },
+  },
+  {
+    name: "post",
     label: "Type",
     customBodyRender: (item) => {
-      return item.password;
+      return item?.job_type;
     },
   },
   {
@@ -40,16 +44,15 @@ const columns = [
     label: "Start Date",
   },
   {
-    name: "rate",
-    label: "Rate",
+    name: "end_date",
+    label: "End Date",
   },
   {
-    name: "today",
-    label: "Today",
-  },
-  {
-    name: "this_week",
-    label: "This Week",
+    name: "post",
+    label: "Rate/Budget",
+    customBodyRender: (item) => {
+      return item.rate ? item.rate : item.budget;
+    },
   },
   {
     name: "status",
@@ -57,180 +60,50 @@ const columns = [
   },
 ];
 
-function getRandomNumber(min, max) {
-  return Math.round(Math.random() * (max - min) + min);
-}
-
-/**
- * Mimic fetch with abort controller https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
- * ⚠️ No IE11 support
- */
-function fakeFetch(date, { signal }) {
-  return new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      const daysInMonth = date.daysInMonth();
-      const daysToHighlight = [1, 2, 3].map(() =>
-        getRandomNumber(1, daysInMonth)
-      );
-
-      resolve({ daysToHighlight });
-    }, 500);
-
-    signal.onabort = () => {
-      clearTimeout(timeout);
-      reject(new DOMException("aborted", "AbortError"));
-    };
-  });
-}
-
-const initialValue = dayjs("2022-04-17");
-
-function ServerDay(props) {
-  const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
-
-  const isSelected =
-    !props.outsideCurrentMonth && highlightedDays.indexOf(props.day.date()) > 0;
-
-  return (
-    <Badge
-      key={props.day.toString()}
-      overlap="circular"
-      badgeContent={isSelected ? "🌚" : undefined}
-    >
-      <PickersDay
-        {...other}
-        outsideCurrentMonth={outsideCurrentMonth}
-        day={day}
-      />
-    </Badge>
-  );
-}
-
-ServerDay.propTypes = {
-  /**
-   * The date to show.
-   */
-  day: PropTypes.object.isRequired,
-  highlightedDays: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * If `true`, day is outside of month and will be hidden.
-   */
-  outsideCurrentMonth: PropTypes.bool.isRequired,
-};
-
 function CDashboard() {
   const history = useHistory();
 
   const [loading, setLoading] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [userList, setUserList] = React.useState({
+  const [onLoadingPosts, setOnLoadingPosts] = React.useState(false);
+  const [limit, setLimit] = React.useState({
+    limit: 10,
+    page: 1,
+  });
+  const [contracts, setUserList] = React.useState({
     data: [],
     meta: {},
   });
-
-  const [filterValues, setFilterValues] = React.useState({
-    values: {
-      limit: 10,
-      search: "",
-      status: "",
-      order_by_date: "",
-      order_by_rate: "",
-    },
-  });
-
-  const requestAbortController = React.useRef(null);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
-
-  const fetchHighlightedDays = (date) => {
-    const controller = new AbortController();
-    fakeFetch(date, {
-      signal: controller.signal,
-    })
-      .then(({ daysToHighlight }) => {
-        setHighlightedDays(daysToHighlight);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        // ignore the error if it's caused by `controller.abort`
-        if (error.name !== "AbortError") {
-          throw error;
-        }
-      });
-
-    requestAbortController.current = controller;
-  };
+  const [posts, setPosts] = React.useState([]);
 
   React.useEffect(() => {
-    fetchHighlightedDays(initialValue);
-    // abort request on unmount
-    return () => requestAbortController.current?.abort();
-  }, []);
-
-  const handleMonthChange = (date) => {
-    if (requestAbortController.current) {
-      // make sure that you are aborting useless requests
-      // because it is possible to switch between months pretty quickly
-      requestAbortController.current.abort();
-    }
-
-    setIsLoading(true);
-    setHighlightedDays([]);
-    fetchHighlightedDays(date);
-  };
-
-  //   React.useEffect(() => {
-  //     fetchingData();
-  //   }, []); // eslint-disable-line
+    fetchingData();
+    fetchPosts();
+  }, []); // eslint-disable-line
 
   const fetchingData = (params = {}) => {
-    // setLoading(true);
-    // Http.get("/attendances", {
-    //   params: {
-    //     ...filterValues.values,
-    //     ...params,
-    //   },
-    // }).then((res) => {
-    //   if (res.data.data) {
-    //     setUserList({
-    //       data: res.data.data,
-    //       meta: res.data.meta,
-    //     });
-    //   }
-    //   setLoading(false);
-    // });
-  };
-
-  const handleChangeFilter = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    const newValue = typeof value === "string" ? value.split(",") : value;
-
-    setFilterValues((prev) => ({
-      ...prev,
-      values: {
-        ...prev.values,
-        [name]: newValue,
-      },
-    }));
-  };
-
-  const handleClearFilter = () => {
-    setFilterValues({
-      values: {
-        search: "",
-        status: "",
-        order_by_date: "",
-        order_by_rate: "",
-      },
+    setLoading(true);
+    Http.get("/contracts", {
+      ...params,
+      ...limit,
+    }).then((res) => {
+      if (res.data.data) {
+        setUserList({
+          data: res.data.data,
+          meta: res.data.meta,
+        });
+      }
+      setLoading(false);
     });
   };
 
-  const handleFilterChange = (name, value) => {
-    setFilterValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const fetchPosts = () => {
+    setOnLoadingPosts(true);
+    Http.get("/user/jobs").then((res) => {
+      if (res.data) {
+        setPosts(res.data.data);
+        setOnLoadingPosts(false);
+      }
+    });
   };
 
   const handleChangePage = (newPage) => {
@@ -239,7 +112,6 @@ function CDashboard() {
 
   const handleRowChange = (value) => {
     fetchingData({ limit: value });
-    handleFilterChange("limit", value);
   };
 
   const handleEdit = (values) => {
@@ -248,14 +120,6 @@ function CDashboard() {
 
   const handleDelete = (values) => {
     console.log(values);
-  };
-
-  const handleOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   return (
@@ -288,38 +152,26 @@ function CDashboard() {
 
           <Box>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={8}>
+              <Grid item xs={12} md={12}>
                 <DataTable
                   withPagination
                   onEdit={handleEdit}
                   onDelete={handleDelete}
                   loading={loading}
-                  data={userList.data}
+                  data={contracts.data}
                   columns={columns}
-                  rowsPerPage={filterValues.values.limit}
-                  count={userList.meta.total || 0}
-                  page={userList.meta.current_page - 1 || 0}
+                  rowsPerPage={limit.limit}
+                  count={contracts.meta.total || 0}
+                  page={contracts.meta.current_page - 1 || 0}
                   onChangePage={handleChangePage}
                   onRowsChangePage={handleRowChange}
                 />
               </Grid>
-              <Grid item xs={12} md={4}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar
-                    defaultValue={initialValue}
-                    loading={isLoading}
-                    onMonthChange={handleMonthChange}
-                    renderLoading={() => <DayCalendarSkeleton />}
-                    slots={{
-                      day: ServerDay,
-                    }}
-                    slotProps={{
-                      day: {
-                        highlightedDays,
-                      },
-                    }}
-                  />
-                </LocalizationProvider>
+              <Grid item xs={12} md={12}>
+                <Schedule
+                  loading={loading}
+                  contracts={contracts && contracts.data}
+                />
               </Grid>
             </Grid>
           </Box>
@@ -437,27 +289,32 @@ function CDashboard() {
             </Grid>
           </Box>
 
-          <Box sx={{ mt: 5 }}>
-            <Box sx={{ textAlign: "center" }}>
-              <Typography sx={{ fontWeight: 800, fontSize: 18 }}>
-                No Posted Jobs
-              </Typography>
-              <Typography>
-                Job data will appear here as soon as you post a Job.
-              </Typography>
-              <Button
-                variant="contained"
-                sx={{
-                  background: `linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%)`,
-                  boxShadow: 5,
-                  mt: 2,
-                }}
-                onClick={() => history.push("/new/job-post")}
-              >
-                Post Job
-              </Button>
+          {posts && posts.length > 0 && (
+            <FindJobCard jobs={posts && posts} loading={onLoadingPosts} />
+          )}
+          {posts && posts.length < 0 && (
+            <Box sx={{ mt: 5 }}>
+              <Box sx={{ textAlign: "center" }}>
+                <Typography sx={{ fontWeight: 800, fontSize: 18 }}>
+                  No Posted Jobs
+                </Typography>
+                <Typography>
+                  Job data will appear here as soon as you post a Job.
+                </Typography>
+                <Button
+                  variant="contained"
+                  sx={{
+                    background: `linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%)`,
+                    boxShadow: 5,
+                    mt: 2,
+                  }}
+                  onClick={() => history.push("/new/job-post")}
+                >
+                  Post Job
+                </Button>
+              </Box>
             </Box>
-          </Box>
+          )}
         </Box>
       </Box>
     </Box>

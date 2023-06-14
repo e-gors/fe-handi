@@ -8,20 +8,21 @@ const categoryLimit = 10;
 
 function ProfileOverview(props) {
   const { worker } = props;
-  const { profile, categories, skills } = worker;
+  const { profile, categories, skills, experience } = worker ? worker : [];
 
   if (!profile) {
     return;
   }
 
-  const { background } = profile ? profile[0] : null;
+  const { background, about } = profile ? profile[0] : [];
 
-  return (
+return (
     <Box>
       <Box>
         <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
-          <Typography>This is a headline</Typography>
+          <Typography>Headline</Typography>
         </Box>
+        <Typography>{about}</Typography>
         <Box>
           <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
             <Typography>Bio</Typography>

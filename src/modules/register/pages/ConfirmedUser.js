@@ -1,32 +1,37 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import Http from "../../../utils/Http";
 import { useHistory, useParams } from "react-router-dom";
 import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
 import ToastNotification from "../../../components/ToastNotification";
 import { options } from "../../../components/options";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../../../redux/actions/userActions";
 
 function ConfirmedUser() {
   const history = useHistory();
   const params = useParams();
 
-  const verifiedUser = useSelector((state) => state.users.user);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.user);
 
   React.useEffect(() => {
-    if (verifiedUser.email_verified_at !== null) {
-      history.push("/dashboard");
-    }
     fetchConfirmedUser();
   }, []);
+
+  React.useEffect(() => {
+    if (user.email_verified_at !== null) {
+      history.push("/dashboard");
+    }
+  }, [user]);
 
   const fetchConfirmedUser = () => {
     Http.get(`/verify-email/${params.id}`)
       .then((res) => {
         if (res.data.code === 200) {
-          localStorage.removeItem("accessToken");
+          dispatch(updateUser(res.data.user));
           ToastNotification("success", res.data.message, options);
-          setTimeout(() => history.push("/login"), 5000);
+          history.push("/dashboard");
         } else {
           ToastNotification("err", res.data.message, options);
         }
@@ -78,7 +83,7 @@ function ConfirmedUser() {
           </Typography>
         </Box>
 
-        <Box
+        {/* <Box
           sx={{
             width: "100%",
             mt: 5,
@@ -109,7 +114,7 @@ function ConfirmedUser() {
           >
             Go to Login
           </Button>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

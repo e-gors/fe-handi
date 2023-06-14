@@ -9,6 +9,7 @@ function WMarketplace() {
   const categories = useSelector((state) => state.categories.categories);
   const skills = useSelector((state) => state.skills.skills);
   const locations = useSelector((state) => state.locations.locations);
+  const user = useSelector((state) => state.users.user);
 
   const [loading, setLoading] = React.useState(false);
   const [onLoadLoading, setOnLoadLoading] = React.useState(false);
@@ -32,6 +33,18 @@ function WMarketplace() {
       skill: "",
     },
   });
+
+  React.useEffect(() => {
+    if (user) {
+      setFilterValues((prev) => ({
+        ...prev,
+        values: {
+          ...prev.values,
+          user_id: user.id,
+        },
+      }));
+    }
+  }, []);
 
   React.useEffect(() => {
     setLimit((prev) => ({

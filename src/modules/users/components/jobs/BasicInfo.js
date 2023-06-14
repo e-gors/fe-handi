@@ -211,8 +211,8 @@ function BasicInfo(props) {
   const handleChangeJobDescription = (content, delta, source, editor) => {
     setJobDescription(content);
 
-    if (content.length <= 51) {
-      setError("Job Description characters must be at least 50 or more.");
+    if (content.length <= 200) {
+      setError("Job Description characters must be at least 200 or more.");
     } else {
       setError(null);
     }

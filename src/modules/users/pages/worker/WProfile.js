@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import React from "react";
 import ProjectReviewTabs from "../../components/worker/ProjectReviewTabs";
 import { useSelector } from "react-redux";
@@ -13,6 +13,8 @@ function WProfile() {
   const { profile } = user;
 
   const profs = profile && profile[0] ? profile[0] : null;
+  const year = new Date(profs?.created_at).getFullYear();
+  const rate = profs && profs.rate;
 
   const styles = {
     wrapper: {
@@ -173,11 +175,13 @@ function WProfile() {
                 </Box>
                 <Box sx={styles.members}>
                   <Box sx={styles.membersEachWrapper}>
-                    <Typography sx={styles.value}>2023</Typography>
+                    <Typography sx={styles.value}>{year && year}</Typography>
                     <Typography sx={styles.label}>Member Since</Typography>
                   </Box>
                   <Box sx={styles.membersEachWrapper}>
-                    <Typography sx={styles.value}>₱ 350.00</Typography>
+                    <Typography sx={styles.value}>
+                      ₱{rate ? rate : "0"}
+                    </Typography>
                     <Typography sx={styles.label}>Rates</Typography>
                   </Box>
                   <Box sx={styles.membersEachWrapper}>
@@ -186,7 +190,7 @@ function WProfile() {
                   </Box>
                 </Box>
                 <Box sx={styles.userRatingWrapper}>
-                  <UserRatingLinearProgress />
+                  <UserRatingLinearProgress ratings={user && user.ratings} />
                 </Box>
                 {profs &&
                   (profs.facebook_url ||

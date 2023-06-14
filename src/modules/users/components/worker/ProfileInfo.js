@@ -1,4 +1,4 @@
-import { Box, Grid, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Button, Grid, Tab, Tabs, Typography } from "@mui/material";
 import React from "react";
 import PropTypes from "prop-types";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -10,6 +10,13 @@ import MarkEmailUnreadIcon from "@mui/icons-material/MarkEmailUnread";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import { useHistory } from "react-router-dom";
+import ProfileModalEdit from "../../components/ProfileModalEdit";
+import PortraitIcon from "@mui/icons-material/Portrait";
+import ShortTextIcon from "@mui/icons-material/ShortText";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import NotesIcon from "@mui/icons-material/Notes";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -98,26 +105,108 @@ const styles = {
     justifyContent: "space-between",
   },
   quoteIcon: { color: "green", width: 30, height: 30 },
+  credsButton: {
+    m: 1,
+    boxShadow: 5,
+    p: 1,
+    display: "flex",
+    borderRadius: 2,
+
+    "&:hover": {
+      boxShadow: 10,
+      backgroundColor: "#BEBEBE",
+      color: "black",
+    },
+  },
 };
 
 function ProfileInfo(props) {
-  const { score, proposals, contracts, offers } = props;
+  const { user } = props;
+
+  const { profile, bids, contracts, offers, tracker } = user;
+  const { profile_completeness } = profile[0];
 
   const history = useHistory();
 
-  const [tab, setTab] = React.useState(0);
+  const [activeTabs, setActiveTabs] = React.useState([0, 0, 0]);
+  const [openProfileEdit, setOpenProfileEdit] = React.useState(false);
+  const [type, setType] = React.useState("");
 
-  const handleChangeTab = (event, newValue) => {
-    setTab(newValue);
+  const addCreds = [
+    {
+      icon: <PortraitIcon color="inherit" />,
+      label: "Add Profile Photo",
+      name: "Profile Image",
+      hasValue: profile?.profile_url ? true : false,
+    },
+    {
+      icon: <PortraitIcon color="inherit" />,
+      label: "Add Background Photo",
+      name: "Background Image",
+      hasValue: profile?.background_url ? true : false,
+    },
+    {
+      icon: <ShortTextIcon color="inherit" />,
+      label: "Add About",
+      name: "About",
+      hasValue: profile?.about ? true : false,
+    },
+    {
+      icon: <NotesIcon color="inherit" />,
+      label: "Add Background",
+      name: "Background",
+      hasValue: profile?.background ? true : false,
+    },
+    {
+      icon: <FacebookIcon color="inherit" />,
+      label: "Facebook",
+      name: "Facebook",
+      hasValue: profile?.facebook_url ? true : false,
+    },
+    {
+      icon: <TwitterIcon color="inherit" />,
+      label: "Twitter",
+      name: "Twitter",
+      hasValue: profile?.twitter_url ? true : false,
+    },
+    {
+      icon: <InstagramIcon color="inherit" />,
+      label: "Instagram",
+      name: "Instagram",
+      hasValue: profile?.instagram_url ? true : false,
+    },
+  ];
+
+  const handleChangeTab = (cardIndex, newTabValue) => {
+    setActiveTabs((prevActiveTabs) =>
+      prevActiveTabs.map((tab, index) =>
+        index === cardIndex ? newTabValue : tab
+      )
+    );
   };
 
   const handleNavigate = (link) => {
     history.push(link);
   };
+
+  const handleChoose = (type) => {
+    setType(type);
+    setOpenProfileEdit(true);
+  };
+
   return (
     <Box>
+      <ProfileModalEdit
+        open={openProfileEdit}
+        type={type}
+        handleClose={() => setOpenProfileEdit(false)}
+      />
       <Box>
-        <Grid container spacing={2}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ flexDirection: { xs: "column-reverse", md: "row" } }}
+        >
           <Grid item xs={12} md={12} lg={9.5}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6} lg={4}>
@@ -129,8 +218,10 @@ function ProfileInfo(props) {
                     </Box>
                     <Box sx={styles.tabWrapper}>
                       <Tabs
-                        value={tab}
-                        onChange={handleChangeTab}
+                        value={activeTabs[0]}
+                        onChange={(event, newValue) =>
+                          handleChangeTab(0, newValue)
+                        }
                         aria-label="basic tabs example"
                       >
                         <Tab
@@ -146,8 +237,21 @@ function ProfileInfo(props) {
                       </Tabs>
                     </Box>
                   </Box>
-                  {tab === 0 && <Typography>30 days</Typography>}
-                  {tab === 1 && <Typography>Week</Typography>}
+                  {activeTabs[0] === 0 && (
+                    <Typography>
+                      {tracker && tracker.profile_view_m
+                        ? tracker.profile_view_m
+                        : 0}
+                    </Typography>
+                  )}
+                  {activeTabs[0] === 1 && (
+                    <Typography>
+                      {" "}
+                      {tracker && tracker.profile_view_w
+                        ? tracker.profile_view_w
+                        : 0}
+                    </Typography>
+                  )}
                 </Box>
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -159,8 +263,10 @@ function ProfileInfo(props) {
                     </Box>
                     <Box sx={styles.tabWrapper}>
                       <Tabs
-                        value={tab}
-                        onChange={handleChangeTab}
+                        value={activeTabs[1]}
+                        onChange={(event, newValue) =>
+                          handleChangeTab(1, newValue)
+                        }
                         aria-label="basic tabs example"
                       >
                         <Tab
@@ -176,8 +282,22 @@ function ProfileInfo(props) {
                       </Tabs>
                     </Box>
                   </Box>
-                  {tab === 0 && <Typography>30 days</Typography>}
-                  {tab === 1 && <Typography>Week</Typography>}
+                  {activeTabs[1] === 0 && (
+                    <Typography>
+                      {" "}
+                      {tracker && tracker.search_result_m
+                        ? tracker.search_result_m
+                        : 0}
+                    </Typography>
+                  )}
+                  {activeTabs[1] === 1 && (
+                    <Typography>
+                      {" "}
+                      {tracker && tracker.search_result_w
+                        ? tracker.search_result_w
+                        : 0}
+                    </Typography>
+                  )}
                 </Box>
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -189,8 +309,10 @@ function ProfileInfo(props) {
                     </Box>
                     <Box sx={styles.tabWrapper}>
                       <Tabs
-                        value={tab}
-                        onChange={handleChangeTab}
+                        value={activeTabs[2]}
+                        onChange={(event, newValue) =>
+                          handleChangeTab(2, newValue)
+                        }
                         aria-label="basic tabs example"
                       >
                         <Tab
@@ -206,8 +328,8 @@ function ProfileInfo(props) {
                       </Tabs>
                     </Box>
                   </Box>
-                  {tab === 0 && <Typography>30 days</Typography>}
-                  {tab === 1 && <Typography>Week</Typography>}
+                  {activeTabs[2] === 0 && <Typography>30 days</Typography>}
+                  {activeTabs[2] === 1 && <Typography>Week</Typography>}
                 </Box>
               </Grid>
             </Grid>
@@ -217,9 +339,11 @@ function ProfileInfo(props) {
                   <CircularProgressbarWithChildren
                     minValue={1}
                     maxValue={10}
-                    value={score}
+                    value={profile_completeness}
                   >
-                    <Typography sx={styles.score}>{score}</Typography>
+                    <Typography sx={styles.score}>
+                      {profile_completeness}
+                    </Typography>
                     <Typography>out of 10</Typography>
                   </CircularProgressbarWithChildren>
                 </Box>
@@ -234,34 +358,39 @@ function ProfileInfo(props) {
                 </Box>
               </Box>
 
-              <Box sx={{ mt: 3 }}>
-                <Box>
-                  <Typography sx={{ ml: 1 }}>Main</Typography>
-
-                  <Box sx={styles.scoreMainWrapper}>
-                    <Box sx={styles.profileCardWrapper}>
-                      <Typography>icon</Typography>
-                      <Typography sx={styles.info}>Required Info</Typography>
-                    </Box>
-                    <Box sx={styles.profileCardWrapper}>
-                      <Typography>icon</Typography>
-                      <Typography sx={styles.info}>Required Info</Typography>
-                    </Box>
-                    <Box sx={styles.profileCardWrapper}>
-                      <Typography>icon</Typography>
-                      <Typography sx={styles.info}>Required Info</Typography>
-                    </Box>
-                    <Box sx={styles.profileCardWrapper}>
-                      <Typography>icon</Typography>
-                      <Typography sx={styles.info}>Required Info</Typography>
-                    </Box>
-                    <Box sx={styles.profileCardWrapper}>
-                      <Typography>icon</Typography>
-                      <Typography sx={styles.info}>Required Info</Typography>
-                    </Box>
+              {!(
+                profile.profile_url &&
+                profile.background_url &&
+                profile.background &&
+                profile.facebook_url &&
+                profile.twitter_url &&
+                profile.instagram_url &&
+                profile.about
+              ) && (
+                <Box sx={{ mt: 3 }}>
+                  <Typography>Add credibility to your profile</Typography>
+                  <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+                    {addCreds &&
+                      addCreds.map((cred, i) => {
+                        if (!cred.hasValue) {
+                          return (
+                            <Button
+                              key={i}
+                              size="small"
+                              sx={styles.credsButton}
+                              onClick={() => handleChoose(cred.name)}
+                            >
+                              {cred.icon}
+                              <Typography sx={{ ml: 2, color: "inherit" }}>
+                                {cred.label}
+                              </Typography>
+                            </Button>
+                          );
+                        }
+                      })}
                   </Box>
                 </Box>
-              </Box>
+              )}
             </Box>
           </Grid>
           <Grid item xs={12} md={12} lg={2.5}>
@@ -284,7 +413,7 @@ function ProfileInfo(props) {
                             Go to Proposals
                           </Typography>
                         </Box>
-                        <Typography>{proposals && proposals.length}</Typography>
+                        <Typography>{bids ? bids.length : 0}</Typography>
                       </Box>
                     </Box>
                   </Grid>
@@ -300,7 +429,9 @@ function ProfileInfo(props) {
                             Go to Contracts
                           </Typography>
                         </Box>
-                        <Typography>{contracts && contracts.length}</Typography>
+                        <Typography>
+                          {contracts ? contracts.length : 0}
+                        </Typography>
                       </Box>
                     </Box>
                   </Grid>
@@ -314,7 +445,7 @@ function ProfileInfo(props) {
                           <RequestQuoteIcon sx={styles.quoteIcon} />
                           <Typography sx={{ ml: 1 }}>Go to Offers</Typography>
                         </Box>
-                        <Typography>{offers && offers.length}</Typography>
+                        <Typography>{offers ? offers.length : 0}</Typography>
                       </Box>
                     </Box>
                   </Grid>

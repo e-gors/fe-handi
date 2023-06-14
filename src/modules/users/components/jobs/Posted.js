@@ -76,7 +76,7 @@ function Posted() {
                 variant="outlined"
                 fullWidth
                 size="small"
-                onClick={() => handleNavigate(url)}
+                onClick={() => handleNavigate('/find-jobs')}
               >
                 View posted job
               </Button>

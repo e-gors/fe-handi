@@ -14,7 +14,6 @@ import {
   Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -33,19 +32,22 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../redux/actions/userActions";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
 const userAnchorItemsOnSmallDevice = [
   {
     label: "Messages",
     ariaLabel: "show 4 new mails",
     badgeContent: 4,
-    icon: <MailIcon />,
+    icon: <MailIcon color="primary" />,
   },
   {
     label: "Notifications",
     ariaLabel: "show 17 new notifications",
     badgeContent: 17,
-    icon: <NotificationsIcon />,
+    icon: <NotificationsIcon color="primary" />,
   },
 ];
 
@@ -53,22 +55,22 @@ const singleLink = [
   {
     label: "Home",
     path: "/",
-    icon: <HomeIcon />,
+    icon: <HomeIcon color="primary" />,
   },
   {
     label: "Company",
     path: "/company",
-    icon: <BusinessIcon />,
+    icon: <BusinessIcon color="primary" />,
   },
   {
     label: "Find Job",
     path: "/find-jobs",
-    icon: <TabIcon />,
+    icon: <TabIcon color="primary" />,
   },
   {
     label: "Hire Worker",
     path: "/find-people",
-    icon: <PersonSearchIcon />,
+    icon: <PersonSearchIcon color="primary" />,
   },
 ];
 
@@ -78,21 +80,21 @@ const accountLinks = [
     path: "/login",
     style: styles.customBlueButton,
     variant: "contained",
-    icon: <LockOpenIcon />,
+    icon: <LockOpenIcon color="primary" />,
   },
   {
     label: "Register",
     path: "/register",
     style: styles.registerStyleButton,
     variant: "outlined",
-    icon: <HowToRegIcon />,
+    icon: <HowToRegIcon color="primary" />,
   },
 ];
 
 const logout = [
   {
     label: "Logout",
-    icon: <LogoutIcon />,
+    icon: <LogoutIcon color="primary" />,
   },
 ];
 
@@ -100,36 +102,42 @@ const workerAnchorItemsOnLaptop = [
   {
     path: "/dashboard",
     label: "Dashboard",
+    icon: <DashboardRoundedIcon color="primary" />,
   },
   {
     path: "/overview/worker",
     label: "Profile",
-  },
-  {
-    path: "/my-account",
-    label: "My Account",
+    icon: <AccountCircleRoundedIcon color="primary" />,
   },
   {
     path: "/account/settings",
-    label: "Settings",
+    label: "Account Settings",
+    icon: <SettingsRoundedIcon color="primary" />,
+  },
+  {
+    label: "Logout",
+    icon: <LogoutIcon color="primary" />,
   },
 ];
 const clientAnchorItemsOnLaptop = [
   {
     path: "/dashboard",
     label: "Dashboard",
+    icon: <DashboardRoundedIcon color="primary" />,
   },
   {
     path: "/overview/client",
     label: "Profile",
-  },
-  {
-    path: "/my-account",
-    label: "My Account",
+    icon: <AccountCircleRoundedIcon color="primary" />,
   },
   {
     path: "/account/settings",
-    label: "Settings",
+    label: "Account Settings",
+    icon: <SettingsRoundedIcon color="primary" />,
+  },
+  {
+    label: "Logout",
+    icon: <LogoutIcon color="primary" />,
   },
 ];
 
@@ -211,17 +219,28 @@ export default function PublicAppBarMenu() {
       {user && user.role === "Worker"
         ? workerAnchorItemsOnLaptop &&
           workerAnchorItemsOnLaptop.map((page, i) => (
-            <MenuItem onClick={(e) => handleNavigate(page.path)} key={i}>
-              {page.label}
+            <MenuItem
+              onClick={(e) =>
+                !page.path ? handleConfirmLogout() : handleNavigate(page.path)
+              }
+              key={i}
+            >
+              <IconButton>{page.icon}</IconButton>
+              <Typography>{page.label}</Typography>
             </MenuItem>
           ))
         : clientAnchorItemsOnLaptop &&
           clientAnchorItemsOnLaptop.map((page, i) => (
-            <MenuItem onClick={(e) => handleNavigate(page.path)} key={i}>
-              {page.label}
+            <MenuItem
+              onClick={(e) =>
+                !page.path ? handleConfirmLogout() : handleNavigate(page.path)
+              }
+              key={i}
+            >
+              <IconButton>{page.icon}</IconButton>
+              <Typography>{page.label}</Typography>
             </MenuItem>
           ))}
-      <MenuItem onClick={handleConfirmLogout}>Logout</MenuItem>
     </Menu>
   );
 

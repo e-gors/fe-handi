@@ -66,7 +66,7 @@ function Reports(props) {
     setAnchorEl(null);
   };
   return (
-    <Box>
+    <Box sx={{ mt: 8, p: 2 }}>
       <Box>
         <Box>
           <Typography sx={{ fontSize: { xs: 20, md: 24 }, m: 2 }}>

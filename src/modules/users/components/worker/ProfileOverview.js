@@ -3,6 +3,9 @@ import React from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ProfileModalEdit from "../ProfileModalEdit";
+import UpdateTxtDefault from "../UpdateTxtDefault";
+import FeedIcon from "@mui/icons-material/Feed";
+import NotesIcon from "@mui/icons-material/Notes";
 
 const categoryLimit = 10;
 
@@ -10,7 +13,7 @@ function ProfileOverview(props) {
   const { user } = props;
 
   const { profile, categories, skills } = user;
-  const { background } = profile[0];
+  const { background, about } = profile[0];
 
   const [open, setOpen] = React.useState(false);
   const [type, setType] = React.useState("");
@@ -29,23 +32,53 @@ function ProfileOverview(props) {
       <ProfileModalEdit type={type} open={open} handleClose={handleClose} />
       <Box>
         <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
-          <Typography>This is a headline</Typography>
-          <IconButton sx={{ ml: 1 }} onClick={() => handleOpen("Background")}>
-            <EditOutlinedIcon />
-          </IconButton>
+          <Typography>Headline</Typography>
+          {about && (
+            <IconButton sx={{ ml: 1 }} onClick={() => handleOpen("Headline")}>
+              <EditOutlinedIcon />
+            </IconButton>
+          )}
         </Box>
+        {!about && (
+          <UpdateTxtDefault
+            icon={<FeedIcon color="primary" />}
+            title="Headline"
+            content="What's your job title, job description, personal motto, or get creative. Your call. Just know this is your most visible self description."
+            handleSetType={(type) => handleOpen(type)}
+          />
+        )}
+        {about && <Typography>{about}</Typography>}
         <Box>
           <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
-            <Typography>Bio</Typography>
-            <IconButton sx={{ ml: 1 }} onClick={() => handleOpen("Bio")}>
+            <Typography>Background</Typography>
+            <IconButton sx={{ ml: 1 }} onClick={() => handleOpen("Background")}>
               <EditOutlinedIcon />
             </IconButton>
           </Box>
+          {!background && (
+            <UpdateTxtDefault
+              icon={<NotesIcon color="primary" />}
+              title="Background"
+              content="Make a great first impression by giving people a snapshot of who you are. Keep it simple and punchy for maximum effect!."
+              handleSetType={(type) => handleOpen(type)}
+            />
+          )}
           {background && (
             <div
               dangerouslySetInnerHTML={{ __html: background && background }}
             ></div>
           )}
+        </Box>
+        <Box>
+          <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+            <Typography>Work Experience</Typography>
+            <IconButton
+              sx={{ ml: 1 }}
+              onClick={() => handleOpen("Work Experience")}
+            >
+              <EditOutlinedIcon />
+            </IconButton>
+          </Box>
         </Box>
 
         <Box>

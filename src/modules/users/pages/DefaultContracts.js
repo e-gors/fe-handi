@@ -41,7 +41,7 @@ export default function DefaultContracts() {
 
   return (
     <Box sx={{ width: "100%", mt: 10 }}>
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, width: "95%", m: "0 auto" }}>
         <Typography
           sx={{ fontSize: { xs: 30, md: 36 }, fontWeight: "bold", ml: 1 }}
         >

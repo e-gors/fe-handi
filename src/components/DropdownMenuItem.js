@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Divider, MenuItem, Box, Menu, Fade } from "@mui/material";
+import { MenuItem, Box, Menu, Fade } from "@mui/material";
 
 export default function DropdownMenuItem(props) {
-  const { anchorEl, open, handleClose, items = [] } = props;
+  const { anchorEl, open, handleClose, onNavigate, items = [] } = props;
 
   const handleNavigate = (link) => {
-    handleClose(link);
+    onNavigate(link);
   };
 
   return (
@@ -15,8 +15,8 @@ export default function DropdownMenuItem(props) {
         MenuListProps={{
           "aria-labelledby": "fade-button",
         }}
-        anchorEl={anchorEl}
         open={open}
+        anchorEl={anchorEl}
         onClose={handleClose}
         TransitionComponent={Fade}
       >

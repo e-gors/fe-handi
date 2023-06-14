@@ -24,7 +24,7 @@ import ToastNotificationContainer from "../../../../components/ToastNotification
 import Http from "../../../../utils/Http";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../../../redux/actions/userActions";
-import { isAuth } from "../../../../utils/helpers";
+import { formatValue, isAuth } from "../../../../utils/helpers";
 import BidsModal from "./proposal/BidsModal";
 
 const style = {
@@ -359,7 +359,8 @@ function FindJobCardModal(props) {
                                 <Typography>Rate</Typography>
                               </Box>
                               <Typography sx={styles.jobTypeValue}>
-                                ₱ {selectedItem && selectedItem.rate}
+                                ₱{" "}
+                                {selectedItem && formatValue(selectedItem.rate)}
                               </Typography>
                             </Box>
                             <Box sx={styles.rate}>
@@ -368,13 +369,13 @@ function FindJobCardModal(props) {
                                 <Typography>Days</Typography>
                               </Box>
                               <Typography sx={styles.jobTypeValue}>
-                                {selectedItem && selectedItem.days} days
+                                {selectedItem && selectedItem.days}
                               </Typography>
                             </Box>
                           </React.Fragment>
                         )}
                       {selectedItem &&
-                        selectedItem.job_type === "Fixed Budget" && (
+                        selectedItem.job_type === "Fixed Cost" && (
                           <React.Fragment>
                             <Box sx={styles.rate}>
                               <Box sx={styles.jobTypeEachWrapper}>
@@ -382,7 +383,9 @@ function FindJobCardModal(props) {
                                 <Typography>budget</Typography>
                               </Box>
                               <Typography sx={styles.jobTypeValue}>
-                                ₱ {selectedItem && selectedItem.budget}
+                                ₱{" "}
+                                {selectedItem &&
+                                  formatValue(selectedItem.budget)}
                               </Typography>
                             </Box>
                           </React.Fragment>
@@ -410,54 +413,60 @@ function FindJobCardModal(props) {
               </Grid>
 
               <Box>
-                <Box sx={{ mb: 5, mt: 2 }}>
-                  <Typography sx={styles.categoryTitle}>Category</Typography>
-                  <Box sx={styles.chipWrapper}>
-                    <Chip
-                      label={selectedItem && selectedItem.category}
-                      variant="contained"
-                      color="primary"
-                    />
+                {selectedItem?.category && (
+                  <Box sx={{ mb: 5, mt: 2 }}>
+                    <Typography sx={styles.categoryTitle}>Category</Typography>
+                    <Box sx={styles.chipWrapper}>
+                      <Chip
+                        label={selectedItem && selectedItem.category}
+                        variant="contained"
+                        color="primary"
+                      />
+                    </Box>
                   </Box>
-                </Box>
+                )}
 
-                <Box sx={{ mb: 5 }}>
-                  <Typography sx={styles.categoryTitle}>
-                    Skills We Are Looking For
-                  </Typography>
-                  <Box sx={styles.chipWrapper}>
-                    {selectedItem &&
-                      selectedItem.skills &&
-                      selectedItem.skills.map((skill, i) => (
-                        <Chip
-                          key={i}
-                          label={skill}
-                          variant="contained"
-                          color="primary"
-                          sx={{ m: 0.5 }}
-                        />
-                      ))}
+                {selectedItem?.skills && (
+                  <Box sx={{ mb: 5 }}>
+                    <Typography sx={styles.categoryTitle}>
+                      Skills We Are Looking For
+                    </Typography>
+                    <Box sx={styles.chipWrapper}>
+                      {selectedItem &&
+                        selectedItem?.skills &&
+                        selectedItem?.skills.map((skill, i) => (
+                          <Chip
+                            key={i}
+                            label={skill}
+                            variant="contained"
+                            color="primary"
+                            sx={{ m: 0.5 }}
+                          />
+                        ))}
+                    </Box>
                   </Box>
-                </Box>
+                )}
 
-                <Box sx={{ mb: 5 }}>
-                  <Typography sx={styles.categoryTitle}>
-                    Preferred Worker Location
-                  </Typography>
-                  <Box sx={styles.chipWrapper}>
-                    {selectedItem &&
-                      selectedItem.locations &&
-                      selectedItem.locations.map((location, i) => (
-                        <Chip
-                          key={i}
-                          label={location}
-                          variant="contained"
-                          color="primary"
-                          sx={{ m: 0.5 }}
-                        />
-                      ))}
+                {selectedItem?.locations && (
+                  <Box sx={{ mb: 5 }}>
+                    <Typography sx={styles.categoryTitle}>
+                      Preferred Worker Location
+                    </Typography>
+                    <Box sx={styles.chipWrapper}>
+                      {selectedItem &&
+                        selectedItem?.locations &&
+                        selectedItem?.locations.map((location, i) => (
+                          <Chip
+                            key={i}
+                            label={location}
+                            variant="contained"
+                            color="primary"
+                            sx={{ m: 0.5 }}
+                          />
+                        ))}
+                    </Box>
                   </Box>
-                </Box>
+                )}
 
                 <Box sx={styles.profileButtonWrapper}>
                   <Box sx={styles.profileWrapper}>
