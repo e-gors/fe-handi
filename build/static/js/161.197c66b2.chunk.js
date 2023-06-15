@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[161],{80161:function(n,i,o){o.r(i),o.d(i,{login:function(){return c}});var _=o(31243),c=function(n){return _.Z.post("".concat({NODE_ENV:"production",PUBLIC_URL:"",WDS_SOCKET_HOST:void 0,WDS_SOCKET_PATH:void 0,WDS_SOCKET_PORT:void 0,FAST_REFRESH:!0}.REACT_APP_API_DOMAIN,"/login"),n,{headers:{Accept:"application/json"}})}}}]);
+//# sourceMappingURL=161.197c66b2.chunk.js.map
