@@ -148,8 +148,8 @@ function WMarketplace() {
 
   const limitShow = (categories, limit) => {
     if (limit) {
-      return categories.map((category) => {
-        return category.children
+      return categories?.map((category) => {
+        return category?.children
           .slice(0, limit)
           .map((child, childIndex) => (
             <Chip
@@ -162,8 +162,8 @@ function WMarketplace() {
           ));
       });
     } else {
-      return categories.map((category) => {
-        return category.children.map((child, childIndex) => (
+      return categories?.map((category) => {
+        return category?.children.map((child, childIndex) => (
           <Chip
             key={childIndex}
             label={child.name}
