@@ -74,7 +74,7 @@ function Jobs(props) {
 
   const fetchingData = (params = {}) => {
     setLoading(true);
-    Http.get("user/jobs", {
+    Http.get("/user/jobs", {
       params: {
         ...limit,
         ...params,

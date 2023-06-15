@@ -62,7 +62,7 @@ function UpdateAddress(props) {
 
   const handleSubmit = () => {
     setLoading(true);
-    Http.post("update/address", address.values)
+    Http.post("/update/address", address.values)
       .then((res) => {
         if (res.data.code === 200) {
           dispatch(updateUser(res.data.user));

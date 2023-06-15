@@ -64,7 +64,7 @@ function UpdateFullname(props) {
 
   const handleSubmit = () => {
     setLoading(true);
-    Http.post("update/fullname", fullname.values)
+    Http.post("/update/fullname", fullname.values)
       .then((res) => {
         if (res.data.code === 200) {
           dispatch(updateUser(res.data.user));

@@ -57,7 +57,7 @@ function IdentityVerification(props) {
     formData.append("selectedRole", selectedRole);
     formData.append("basicInfo", JSON.stringify(basicInfo));
 
-    Http.post("register/confirmed/user", formData)
+    Http.post("/register/confirmed/user", formData)
       .then((res) => {
         if (res.data.code === 200) {
           handleNext();

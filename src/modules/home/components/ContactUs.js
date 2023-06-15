@@ -58,21 +58,20 @@ export default function ContactUs() {
   };
 
   const handleSubmit = () => {
-    console.log(formValues.values);
-    // setLoading(true);
-    // Http.post("contact-us", formValues.values)
-    //   .then((res) => {
-    //     if (res.data.code === 200) {
+    setLoading(true);
+    Http.post("/contact-us", formValues.values)
+      .then((res) => {
+        if (res.data.code === 200) {
 
-    //     } else {
-    //       ToastNotification("error", res.data.message, options);
-    //     }
-    //     setLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     setLoading(false);
-    //     ToastNotification("error", err, options);
-    //   });
+        } else {
+          ToastNotification("error", res.data.message, options);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        ToastNotification("error", err, options);
+      });
   };
 
   const handleValidate = () => {

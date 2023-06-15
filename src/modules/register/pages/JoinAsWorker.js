@@ -156,7 +156,7 @@ function JoinAsWorker() {
 
   const fetchCategories = () => {
     publicHttp
-      .get("categories")
+      .get("/categories")
       .then((res) => {
         dispatch(setCategories(res.data.data));
       })

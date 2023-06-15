@@ -173,7 +173,7 @@ function FindJobCardModal(props) {
 
   const addToShortlist = (id) => {
     if (user && user.length !== 0 && user.role === "Worker") {
-      Http.post(`new/shortlist/post/${id}`)
+      Http.post(`/new/shortlist/post/${id}`)
         .then((res) => {
           if (res.data.code === 200) {
             dispatch(updateUser(res.data.user));
@@ -195,7 +195,7 @@ function FindJobCardModal(props) {
   };
 
   const removeToShortlist = (id) => {
-    Http.delete(`remove/shortlist/post/${id}`)
+    Http.delete(`/remove/shortlist/post/${id}`)
       .then((res) => {
         if (res.data.code === 200) {
           dispatch(updateUser(res.data.user));

@@ -112,7 +112,7 @@ function Security() {
 
   const handleSubmit = () => {
     setLoading(true);
-    Http.post("account/update/password", newPassword.values)
+    Http.post("/account/update/password", newPassword.values)
       .then((res) => {
         if (res.data.code === 200) {
           ToastNotification("success", res.data.message, options);

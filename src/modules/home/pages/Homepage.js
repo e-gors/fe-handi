@@ -82,27 +82,15 @@ function Homepage() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    // fetchWorkers();
     fetchCategories();
     fetchSkills();
     fetchSkillChildren();
     fetchLocations();
   }, []);
 
-  const fetchWorkers = () => {
-    publicHttp
-      .get("user/workers")
-      .then((res) => {
-        dispatch(setWorkers(res.data.data));
-      })
-      .catch((err) => {
-        ToastNotification("error", err.message, options);
-      });
-  };
-
   const fetchCategories = () => {
     publicHttp
-      .get("categories")
+      .get("/categories")
       .then((res) => {
         dispatch(setCategories(res.data.data));
       })
@@ -113,7 +101,7 @@ function Homepage() {
 
   const fetchSkills = () => {
     publicHttp
-      .get("skills")
+      .get("/skills")
       .then((res) => {
         dispatch(setSkills(res.data.data));
       })
@@ -124,7 +112,7 @@ function Homepage() {
 
   const fetchSkillChildren = () => {
     publicHttp
-      .get("skills/children")
+      .get("/skills/children")
       .then((res) => {
         dispatch(setSkillsChildren(res.data.data));
       })
@@ -134,7 +122,7 @@ function Homepage() {
   };
   const fetchLocations = () => {
     publicHttp
-      .get("locations")
+      .get("/locations")
       .then((res) => {
         dispatch(setLocations(res.data.data));
       })
