@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[7319],{27319:function(n,e,t){t.r(e),t.d(e,{setPosts:function(){return o},setRecommendedJobs:function(){return s}});var u=t(26527),o=function(n){return{type:u.ActionTypes.SET_POSTS,payload:n}},s=function(n){return{type:u.ActionTypes.SET_RECOMMENDED_JOBS,payload:n}}}}]);
-//# sourceMappingURL=7319.9c2f6094.chunk.js.map
