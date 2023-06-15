@@ -74,7 +74,7 @@ function Project() {
   }, []);
 
   const fetchProjects = () => {
-    Http.get("projects")
+    Http.get("/projects")
       .then((res) => {
         if (res.data.data) {
           dispatch(setProjects(res.data.data));
@@ -150,7 +150,7 @@ function Project() {
       formData.append("images[]", image.file);
     });
 
-    Http.post("new/projects", formData)
+    Http.post("/new/projects", formData)
       .then((res) => {
         if (res.data.code === 200) {
           dispatch(updateProjects(res.data.projects));

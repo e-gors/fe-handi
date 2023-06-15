@@ -137,7 +137,7 @@ function ScheduleModal(props) {
 
   const handleSubmit = (dates) => {
     setLoading(true);
-    Http.post(`choose/proposal/${bid.id}/${selectedItem.id}`, dates)
+    Http.post(`/choose/proposal/${bid.id}/${selectedItem.id}`, dates)
       .then((res) => {
         if (res.data.code === 200) {
           ToastNotification("success", res.data.message, options);

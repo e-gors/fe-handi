@@ -42,7 +42,7 @@ function UpdateBackground(props) {
     const formData = new FormData();
     formData.append("background", background);
 
-    Http.post("update/background", formData)
+    Http.post("/update/background", formData)
       .then((res) => {
         if (res.data.code === 200) {
           setLoading(false);
