@@ -259,7 +259,7 @@ function WMarketplace() {
         </Box>
 
         <FindWorkerCard workers={workers.data} loading={loading} />
-        {workers.data && workers.data.length !== 0 && (
+        {workers.data && workers.data?.length !== 0 && (
           <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
             <Pagination
               count={Math.ceil(workers.meta.total / limit.limit)}
