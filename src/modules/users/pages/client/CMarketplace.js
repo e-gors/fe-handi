@@ -201,7 +201,7 @@ function CMarketplace() {
           >
             {!showMore && limitShow(categories, 2)}
             {showMore && limitShow(categories)}
-            {!showMore && categories.length > 3 && (
+            {!showMore && categories?.length > 3 && (
               <Typography
                 component="span"
                 variant="outlined"
