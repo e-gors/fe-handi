@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[161],{80161:function(n,t,e){e.r(t),e.d(t,{login:function(){return i}});var c=e(31243),i=function(n){return c.Z.post("".concat("http://127.0.0.1:8000/api","/login"),n,{headers:{Accept:"application/json"}})}}}]);
+//# sourceMappingURL=161.ba7cce8e.chunk.js.map
