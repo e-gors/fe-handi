@@ -7,7 +7,7 @@ publicHttp.defaults.headers.common["Accept"] = "application/json";
 publicHttp.defaults.headers.common["Content-Type"] = "application/json";
 publicHttp.defaults.headers.common[
   "Authorization"
-] = `Bearer ${process.env.REACT_APP_CLIENT_TOKEN}`;
+] = `Bearer ${localStorage.getItem("clientToken")}`;
 
 publicHttp.interceptors.response.use(
   function (response) {
