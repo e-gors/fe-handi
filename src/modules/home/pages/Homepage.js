@@ -20,10 +20,10 @@ import {
 } from "../../../redux/actions/skillActions";
 import { setLocations } from "../../../redux/actions/locationActions";
 import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
-import noGuardHttp from "../../register/service";
 import ToastNotification from "../../../components/ToastNotification";
 import { options } from "../../../components/options";
 import { setWorkers } from "../../../redux/actions/profileActions";
+import publicHttp from "../../../utils/publicHttp";
 
 const innerStyles = {
   wrapper: {
@@ -90,7 +90,7 @@ function Homepage() {
   }, []);
 
   const fetchWorkers = () => {
-    noGuardHttp
+    publicHttp
       .get("user/workers")
       .then((res) => {
         dispatch(setWorkers(res.data.data));
@@ -101,7 +101,7 @@ function Homepage() {
   };
 
   const fetchCategories = () => {
-    noGuardHttp
+    publicHttp
       .get("categories")
       .then((res) => {
         dispatch(setCategories(res.data.data));
@@ -112,7 +112,7 @@ function Homepage() {
   };
 
   const fetchSkills = () => {
-    noGuardHttp
+    publicHttp
       .get("skills")
       .then((res) => {
         dispatch(setSkills(res.data.data));
@@ -123,7 +123,7 @@ function Homepage() {
   };
 
   const fetchSkillChildren = () => {
-    noGuardHttp
+    publicHttp
       .get("skills/children")
       .then((res) => {
         dispatch(setSkillsChildren(res.data.data));
@@ -133,7 +133,7 @@ function Homepage() {
       });
   };
   const fetchLocations = () => {
-    noGuardHttp
+    publicHttp
       .get("locations")
       .then((res) => {
         dispatch(setLocations(res.data.data));

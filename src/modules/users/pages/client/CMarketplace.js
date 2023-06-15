@@ -3,7 +3,7 @@ import React, { useReducer } from "react";
 import { useSelector } from "react-redux";
 import FindJobWorkerFilter from "../../components/FindJobWorkerFilter";
 import FindJobCard from "../../components/worker/FindJobCard";
-import noGuardHttp from "../../../register/service";
+import publicHttp from "../../../../utils/publicHttp";
 
 function CMarketplace() {
   const categories = useSelector((state) => state.categories.categories);
@@ -44,7 +44,7 @@ function CMarketplace() {
 
   const fetchingData = (params = {}) => {
     setLoading(true);
-    noGuardHttp
+    publicHttp
       .get("/jobs", {
         params: {
           ...limit,
