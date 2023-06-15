@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[6155],{89355:function(n,e,t){t.r(e),t.d(e,{setSkills:function(){return u},setSkillsChildren:function(){return r}});var i=t(26527),u=function(n){return{type:i.ActionTypes.SET_SKILLS,payload:n}},r=function(n){return{type:i.ActionTypes.SET_SKILLS_CHILDREN,payload:n}}}}]);
+//# sourceMappingURL=6155.9910bbf6.chunk.js.map

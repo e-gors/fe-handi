@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[5594],{25594:function(e,i,s){e.exports=s.p+"static/media/build-bridges.db60d468fb713959761a.jpeg"}}]);
