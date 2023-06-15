@@ -38,7 +38,7 @@ import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import Http from "../../../../utils/Http";
 import { useHistory } from "react-router-dom";
 import ConfirmationModal from "../../../../components/ConfirmationModal";
-import noGuardHttp from "../../../register/service";
+import publicHttp from "../../../../utils/publicHttp";
 
 const validator = new Reevalidate.Validator({
   type: "required",
@@ -197,7 +197,7 @@ function NewJobOffer() {
 
   const fetchWorkers = () => {
     setLoadingOnLoad(true);
-    noGuardHttp
+    publicHttp
       .get("/user/workers")
       .then((res) => {
         if (res.data.data) {

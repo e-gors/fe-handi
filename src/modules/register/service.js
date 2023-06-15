@@ -1,60 +1,19 @@
-import axios from "axios";
-const api = process.env.REACT_APP_API_DOMAIN;
-
-const noGuardHttp = axios.create();
-
-noGuardHttp.defaults.baseURL = api;
-noGuardHttp.defaults.headers.common["Accept"] = "application/json";
-noGuardHttp.defaults.headers.common["Content-Type"] = "application/json";
-noGuardHttp.interceptors.response.use(
-  function (response) {
-    return response;
-  },
-  function (error) {
-    if (error.message === "Network Error") {
-      return Promise.reject(error);
-    }
-
-    return Promise.reject(error);
-  }
-);
-
-export default noGuardHttp;
+import publicHttp from "../../utils/publicHttp";
 
 export const workerRegister = (role, formValues, expertise) => {
-  return axios.post(
-    `${api}/join-us/${role}`,
-    {
-      formValues: formValues.values,
-      expertise: expertise.values,
-    },
-    {
-      headers: {
-        Accept: "application/json",
-      },
-    }
-  );
-};
-
-export const clientRegister = (role, formValues) => {
-  return axios.post(`${api}/join-us/${role}`, formValues.values, {
-    headers: {
-      Accept: "application/json",
-    },
+  return publicHttp.post(`/join-us/${role}`, {
+    formValues: formValues.values,
+    expertise: expertise.values,
   });
 };
 
+export const clientRegister = (role, formValues) => {
+  return publicHttp.post(`/join-us/${role}`, formValues.values);
+};
+
 export const registerOnApply = (formValues, expertise) => {
-  return axios.post(
-    `${api}/apply/register`,
-    {
-      formValues: formValues.values,
-      expertise: expertise.values,
-    },
-    {
-      headers: {
-        Accept: "application/json",
-      },
-    }
-  );
+  return publicHttp.post(`/apply/register`, {
+    formValues: formValues.values,
+    expertise: expertise.values,
+  });
 };

@@ -26,10 +26,10 @@ import { options } from "../../../components/options";
 import { useDispatch, useSelector } from "react-redux";
 // import { setUser } from "../../../redux/actions/userActions";
 import ReeValidate from "ree-validate-18";
-import noGuardHttp from "../service";
 import { setCategories } from "../../../redux/actions/categoryActions";
 import Http from "../../../utils/Http";
 import { setUser } from "../../../redux/actions/userActions";
+import publicHttp from "../../../utils/publicHttp";
 
 const formValuesValidator = new ReeValidate.Validator({
   email: "required|email|regex:^[a-zA-Z0-9]+.[^s@]+@gmail.com$",
@@ -155,7 +155,7 @@ function JoinAsWorker() {
   }, []);
 
   const fetchCategories = () => {
-    noGuardHttp
+    publicHttp
       .get("categories")
       .then((res) => {
         dispatch(setCategories(res.data.data));

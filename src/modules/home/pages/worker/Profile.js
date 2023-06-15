@@ -13,7 +13,7 @@ import {
   filterWorkers,
   updateWorker,
 } from "../../../../redux/actions/profileActions";
-import noGuardHttp from "../../../register/service";
+import publicHttp from "../../../../utils/publicHttp";
 
 function Profile() {
   const { uuid } = useParams();
@@ -28,7 +28,7 @@ function Profile() {
 
   const fetchWorker = () => {
     setLoading(true);
-    noGuardHttp
+    publicHttp
       .get(`/worker/${uuid}`)
       .then((res) => {
         if (res.data.code === 200) {
@@ -188,7 +188,7 @@ function Profile() {
   };
 
   const inCrementViewedUser = React.useCallback(() => {
-    noGuardHttp
+    publicHttp
       .post(`/track/user/view/${uuid}`)
       .then((res) => {
         if (res.data.code === 200) {

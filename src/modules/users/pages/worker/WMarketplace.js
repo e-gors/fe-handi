@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import FindJobWorkerFilter from "../../components/FindJobWorkerFilter";
 import FindWorkerCard from "../../components/worker/FindWorkerCard";
-import noGuardHttp from "../../../register/service";
+import publicHttp from "../../../../utils/publicHttp";
 
 function WMarketplace() {
   const categories = useSelector((state) => state.categories.categories);
@@ -56,7 +56,7 @@ function WMarketplace() {
 
   const fetchingData = (params = {}) => {
     setLoading(true);
-    noGuardHttp
+    publicHttp
       .get("/workers", {
         params: {
           ...limit,
