@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[884],{50884:function(e,f,a){e.exports=a.p+"static/media/job_offer.db6eb56fba2545063fb0.png"}}]);

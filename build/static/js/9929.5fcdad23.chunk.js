@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[9929],{19929:function(e,n,a){e.exports=a.p+"static/media/no-img-trans-bg.76b43f983911205a1d58.png"}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[1294],{41294:function(e,c,a){e.exports=a.p+"static/media/construction.46aea579cf38b0e3c105.gif"}}]);

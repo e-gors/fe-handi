@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[2551],{92551:function(e,t,n){n.r(t);var o=n(68870),r=n(20890),i=(n(72791),n(80184)),s={root:{display:"flex",height:"100vh",justifyContent:"center",alignItems:"center"},font:{fontWeight:"bold",fontSize:{xs:18,md:36}}};t.default=function(){return(0,i.jsx)(o.Z,{sx:s.root,children:(0,i.jsx)(r.Z,{color:"error",align:"center",sx:s.font,children:"Forbidden, You are not authorized to access this page!"})})}}}]);
-//# sourceMappingURL=2551.ec631c94.chunk.js.map
