@@ -136,8 +136,8 @@ function CMarketplace() {
 
   const limitShow = (categories, limit) => {
     if (limit) {
-      return categories.map((category) => {
-        return category.children
+      return categories?.map((category) => {
+        return category?.children
           .slice(0, limit)
           .map((child, childIndex) => (
             <Chip
@@ -150,8 +150,8 @@ function CMarketplace() {
           ));
       });
     } else {
-      return categories.map((category) => {
-        return category.children.map((child, childIndex) => (
+      return categories?.map((category) => {
+        return category?.children.map((child, childIndex) => (
           <Chip
             key={childIndex}
             label={child.name}
@@ -250,7 +250,7 @@ function CMarketplace() {
           loading={loading}
           handleForceUpdate={() => forceUpdate()}
         />
-        {jobs.data && jobs.data.length !== 0 && (
+        {jobs.data && jobs.data?.length !== 0 && (
           <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
             <Pagination
               count={Math.ceil(jobs.meta.total / limit.limit)}
