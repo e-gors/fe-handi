@@ -144,8 +144,11 @@ function JoinAsClient() {
     if (isAuth()) {
       history.push("/dashboard");
     }
+    if (!role) {
+      history.push("/register");
+    }
   }, []);
-  
+
   const handdleChangeCheck = (e) => {
     setIsChecked(!isChecked);
   };
