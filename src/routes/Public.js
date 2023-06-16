@@ -4,6 +4,8 @@ import Loader from "../layouts/Loader";
 import Footer from "../layouts/Footer";
 import PublicAppBarMenu from "../layouts/PublicAppBarMenu";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { isAuth } from "../utils/helpers";
+import { Redirect } from "react-router-dom";
 
 const theme = createTheme({
   typography: {

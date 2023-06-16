@@ -151,6 +151,7 @@ function JoinAsWorker() {
   });
 
   useEffect(() => {
+    history.push("/dashboard");
     fetchCategories();
   }, []);
 

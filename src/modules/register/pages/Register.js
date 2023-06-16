@@ -4,6 +4,7 @@ import checked from "../../../assets/images/checked.png";
 import client from "../../../assets/images/client.png";
 import worker from "../../../assets/images/worker.png";
 import { useHistory } from "react-router-dom";
+import { isAuth } from "../../../utils/helpers";
 
 const styles = {
   wrapper: { mt: 10 },
@@ -163,6 +164,9 @@ function Register() {
   const [selectedRole, setSelectedRole] = React.useState("Worker");
 
   React.useEffect(() => {
+    if (isAuth()) {
+      history.push("/dashboard");
+    }
     let role = localStorage.getItem("selectedRole");
 
     if (role) {
@@ -187,7 +191,9 @@ function Register() {
     <Box sx={styles.wrapper}>
       <Box sx={styles.main}>
         <Typography sx={styles.chooseRoleHeader}>Get Started</Typography>
-        <Typography sx={styles.chooseRole}>Start by choosing your role.</Typography>
+        <Typography sx={styles.chooseRole}>
+          Start by choosing your role.
+        </Typography>
         <Box sx={styles.userRoleWrapper}>
           <Box
             sx={

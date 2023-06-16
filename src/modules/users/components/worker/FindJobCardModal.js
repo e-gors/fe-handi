@@ -122,6 +122,34 @@ const styles = {
     justifyContent: "space-evenly",
   },
   totalBottom: { color: "blue", fontSize: 12 },
+  selectedImagesWrapper: {
+    display: "flex",
+    overflowX: "scroll",
+    p: 2,
+
+    "::-webkit-scrollbar": {
+      display: "none",
+    },
+  },
+  imageWrapper: {
+    ml: 2,
+    "&:hover": {
+      ".remove": {
+        display: "block",
+      },
+    },
+  },
+  image: {
+    width: 200,
+    height: 120,
+    border: "1px solid #BEBEBE",
+    borderRadius: 5,
+
+    "&:hover": {
+      border: "1px solid black",
+      boxShadow: 10,
+    },
+  },
 };
 
 function FindJobCardModal(props) {
@@ -132,8 +160,8 @@ function FindJobCardModal(props) {
   const id = selectedItem && selectedItem.id;
   const isFavorite =
     user &&
-    user.shortlist &&
-    user.shortlist.some((item) => item.post_id === id);
+    user.shortlists &&
+    user.shortlists.some((item) => item.post_id === id);
 
   const isBided =
     user && user.bids && user.bids.some((item) => item.post_id === id);
@@ -409,6 +437,18 @@ function FindJobCardModal(props) {
                       __html: selectedItem && selectedItem.description,
                     }}
                   />
+                  <Box sx={styles.selectedImagesWrapper}>
+                    {selectedItem &&
+                      selectedItem.images?.map((image, i) => (
+                        <Box key={i} sx={{ m: 0.5 }}>
+                          <img
+                            style={styles.image}
+                            src={image.url}
+                            alt={image.name}
+                          />
+                        </Box>
+                      ))}
+                  </Box>
                 </Grid>
               </Grid>
 

@@ -36,44 +36,8 @@ const status = [
 const orderByRate = ["Ascending", "Descending"];
 const orderByDate = ["Ascending", "Descending"];
 
-const columns = [
-  {
-    name: "tittle",
-    label: "Job",
-  },
-  {
-    name: "post.user",
-    label: "Client",
-  },
-  {
-    name: "post",
-    label: "Contract Name",
-  },
-  {
-    name: "job_type",
-    label: "Type",
-  },
-  {
-    name: "position",
-    label: "Position",
-  },
-  {
-    name: "days",
-    label: "Number of Days",
-  },
-
-  {
-    name: "rate",
-    label: "Rate/Budget",
-  },
-  {
-    name: "status",
-    label: "Status",
-  },
-];
-
 export default function Contracts(props) {
-  const { type, jobs } = props;
+  const { type, columns } = props;
 
   const dispatch = useDispatch();
 
@@ -86,7 +50,6 @@ export default function Contracts(props) {
     data: [],
     meta: {},
   });
-  console.log(contracts);
   const [limit, setLimit] = React.useState({
     limit: 10,
     page: 1,
@@ -368,7 +331,7 @@ export default function Contracts(props) {
         onEdit={handleEdit}
         onDelete={handleDelete}
         loading={loading}
-        data={jobs}
+        data={contracts.data}
         columns={columns}
         rowsPerPage={filterValues.values.limit}
         count={contracts.meta.total || 0}

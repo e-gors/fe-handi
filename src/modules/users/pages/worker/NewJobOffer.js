@@ -45,7 +45,6 @@ const validator = new Reevalidate.Validator({
   rate: "required",
   budget: "required",
   days: "required",
-  title: "min:5|max:20",
 });
 
 const days = [
@@ -182,7 +181,6 @@ function NewJobOffer() {
     values: {
       contractor: "",
       post: "",
-      title: "",
       rate: "",
       days: "",
       type: "Daily Rate",
@@ -219,7 +217,6 @@ function NewJobOffer() {
         values: {
           contractor: prev.values.contractor,
           post: prev.values.post,
-          title: prev.values.title,
           rate: prev.values.rate,
           days: prev.values.days,
           type: prev.values.type,
@@ -232,7 +229,6 @@ function NewJobOffer() {
         values: {
           contractor: prev.values.contractor,
           post: prev.values.post,
-          title: prev.values.title,
           type: prev.values.type,
           budget: "",
         },
@@ -397,7 +393,7 @@ function NewJobOffer() {
     validator.validateAll(formValues.values).then((success) => {
       if (success) {
         if (selectedItem) {
-          if (formValues.values.post || formValues.values.title) {
+          if (formValues.values.post) {
             handleSubmit();
           } else {
             ToastNotification(
@@ -552,18 +548,6 @@ function NewJobOffer() {
               />
             )}
             onChange={handleChangePost}
-          />
-          <Typography>Title *</Typography>
-          <FormField
-            name="title"
-            label={
-              formValues.values.post ? "You selected a posted job" : "Title"
-            }
-            fullWidth
-            value={formValues.values.post ? "" : formValues.values.title}
-            errors={formValues.errors}
-            onChange={handleChangeFormValues}
-            disabled={formValues.values.post ? true : false}
           />
         </Box>
         <Box sx={{ backgroundColor: "#CCCCCC", p: 2 }}>

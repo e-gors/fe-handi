@@ -27,6 +27,7 @@ import SelectDropdown from "../../../components/SelectDropdown";
 import Http from "../../../utils/Http";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../redux/actions/userActions";
+import { isAuth } from "../../../utils/helpers";
 
 const validator = new ReeValidate.Validator({
   first_name: "required",
@@ -139,6 +140,12 @@ function JoinAsClient() {
     errors: validator.errors,
   });
 
+  React.useEffect(() => {
+    if (isAuth()) {
+      history.push("/dashboard");
+    }
+  }, []);
+  
   const handdleChangeCheck = (e) => {
     setIsChecked(!isChecked);
   };
