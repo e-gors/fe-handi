@@ -30,6 +30,7 @@ import { setCategories } from "../../../redux/actions/categoryActions";
 import Http from "../../../utils/Http";
 import { setUser } from "../../../redux/actions/userActions";
 import publicHttp from "../../../utils/publicHttp";
+import { isAuth } from "../../../utils/helpers";
 
 const formValuesValidator = new ReeValidate.Validator({
   email: "required|email|regex:^[a-zA-Z0-9]+.[^s@]+@gmail.com$",
@@ -149,22 +150,14 @@ function JoinAsWorker() {
     },
     errors: formValuesValidator.errors,
   });
-
-  useEffect(() => {
-    history.push("/dashboard");
-    fetchCategories();
+  React.useEffect(() => {
+    if (isAuth()) {
+      history.push("/dashboard");
+    }
+    if (!role) {
+      history.push("/register");
+    }
   }, []);
-
-  const fetchCategories = () => {
-    publicHttp
-      .get("/categories")
-      .then((res) => {
-        dispatch(setCategories(res.data.data));
-      })
-      .catch((err) => {
-        ToastNotification("error", err.message, options);
-      });
-  };
 
   const handdleChangeCheck = (e) => {
     setIsChecked(!isChecked);

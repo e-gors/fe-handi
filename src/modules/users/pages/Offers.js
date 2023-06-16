@@ -76,8 +76,6 @@ function Offers(props) {
     optimizedFn(filterValues.values);
   }, [filterValues.values]); // eslint-disable-line
 
-  console.log(selectedItem);
-
   const fetchingData = (params = {}) => {
     setLoading(true);
     Http.get("/offers", {
