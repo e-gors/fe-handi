@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[2527],{2527:function(e,t,s){s.r(t);var n=s(31243).Z.create();n.defaults.baseURL="http://localhost:8000/api/",n.defaults.headers.common.Accept="application/json",n.defaults.headers.common["Content-Type"]="application/json",n.interceptors.response.use((function(e){return e}),(function(e){if("Network Error"===e.message)return Promise.reject(e);if(401===(e.response&&e.response.status))window.location.href="/";return Promise.reject(e)})),t.default=n}}]);
-//# sourceMappingURL=2527.48717067.chunk.js.map
