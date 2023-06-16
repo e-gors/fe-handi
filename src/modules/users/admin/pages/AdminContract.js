@@ -4,6 +4,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { Tabs, Tab, Box, Typography } from "@mui/material";
 import Contracts from "../../components/Contracts";
+import Http from "../../../../utils/Http";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -36,6 +37,12 @@ function a11yProps(index) {
 
 export default function DefaultContracts() {
   const [tab, setTab] = React.useState(0);
+  const [jobs, setJob] = React.useState([]);
+  React.useEffect(() => {
+    Http.get("/contracts").then((res) => {
+      setJob(res.data);
+    });
+  }, []);
 
   const handleChangeTab = (event, newValue) => {
     setTab(newValue);
@@ -63,14 +70,14 @@ export default function DefaultContracts() {
 
         <Box>
           <TabPanel value={tab} index={0}>
-            <Contracts />
+            <Contracts jobs={jobs} />
           </TabPanel>
-          <TabPanel value={tab} index={1}>
+          {/* <TabPanel value={tab} index={1}>
             <Contracts />
           </TabPanel>
           <TabPanel value={tab} index={2}>
             <Contracts />
-          </TabPanel>
+          </TabPanel> */}
         </Box>
       </Box>
     </Box>

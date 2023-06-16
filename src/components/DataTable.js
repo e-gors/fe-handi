@@ -3,7 +3,6 @@ import {
   CircularProgress,
   Grid,
   IconButton,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -21,6 +20,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import AddTaskIcon from "@mui/icons-material/AddTask";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 
 function DataTable(props) {
   const {
@@ -38,6 +39,7 @@ function DataTable(props) {
     onWithdrawn,
     onCancel,
     onView,
+    onAccept,
     loading,
     ...rest
   } = props;
@@ -87,6 +89,12 @@ function DataTable(props) {
     setSelectedItem(item);
     onView && onView(item);
   };
+
+  const handleAccept = (item) => {
+    setSelectedItem(item);
+    onAccept && onAccept(item);
+  };
+
   const handleComplete = (item) => {
     setSelectedItem(item);
     onComplete && onComplete(item);
@@ -102,6 +110,10 @@ function DataTable(props) {
   const handleDelete = (item) => {
     setSelectedItem(item);
     onDelete && onDelete(item);
+  };
+  const handleCancel = (item) => {
+    setSelectedItem(item);
+    onCancel && onCancel(item);
   };
 
   return (
@@ -121,6 +133,7 @@ function DataTable(props) {
               {(onDelete ||
                 onComplete ||
                 onEdit ||
+                onCancel ||
                 onView ||
                 onRevoked ||
                 withNumber) && (
@@ -145,6 +158,7 @@ function DataTable(props) {
                 <TableRow key={itemIndex}>
                   {(onDelete ||
                     onEdit ||
+                    onCancel ||
                     onView ||
                     onComplete ||
                     onRevoked ||
@@ -166,6 +180,30 @@ function DataTable(props) {
                           </IconButton>
                         </Tooltip>
                       )}
+                      {onAccept && (
+                        <Tooltip title="Accept" arrow>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() => handleAccept(item)}
+                          >
+                            <CheckCircleOutlineOutlinedIcon
+                              xs={{ color: "green" }}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                      {onCancel && (
+                        <Tooltip title="Decline" arrow>
+                          <IconButton
+                            size="small"
+                            sx={{ color: "gray" }}
+                            onClick={() => handleCancel(item)}
+                          >
+                            <HighlightOffRoundedIcon color="warning" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                       {onComplete && (
                         <Tooltip title="Complete contract?" arrow>
                           <IconButton
@@ -178,7 +216,7 @@ function DataTable(props) {
                         </Tooltip>
                       )}
                       {onRevoked && (
-                        <Tooltip title="Cancel" arrow>
+                        <Tooltip title="Withdrawn" arrow>
                           <IconButton
                             size="small"
                             sx={{ color: "gray" }}
@@ -188,6 +226,7 @@ function DataTable(props) {
                           </IconButton>
                         </Tooltip>
                       )}
+
                       {onEdit && (
                         <Tooltip title="Edit" arrow>
                           <IconButton

@@ -58,6 +58,12 @@ export default function Settings() {
 
   return (
     <Box sx={styles.wrapper}>
+      <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
+        My Account
+      </Typography>
+
+      <Box sx={styles.main}></Box>
+
       <Box sx={styles.MyAccountTabsWrapper}>
         <Box>
           <Tabs

@@ -224,7 +224,7 @@ function WDashboard() {
                       variant="contained"
                       color="primary"
                       onClick={() =>
-                        handleNavigate(`/account/settings/notifications`)
+                        handleNavigate(`/account/settings`)
                       }
                     >
                       Notifications Settings

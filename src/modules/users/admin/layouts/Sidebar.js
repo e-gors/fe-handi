@@ -40,11 +40,7 @@ const links = [
     icon: <LocalOfferIcon />,
     link: "/admin/offers",
   },
-  {
-    label: "Reports",
-    icon: <AccountBoxIcon />,
-    link: "/admin/reports",
-  },
+
   {
     label: "Settings",
     icon: <SettingsApplicationsIcon />,

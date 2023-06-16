@@ -175,7 +175,7 @@ export default function LoginSide() {
           md={7}
           sx={{
             backgroundImage:
-              "url(https://img.freepik.com/premium-vector/happy-labour-day-construction-workers-are-working-building-labour-day-1-may-illustration_138260-738.jpg?w=2000)",
+              "url(https://resources.workable.com/wp-content/uploads/2019/12/how_to_hire_in_construction.png)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
