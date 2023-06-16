@@ -49,32 +49,16 @@ const styles = {
 
 const columns = [
   {
-    name: "post.users",
+    name: "full_name",
+    label: "Fullname",
+  },
+  {
+    name: "username",
     label: "Username",
   },
   {
-    name: "post.title",
-    label: "Job Title",
-  },
-  {
-    name: "post.category",
-    label: "Category",
-  },
-  {
-    name: "post.position",
-    label: "Position",
-  },
-  {
-    name: "post.job_type",
-    label: "Type",
-  },
-  {
-    name: "rate",
-    label: "My Rate",
-  },
-  {
-    name: "status",
-    label: "Status",
+    name: "role",
+    label: "Role",
   },
 ];
 
@@ -110,13 +94,14 @@ const RecentJobSales = () => {
 
   const fetchingData = (params = {}) => {
     setLoading(true);
-    Http.get("/get-user", {
+    Http.get("/admin/users", {
       params: {
         ...limit,
         ...params,
       },
     }).then((res) => {
-      if (res.data.data) {
+      if (res.data) {
+        console.log(res.data.data);
         setUsers({
           data: res.data.data,
           meta: res.data.meta,
@@ -417,7 +402,7 @@ const AdminDashboard = () => {
             >
               <Box sx={{ display: "flex" }}>
                 <AssessmentIcon sx={{ mr: 2, color: "green" }} />
-                <Typography>Reports</Typography>
+                <Typography>Job Post</Typography>
               </Box>
               <Typography
                 sx={{

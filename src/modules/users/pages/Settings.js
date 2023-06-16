@@ -58,6 +58,15 @@ export default function Settings() {
 
   return (
     <Box sx={styles.wrapper}>
+<<<<<<< Updated upstream:src/modules/users/pages/Settings.js
+=======
+      <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
+        My Account
+      </Typography>
+
+      <Box sx={styles.main}></Box>
+
+>>>>>>> Stashed changes:src/modules/users/pages/worker/MyAccount.js
       <Box sx={styles.MyAccountTabsWrapper}>
         <Box>
           <Tabs

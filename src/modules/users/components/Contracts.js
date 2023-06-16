@@ -1,3 +1,5 @@
+/** @format */
+
 import * as React from "react";
 import PropTypes from "prop-types";
 import {
@@ -36,47 +38,33 @@ const orderByDate = ["Ascending", "Descending"];
 
 const columns = [
   {
-    name: "bid",
-    label: "Contractor",
-    customBodyRender: (item) => {
-      return item.user?.full_name;
-    },
+    name: "tittle",
+    label: "Job",
   },
   {
     name: "post.user",
     label: "Client",
-    customBodyRender: (item) => {
-      return item.full_name;
-    },
   },
   {
     name: "post",
     label: "Contract Name",
-    customBodyRender: (item) => {
-      return item?.title;
-    },
   },
   {
-    name: "post",
+    name: "job_type",
     label: "Type",
-    customBodyRender: (item) => {
-      return item?.job_type;
-    },
   },
   {
-    name: "start_date",
-    label: "Start Date",
+    name: "position",
+    label: "Position",
   },
   {
-    name: "end_date",
-    label: "End Date",
+    name: "days",
+    label: "Number of Days",
   },
+
   {
-    name: "post",
+    name: "rate",
     label: "Rate/Budget",
-    customBodyRender: (item) => {
-      return item.rate ? item.rate : item.budget;
-    },
   },
   {
     name: "status",
@@ -85,7 +73,7 @@ const columns = [
 ];
 
 export default function Contracts(props) {
-  const { type } = props;
+  const { type, jobs } = props;
 
   const dispatch = useDispatch();
 
@@ -98,6 +86,7 @@ export default function Contracts(props) {
     data: [],
     meta: {},
   });
+  console.log(contracts);
   const [limit, setLimit] = React.useState({
     limit: 10,
     page: 1,
@@ -379,7 +368,7 @@ export default function Contracts(props) {
         onEdit={handleEdit}
         onDelete={handleDelete}
         loading={loading}
-        data={contracts.data}
+        data={jobs}
         columns={columns}
         rowsPerPage={filterValues.values.limit}
         count={contracts.meta.total || 0}
