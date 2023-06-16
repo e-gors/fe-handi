@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[653],{70653:function(n,e,t){t.r(e),t.d(e,{setLocations:function(){return a}});var u=t(26527),a=function(n){return{type:u.ActionTypes.SET_LOCATIONS,payload:n}}}}]);
+//# sourceMappingURL=653.36fa4c64.chunk.js.map
