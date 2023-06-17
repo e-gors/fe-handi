@@ -22,7 +22,7 @@ import ToastNotification from "../../../../components/ToastNotification";
 import { options } from "../../../../components/options";
 import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
 import Http from "../../../../utils/Http";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { updateUser } from "../../../../redux/actions/userActions";
 import { formatValue, isAuth } from "../../../../utils/helpers";
 import BidsModal from "./proposal/BidsModal";
@@ -153,9 +153,10 @@ const styles = {
 };
 
 function FindJobCardModal(props) {
-  const { open, handleClose, selectedItem, user, handleForceUpdate } = props;
+  const { open, handleClose, selectedItem, handleForceUpdate } = props;
 
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.user);
 
   const id =  selectedItem?.id;
   const isFavorite =
@@ -169,8 +170,8 @@ function FindJobCardModal(props) {
   const handleOpen = () => {
     if (isAuth()) {
       if (user?.role === "Worker") {
-        console.log( user?.bids?.find((item) => item.post_id === id))
-        if (user?.bids?.find((item) => item.post_id === id)) {
+        console.log( user.bids.find((item) => item.post_id === id))
+        if (user.bids.find((item) => item.post_id === id)) {
           ToastNotification(
             "error",
             "You cannot bid again! Only one bid per job post.",
