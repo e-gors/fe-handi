@@ -159,6 +159,7 @@ function FindJobCardModal(props) {
   const user = useSelector((state) => state.users.user);
 
   const id =  selectedItem?.id;
+  console.log(id,"ID")
   const isFavorite =
     user?.shortlists?.find((item) => item.post_id === id);
 
@@ -170,7 +171,7 @@ function FindJobCardModal(props) {
   const handleOpen = () => {
     if (isAuth()) {
       if (user?.role === "Worker") {
-        console.log( user.bids.find((item) => item.post_id === id))
+        console.log( user.bids.find((item) => item.post_id === id,"find"))
         if (user.bids.find((item) => item.post_id === id)) {
           ToastNotification(
             "error",
