@@ -7,16 +7,21 @@ import {
   Menu,
   MenuItem,
   Divider,
-  CircularProgress,
 } from "@mui/material";
 import FormField from "../../../../components/FormField";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import SelectDropdown from "../../../../components/SelectDropdown";
-import ArticleIcon from "@mui/icons-material/Article";
 import { useHistory } from "react-router-dom";
 import Http from "../../../../utils/Http";
 import DataTable from "../../../../components/DataTable";
+import EditBid from "../../components/worker/proposal/EditBid";
+import ConfirmationModal from "../../../../components/ConfirmationModal";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../../../redux/actions/userActions";
+import { options } from "../../../../components/options";
+import ToastNotification from "../../../../components/ToastNotification";
+import ToastNotificationContainer from "../../../../components/ToastNotificationContainer";
 
 const status = ["Pending", "Accepted", "Declined", "Withdrawn"];
 const orderByRate = ["asc", "desc"];
@@ -80,9 +85,14 @@ const columns = [
 function Proposal() {
   const history = useHistory();
 
+  const dispatch = useDispatch();
+  const [ignored, forceUpdate] = React.useReducer((x) => x + 1, 0);
   const [loading, setLoading] = React.useState(false);
+  const [loadingOnSubmit, setLoadingOnSubmit] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const [openEditProposal, setOpenEditProposal] = React.useState(false);
+  const [openConfirm, setOpenConfirm] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState({});
   const [proposals, setProposals] = React.useState({
     data: [],
     meta: {},
@@ -107,7 +117,7 @@ function Proposal() {
       page: 1,
     }));
     optimizedFn(filterValues.values);
-  }, [filterValues.values]); // eslint-disable-line
+  }, [ignored, filterValues.values]); // eslint-disable-line
 
   const fetchingData = (params = {}) => {
     setLoading(true);
@@ -189,23 +199,56 @@ function Proposal() {
     setAnchorEl(null);
   };
 
-  const handleNavigate = (link) => {
-    history.push(link);
-  };
-  const handleView = (item) => {
-    console.log(item);
-  };
   const handleEdit = (item) => {
-    console.log(item);
+    setSelectedItem(item);
+    setOpenEditProposal(true);
+  };
+
+  const handleEditConfirm = () => {
+    setOpenEditProposal(false);
+    forceUpdate();
   };
   const handleRevoked = (item) => {
-    console.log(item);
+    setSelectedItem(item);
+    setOpenConfirm(true);
   };
-  const handleDelete = (item) => {
-    console.log(item);
+
+  const handleCancel = () => {
+    setLoadingOnSubmit(true);
+    Http.post(`/proposal/cancel/${selectedItem.id}`)
+      .then((res) => {
+        if (res.data.code === 200) {
+          setOpenConfirm(false);
+          dispatch(updateUser(res.data.user));
+          ToastNotification("success", res.data.message, options);
+        } else {
+          ToastNotification("error", res.data.message, options);
+        }
+        setLoadingOnSubmit(false);
+      })
+      .catch((err) => {
+        setLoadingOnSubmit(false);
+        ToastNotification("error", err.message, options);
+      });
   };
+
   return (
     <Box sx={styles.wrapper}>
+      <ToastNotificationContainer />
+      <EditBid
+        open={openEditProposal}
+        handleClose={() => setOpenEditProposal(false)}
+        onHandleSubmit={handleEditConfirm}
+        bid={selectedItem}
+      />
+      <ConfirmationModal
+        open={openConfirm}
+        onClose={() => setOpenConfirm(false)}
+        onConfirm={handleCancel}
+        loading={loadingOnSubmit}
+        title={"Withdraw your proposal?"}
+        message={"Your are about to cancel your proposal, proceed?"}
+      />
       <Box>
         <Box>
           <Typography sx={{ fontSize: { xs: 20, md: 24 }, m: 2 }}>
@@ -290,10 +333,8 @@ function Proposal() {
 
         <DataTable
           withPagination
-          onView={handleView}
           onRevoked={handleRevoked}
           onEdit={handleEdit}
-          onDelete={handleDelete}
           loading={loading}
           data={proposals.data}
           columns={columns}

@@ -11,7 +11,7 @@ import {
   InputAdornment,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import FormField from "../../../components/FormField";
 import SelectDropdown from "../../../components/SelectDropdown";
 import PersonIcon from "@mui/icons-material/Person";
@@ -24,12 +24,9 @@ import ToastNotificationContainer from "../../../components/ToastNotificationCon
 import ToastNotification from "../../../components/ToastNotification";
 import { options } from "../../../components/options";
 import { useDispatch, useSelector } from "react-redux";
-// import { setUser } from "../../../redux/actions/userActions";
 import ReeValidate from "ree-validate-18";
-import { setCategories } from "../../../redux/actions/categoryActions";
 import Http from "../../../utils/Http";
 import { setUser } from "../../../redux/actions/userActions";
-import publicHttp from "../../../utils/publicHttp";
 import { isAuth } from "../../../utils/helpers";
 
 const formValuesValidator = new ReeValidate.Validator({

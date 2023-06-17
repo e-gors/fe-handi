@@ -3,6 +3,7 @@
 import { Box, Chip, Tooltip, Typography } from "@mui/material";
 import React from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import dayjs from "dayjs";
 
 const categoryLimit = 10;
 
@@ -16,7 +17,7 @@ function ProfileOverview(props) {
 
   const { background, about } = profile ? profile[0] : [];
 
-return (
+  return (
     <Box>
       <Box>
         <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
@@ -35,6 +36,32 @@ return (
             ></div>
           )}
         </Box>
+        {experience && (
+          <Box>
+            <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+              <Typography>Work Experience</Typography>
+            </Box>
+            <Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography sx={{ fontWeight: "bold", fontSize: 14 }}>
+                  {experience.position}
+                </Typography>
+                <Box sx={{ display: "flex" }}>
+                  <Typography sx={{ fontWeight: "bold", fontSize: 11 }}>
+                    {dayjs(experience.start_date).format("MMMM DD, YYYY")}
+                  </Typography>
+                  <Typography sx={{ ml: 1, mr: 1, fontWeight: "bold" }}>
+                    -
+                  </Typography>
+                  <Typography sx={{ fontWeight: "bold", fontSize: 11 }}>
+                    {dayjs(experience.end_date).format("MMMM DD, YYYY")}
+                  </Typography>
+                </Box>
+              </Box>
+              <Typography sx={{ mt: 1 }}>{experience.notes}</Typography>
+            </Box>
+          </Box>
+        )}
 
         <Box>
           <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>

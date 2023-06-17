@@ -121,7 +121,7 @@ function ProfileModalEdit(props) {
                   adds={address}
                 />
               )}
-              {type === "Address" && (
+              {type === "Work Experience" && (
                 <UpdateWorkExperience
                   handleClose={handleClose}
                   onConfirm={handleClose}

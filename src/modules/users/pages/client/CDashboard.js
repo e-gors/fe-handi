@@ -155,8 +155,6 @@ function CDashboard() {
               <Grid item xs={12} md={12}>
                 <DataTable
                   withPagination
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
                   loading={loading}
                   data={contracts.data}
                   columns={columns}

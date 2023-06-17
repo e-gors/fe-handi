@@ -21,9 +21,10 @@ const styles = {
     p: 2,
     borderRadius: 3,
     cursor: "pointer",
+    boxShadow: 5,
 
     "&:hover": {
-      boxShadow: 5,
+      boxShadow: 10,
 
       ".position": {
         color: "blue",

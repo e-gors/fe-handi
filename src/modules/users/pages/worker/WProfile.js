@@ -10,7 +10,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 function WProfile() {
   const user = useSelector((state) => state.users.user);
 
-  const { profile } = user;
+  const { profile, experience, completed } = user;
 
   const profs = profile && profile[0] ? profile[0] : null;
   const year = new Date(profs?.created_at).getFullYear();
@@ -185,7 +185,7 @@ function WProfile() {
                     <Typography sx={styles.label}>Rates</Typography>
                   </Box>
                   <Box sx={styles.membersEachWrapper}>
-                    <Typography sx={styles.value}>49</Typography>
+                    <Typography sx={styles.value}>{completed}</Typography>
                     <Typography sx={styles.label}>Completed Jobs</Typography>
                   </Box>
                 </Box>

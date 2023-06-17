@@ -156,10 +156,10 @@ function FindJobCardModal(props) {
   const { open, handleClose, selectedItem, user, handleForceUpdate } = props;
 
   const dispatch = useDispatch();
-  const isFavorite = user?.shortlists?.some(
+  const isFavorite = user.shortlists?.some(
     (item) => Number(item.post_id) === selectedItem?.id
   );
-  const isBided = user.bids.some(
+  const isBided = user.bids?.some(
     (item) => Number(item.post_id) === selectedItem?.id
   );
 

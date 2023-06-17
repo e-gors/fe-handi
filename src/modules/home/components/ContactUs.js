@@ -120,6 +120,7 @@ export default function ContactUs() {
             <FormField
               variant="standard"
               multiline
+              rows={4}
               required
               name="letter"
               errors={formValues.errors}

@@ -6,13 +6,14 @@ import ProfileModalEdit from "../ProfileModalEdit";
 import UpdateTxtDefault from "../UpdateTxtDefault";
 import FeedIcon from "@mui/icons-material/Feed";
 import NotesIcon from "@mui/icons-material/Notes";
+import dayjs from "dayjs";
 
 const categoryLimit = 10;
 
 function ProfileOverview(props) {
   const { user } = props;
 
-  const { profile, categories, skills } = user;
+  const { profile, categories, skills, experience } = user;
   const { background, about } = profile[0];
 
   const [open, setOpen] = React.useState(false);
@@ -79,6 +80,28 @@ function ProfileOverview(props) {
               <EditOutlinedIcon />
             </IconButton>
           </Box>
+
+          {experience && (
+            <Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography sx={{ fontWeight: "bold", fontSize: 14 }}>
+                  {experience.position}
+                </Typography>
+                <Box sx={{ display: "flex" }}>
+                  <Typography sx={{ fontWeight: "bold", fontSize: 11 }}>
+                    {dayjs(experience.start_date).format("MMMM DD, YYYY")}
+                  </Typography>
+                  <Typography sx={{ ml: 1, mr: 1, fontWeight: "bold" }}>
+                    -
+                  </Typography>
+                  <Typography sx={{ fontWeight: "bold", fontSize: 11 }}>
+                    {dayjs(experience.end_date).format("MMMM DD, YYYY")}
+                  </Typography>
+                </Box>
+              </Box>
+              <Typography sx={{ mt: 1 }}>{experience.notes}</Typography>
+            </Box>
+          )}
         </Box>
 
         <Box>

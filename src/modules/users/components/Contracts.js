@@ -328,8 +328,6 @@ export default function Contracts(props) {
       <DataTable
         withPagination
         onComplete={onComplete}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
         loading={loading}
         data={contracts.data}
         columns={columns}

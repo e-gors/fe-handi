@@ -238,7 +238,7 @@ function Profile() {
                       <Typography sx={styles.label}>Rates</Typography>
                     </Box>
                     <Box sx={styles.membersEachWrapper}>
-                      <Typography sx={styles.value}>49</Typography>
+                      <Typography sx={styles.value}>{worker.completed}</Typography>
                       <Typography sx={styles.label}>Completed Jobs</Typography>
                     </Box>
                   </Box>

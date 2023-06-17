@@ -18,7 +18,7 @@ function WProfileEdit() {
   const history = useHistory();
   const user = useSelector((state) => state.users.user);
 
-  const { profile, fullname } = user;
+  const { profile, fullname, completed } = user;
   const {
     background_url,
     profile_url,
@@ -293,7 +293,7 @@ function WProfileEdit() {
                     <Typography sx={styles.label}>Rates</Typography>
                   </Box>
                   <Box sx={styles.membersEachWrapper}>
-                    <Typography sx={styles.value}>49</Typography>
+                    <Typography sx={styles.value}>{completed}</Typography>
                     <Typography sx={styles.label}>Completed Jobs</Typography>
                   </Box>
                 </Box>

@@ -154,149 +154,158 @@ function DataTable(props) {
           </TableHead>
           <TableBody>
             {!loading &&
-              data.map((item, itemIndex) => (
-                <TableRow key={itemIndex}>
-                  {(onDelete ||
-                    onEdit ||
-                    onCancel ||
-                    onView ||
-                    onComplete ||
-                    onRevoked ||
-                    withNumber) && (
-                    <TableCell
-                      size="small"
-                      align="center"
-                      sx={{ whiteSpace: "noWrap" }}
-                    >
-                      {withNumber && itemIndex + 1}
-                      {onView && (
-                        <Tooltip title="View" arrow>
-                          <IconButton
-                            size="small"
-                            color="primary"
-                            onClick={() => handleView(item)}
-                          >
-                            <VisibilityIcon />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      {onAccept && (
-                        <Tooltip title="Accept" arrow>
-                          <IconButton
-                            size="small"
-                            color="primary"
-                            onClick={() => handleAccept(item)}
-                          >
-                            <CheckCircleOutlineOutlinedIcon
-                              xs={{ color: "green" }}
-                            />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      {onCancel && (
-                        <Tooltip title="Decline" arrow>
-                          <IconButton
-                            size="small"
-                            sx={{ color: "gray" }}
-                            onClick={() => handleCancel(item)}
-                          >
-                            <HighlightOffRoundedIcon color="warning" />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      {onComplete && (
-                        <Tooltip title="Complete contract?" arrow>
-                          <IconButton
-                            size="small"
-                            color="primary"
-                            onClick={() => handleComplete(item)}
-                          >
-                            <AddTaskIcon />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      {onRevoked && (
-                        <Tooltip title="Withdrawn" arrow>
-                          <IconButton
-                            size="small"
-                            sx={{ color: "gray" }}
-                            onClick={() => handleRevoked(item)}
-                          >
-                            <DeleteSweepIcon />
-                          </IconButton>
-                        </Tooltip>
-                      )}
+              data.map((item, itemIndex) => {
+                const accept = item.status === "accept";
+                const decline = item.status === "decline";
+                const withdrawn = item.status === "withdrawn";
+                const complete = item.status === "complete";
+                const pending = item.status === "pending";
+                const inProgress = item.status === "in progress";
 
-                      {onEdit && (
-                        <Tooltip title="Edit" arrow>
-                          <IconButton
-                            size="small"
-                            sx={{ color: "#00c853" }}
-                            onClick={() => handleEdit(item)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      {onDelete && (
-                        <Tooltip title="Delete" arrow>
-                          <IconButton
-                            size="small"
-                            color="error"
-                            onClick={() => handleDelete(item)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                    </TableCell>
-                  )}
-
-                  {columns.map((col, colIndex) => {
-                    const cellValue = getCellValue(item, col);
-                    const isStatusColumn = col.name === "status"; // Assuming "status" is the column identifier
-
-                    let cellColor = "inherit";
-                    if (isStatusColumn) {
-                      if (cellValue === "pending") {
-                        cellColor = "red";
-                      } else if (
-                        cellValue === "accepted" ||
-                        cellValue === "in progress" ||
-                        cellValue === "posted"
-                      ) {
-                        cellColor = "green";
-                      } else if (cellValue === "completed") {
-                        cellColor = "blue";
-                      } else if (cellValue === "declined") {
-                        cellColor = "orange";
-                      } else if (cellValue === "withdrawn") {
-                        cellColor = "gray";
-                      }
-                    }
-                    return (
+                return (
+                  <TableRow key={itemIndex}>
+                    {(onDelete ||
+                      onEdit ||
+                      onCancel ||
+                      onView ||
+                      onComplete ||
+                      onRevoked ||
+                      withNumber) && (
                       <TableCell
                         size="small"
-                        key={`${colIndex}-${col.name}`}
-                        sx={{
-                          whiteSpace: "noWrap",
-                          fontWeight: isStatusColumn ? "bold" : "normal",
-                          color: cellColor,
-                        }}
+                        align="center"
+                        sx={{ whiteSpace: "noWrap" }}
                       >
-                        {col.customBodyRender
-                          ? col.customBodyRender(
-                              cellValue,
-                              item,
-                              colIndex,
-                              itemIndex
-                            )
-                          : cellValue}
+                        {withNumber && itemIndex + 1}
+                        {onView && (
+                          <Tooltip title="View" arrow>
+                            <IconButton
+                              size="small"
+                              color="primary"
+                              onClick={() => handleView(item)}
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {onAccept && pending && (
+                          <Tooltip title="Accept" arrow>
+                            <IconButton
+                              size="small"
+                              color="primary"
+                              onClick={() => handleAccept(item)}
+                            >
+                              <CheckCircleOutlineOutlinedIcon
+                                xs={{ color: "green" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {onCancel && pending && !withdrawn && (
+                          <Tooltip title="Decline" arrow>
+                            <IconButton
+                              size="small"
+                              sx={{ color: "gray" }}
+                              onClick={() => handleCancel(item)}
+                            >
+                              <HighlightOffRoundedIcon color="warning" />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {onComplete && inProgress && (
+                          <Tooltip title="Complete contract?" arrow>
+                            <IconButton
+                              size="small"
+                              color="primary"
+                              onClick={() => handleComplete(item)}
+                            >
+                              <AddTaskIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {onRevoked && pending && !decline && (
+                          <Tooltip title="Withdrawn" arrow>
+                            <IconButton
+                              size="small"
+                              sx={{ color: "gray" }}
+                              onClick={() => handleRevoked(item)}
+                            >
+                              <DeleteSweepIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+
+                        {onEdit && (
+                          <Tooltip title="Edit" arrow>
+                            <IconButton
+                              size="small"
+                              sx={{ color: "#00c853" }}
+                              onClick={() => handleEdit(item)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {onDelete && (
+                          <Tooltip title="Delete" arrow>
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() => handleDelete(item)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
                       </TableCell>
-                    );
-                  })}
-                </TableRow>
-              ))}
+                    )}
+
+                    {columns.map((col, colIndex) => {
+                      const cellValue = getCellValue(item, col);
+                      const isStatusColumn = col.name === "status"; // Assuming "status" is the column identifier
+
+                      let cellColor = "inherit";
+                      if (isStatusColumn) {
+                        if (cellValue === "pending") {
+                          cellColor = "red";
+                        } else if (
+                          cellValue === "accepted" ||
+                          cellValue === "in progress" ||
+                          cellValue === "posted"
+                        ) {
+                          cellColor = "green";
+                        } else if (cellValue === "completed") {
+                          cellColor = "blue";
+                        } else if (cellValue === "declined") {
+                          cellColor = "orange";
+                        } else if (cellValue === "withdrawn") {
+                          cellColor = "gray";
+                        }
+                      }
+                      return (
+                        <TableCell
+                          size="small"
+                          key={`${colIndex}-${col.name}`}
+                          sx={{
+                            whiteSpace: "noWrap",
+                            fontWeight: isStatusColumn ? "bold" : "normal",
+                            color: cellColor,
+                          }}
+                        >
+                          {col.customBodyRender
+                            ? col.customBodyRender(
+                                cellValue,
+                                item,
+                                colIndex,
+                                itemIndex
+                              )
+                            : cellValue}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
         {!loading && data.length === 0 && (

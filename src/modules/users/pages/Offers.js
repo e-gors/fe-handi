@@ -157,8 +157,22 @@ function Offers(props) {
     setAnchorEl(null);
   };
 
+  const onCancel = (item) => {
+    setSelectedItem(item);
+    setMethod("cancel");
+    setOpenConfirm(true);
+  };
+
+  const onAccept = (item) => {
+    setSelectedItem(item);
+    setMethod("accept");
+    setOpenConfirm(true);
+  };
+
   const handleRevoked = (item) => {
-    console.log(item);
+    setSelectedItem(item);
+    setMethod("withdrawn");
+    setOpenConfirm(true);
   };
 
   const handleAccept = () => {
@@ -178,32 +192,35 @@ function Offers(props) {
         setLoadingOnSubmit(false);
         ToastNotification("error", err.message, options);
       });
-  };
-
-  const handleOpenConfirm = (method) => {
-    setMethod(method);
-    setOpenConfirm(true);
-  };
-
-  const onCancel = (item) => {
-    setSelectedItem(item);
-    handleOpenConfirm("cancel");
-  };
-
-  const onAccept = (item) => {
-    setSelectedItem(item);
-    handleOpenConfirm("accept");
-  };
+  }; 
 
   const handleCancel = () => {
     setLoadingOnSubmit(true);
     Http.post(`/offer/cancel/${selectedItem.id}`)
       .then((res) => {
         if (res.data.code === 200) {
-          dispatch(updateUser(res.data.user));
           setOpenConfirm(false);
+          dispatch(updateUser(res.data.user));
           ToastNotification("success", res.data.message, options);
-          setMethod(null);
+        } else {
+          ToastNotification("error", res.data.message, options);
+        }
+        setLoadingOnSubmit(false);
+      })
+      .catch((err) => {
+        setLoadingOnSubmit(false);
+        ToastNotification("error", err.message, options);
+      });
+  };
+
+  const handleWithdrawn = () => {
+    setLoadingOnSubmit(true);
+    Http.post(`/offer/withdraw/${selectedItem.id}`)
+      .then((res) => {
+        if (res.data.code === 200) {
+          setOpenConfirm(false);
+          dispatch(updateUser(res.data.user));
+          ToastNotification("success", res.data.message, options);
         } else {
           ToastNotification("error", res.data.message, options);
         }
@@ -220,6 +237,8 @@ function Offers(props) {
       handleCancel();
     } else if (method === "accept") {
       handleAccept();
+    } else {
+      handleWithdrawn();
     }
   };
 
@@ -231,7 +250,13 @@ function Offers(props) {
         onClose={() => setOpenConfirm(false)}
         onConfirm={handleConfirm}
         loading={loadingOnSubmit}
-        title={method === "accept" ? "Accept Offer?" : "Decline Offer?"}
+        title={
+          method === "accept"
+            ? "Accept Offer?"
+            : method === "cancel"
+            ? "Cancel Offer?"
+            : "Withdraw Offer"
+        }
         message={
           method ? `Your about to ${method && method} offer, continue ?` : false
         }
