@@ -126,18 +126,15 @@ function FindJobCard(props) {
       )}
       <FindJobCardModal
         open={open}
-        handleClose={handleOpen}
+        handleClose={() => setOpen(false)}
         selectedItem={selectedItem}
-        user={user && user}
+        user={user}
         handleForceUpdate={handleForceUpdate}
       />
       <Grid container spacing={1}>
-        {!loading &&
-          jobs &&
-          jobs.map((job, postIndex) => {
+        { jobs?.map((job, postIndex) => {
             const limitedSkills =
-              job.skills &&
-              job.skills?.length > 2 &&
+              job?.skills?.length > 2 &&
               jobs.skills?.length > skillLimit &&
               jobs.skills.slice(0, skillLimit);
             return (

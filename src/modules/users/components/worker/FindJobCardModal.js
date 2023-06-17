@@ -167,6 +167,7 @@ function FindJobCardModal(props) {
   const [openApplyModal, setOpenApplyModal] = React.useState(false);
   const [openBidsModal, setOpenBidsModal] = React.useState(false);
 
+  console.log(user);
   const handleOpen = () => {
     if (isAuth()) {
       if (user?.role === "Worker") {
