@@ -172,7 +172,7 @@ function BidsModal(props) {
                   const isProposalOwner =
                     isAuth() &&
                     user.role === "Worker" &&
-                    bid.user_id === user.id;
+                    Number(bid.user_id) === user.id;
 
                   return (
                     <React.Fragment key={i}>
