@@ -170,6 +170,7 @@ function FindJobCardModal(props) {
   const handleOpen = () => {
     if (isAuth()) {
       if (user?.role === "Worker") {
+        console.log(isBided)
         if (isBided) {
           ToastNotification(
             "error",
@@ -257,7 +258,7 @@ function FindJobCardModal(props) {
           <BidsModal
             open={openBidsModal}
             handleClose={() => setOpenBidsModal(false)}
-            bids={selectedItem && selectedItem.bids}
+            bids={selectedItem?.bids}
             selectedItem={selectedItem}
             handleForceUpdate={onHandleClose}
           />
