@@ -157,21 +157,19 @@ function FindJobCardModal(props) {
 
   const dispatch = useDispatch();
 
-  const id = selectedItem && selectedItem.id;
+  const id =  selectedItem?.id;
   const isFavorite =
-    user &&
-    user.shortlists &&
-    user.shortlists.some((item) => item.post_id === id);
+    user?.shortlists?.some((item) => item.post_id === id);
 
   const isBided =
-    user && user.bids && user.bids.some((item) => item.post_id === id);
+    user?.bids?.some((item) => item.post_id === id);
 
   const [openApplyModal, setOpenApplyModal] = React.useState(false);
   const [openBidsModal, setOpenBidsModal] = React.useState(false);
 
   const handleOpen = () => {
     if (isAuth()) {
-      if (user && user.role === "Worker") {
+      if (user?.role === "Worker") {
         if (isBided) {
           ToastNotification(
             "error",

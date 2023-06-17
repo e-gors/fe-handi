@@ -8,8 +8,6 @@ import {
 } from "@mui/material";
 import Http from "../../../utils/Http";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { isAuth } from "../../../utils/helpers";
-import { useHistory } from "react-router-dom";
 import FormField from "../../../components/FormField";
 import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
 import ToastNotification from "../../../components/ToastNotification";
@@ -25,7 +23,6 @@ const validator = new ReeValidate.Validator({
 const theme = createTheme();
 
 export default function ContactUs() {
-  const history = useHistory();
   const [loading, setLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState({
     values: {
@@ -62,7 +59,13 @@ export default function ContactUs() {
     Http.post("/contact-us", formValues.values)
       .then((res) => {
         if (res.data.code === 200) {
-
+          ToastNotification("success", res.data.message, options);
+          setFormValues({
+            vales: {
+              email: "",
+              letter: "",
+            },
+          });
         } else {
           ToastNotification("error", res.data.message, options);
         }
