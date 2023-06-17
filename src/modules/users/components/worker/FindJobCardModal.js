@@ -159,10 +159,8 @@ function FindJobCardModal(props) {
 
   const id =  selectedItem?.id;
   const isFavorite =
-    user?.shortlists?.some((item) => item.post_id === id);
+    user?.shortlists?.find((item) => item.post_id === id);
 
-  const isBided =
-    user?.bids?.some((item) => item.post_id === id);
 
   const [openApplyModal, setOpenApplyModal] = React.useState(false);
   const [openBidsModal, setOpenBidsModal] = React.useState(false);
@@ -171,8 +169,8 @@ function FindJobCardModal(props) {
   const handleOpen = () => {
     if (isAuth()) {
       if (user?.role === "Worker") {
-        console.log(isBided)
-        if (isBided) {
+        console.log( user?.bids?.find((item) => item.post_id === id))
+        if (user?.bids?.find((item) => item.post_id === id)) {
           ToastNotification(
             "error",
             "You cannot bid again! Only one bid per job post.",
