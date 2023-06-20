@@ -29,7 +29,6 @@ import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import { styles } from "../assets/styles/styles";
 import logo from "../assets/images/handi-logo.png";
 import LogoutIcon from "@mui/icons-material/Logout";
-import AssessmentIcon from "@mui/icons-material/Assessment";
 import WorkIcon from "@mui/icons-material/Work";
 import PeopleIcon from "@mui/icons-material/People";
 import ConfirmationModal from "../components/ConfirmationModal";

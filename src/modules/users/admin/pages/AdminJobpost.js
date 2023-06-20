@@ -315,6 +315,7 @@ function JobPosted(props) {
           withPagination
           onEdit
           onView={handleView}
+          search={filterValues.values.search}
           loading={loading}
           data={jobs.data}
           columns={columns}

@@ -23,7 +23,7 @@ import { useDispatch } from "react-redux";
 import { updateUser } from "../../../redux/actions/userActions";
 import ConfirmationModal from "../../../components/ConfirmationModal";
 
-const status = ["Pending", "Accepted", "Declined", "Withdrawn"];
+const status = ["Pending", "Accepted", "Declined", "Withdrawn", "Expired"];
 const orderByRate = ["Ascending", "Descending"];
 const orderByDate = ["Ascending", "Descending"];
 
@@ -111,13 +111,12 @@ function Offers(props) {
   const handleChangeFilter = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    const newValue = typeof value === "string" ? value.split(",") : value;
 
     setFilterValues((prev) => ({
       ...prev,
       values: {
         ...prev.values,
-        [name]: newValue,
+        [name]: value,
       },
     }));
   };
@@ -180,6 +179,7 @@ function Offers(props) {
     Http.post(`/offer/accept/${selectedItem.id}`)
       .then((res) => {
         if (res.data.code === 200) {
+          setOpenConfirm(false);
           dispatch(updateUser(res.data.user));
           ToastNotification("success", res.data.message, options);
           history.push("/contracts");
@@ -192,7 +192,7 @@ function Offers(props) {
         setLoadingOnSubmit(false);
         ToastNotification("error", err.message, options);
       });
-  }; 
+  };
 
   const handleCancel = () => {
     setLoadingOnSubmit(true);
@@ -364,6 +364,7 @@ function Offers(props) {
           onCancel={role === "Worker" && onCancel}
           onAccept={role === "Worker" && onAccept}
           onRevoked={role === "Client" && handleRevoked}
+          search={filterValues.values.search}
           loading={loading}
           data={offers.data}
           columns={columns}

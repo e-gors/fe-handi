@@ -42,6 +42,10 @@ const dailyColumns = [
     label: "Title",
   },
   {
+    name: "position",
+    label: "Job Position",
+  },
+  {
     name: "locations",
     label: "Locations",
   },
@@ -71,6 +75,10 @@ const fixedColumns = [
   {
     name: "title",
     label: "Title",
+  },
+  {
+    name: "position",
+    label: "Job Position",
   },
   {
     name: "locations",

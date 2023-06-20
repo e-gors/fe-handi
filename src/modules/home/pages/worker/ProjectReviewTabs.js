@@ -44,7 +44,7 @@ function ProjectReviewTabs(props) {
 
   const user = useSelector((state) => state.users.user);
 
-  const isOwner = isAuth() && user.id === worker.user_id ? true : false;
+  const isOwner = isAuth() && user.id === Number(worker.user_id) ? true : false;
 
   const handleChangeTab = (event, newValue) => {
     setTab(newValue);
@@ -73,7 +73,12 @@ function ProjectReviewTabs(props) {
             <Project worker={worker} />
           </TabPanel>
           <TabPanel value={tab} index={2}>
-            <NewReview worker={worker} isOwner={isOwner} user={user} />
+            <NewReview
+              worker={worker}
+              isOwner={isOwner}
+              user={user}
+              contracts={user?.contracts}
+            />
           </TabPanel>
         </Box>
       </Box>

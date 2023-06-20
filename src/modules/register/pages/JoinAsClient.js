@@ -54,7 +54,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-evenly",
     flexWrap: "wrap",
-    borderRadius: 10,
+    borderRadius: 3,
     boxShadow: 5,
   },
   registerAs: {

@@ -277,6 +277,7 @@ const RecentJobSales = () => {
           onRevoked={handleRevoked}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          search={filterValues.values.search}
           loading={loading}
           data={users.data}
           columns={columns}

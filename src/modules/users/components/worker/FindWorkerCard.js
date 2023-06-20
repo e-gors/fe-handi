@@ -17,6 +17,12 @@ import ToastNotificationContainer from "../../../../components/ToastNotification
 import StarIcon from "@mui/icons-material/Star";
 import ImageIcon from "@mui/icons-material/Image";
 import noImage from "../../../../assets/images/no-img-trans-bg.png";
+import Http from "../../../../utils/Http";
+import ToastNotification from "../../../../components/ToastNotification";
+import { options } from "../../../../components/options";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../../../../redux/actions/userActions";
+import { isAuth } from "../../../../utils/helpers";
 
 const categoryLimit = 2;
 const skillLimit = 2;
@@ -114,12 +120,76 @@ const styles = {
 function FindWorkerCard(props) {
   const { workers, loading } = props;
 
-  const handleNavigate = (link) => {
-    window.open(link);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.user);
+  const [loadingOnShortlist, setLoadingOnShortlist] = React.useState(false);
+
+  const handleNavigate = (e, link) => {
+    const target = e.target;
+    const hasDesiredClass = target.classList.contains("MuiBox-root");
+    if (hasDesiredClass) {
+      window.open(link);
+    }
+  };
+
+  const handleAddWorkerToList = (e, id) => {
+    const target = e.target;
+    const hasDesiredClass = target.classList.contains("MuiSvgIcon-root");
+    if (hasDesiredClass) {
+      handleAddWorkerToShortlist(id);
+    }
+  };
+
+  const handleRemoveWorkerToList = (e, id) => {
+    const target = e.nativeEvent.target;
+    if (
+      target.tagName === "path" &&
+      target.getAttribute("d") ===
+        "M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"
+    ) {
+      handleRemoveWorkerToShortList(id);
+    }
+  };
+
+  const handleAddWorkerToShortlist = (id) => {
+    setLoadingOnShortlist(true);
+    Http.post(`/new/shortlist/user/${id}`)
+      .then((res) => {
+        if (res.data.code === 200) {
+          dispatch(updateUser(res.data.user));
+          ToastNotification("success", res.data.message, options);
+        } else {
+          ToastNotification("error", res.data.message, options);
+        }
+        setLoadingOnShortlist(false);
+      })
+      .catch((err) => {
+        setLoadingOnShortlist(false);
+        ToastNotification("error", err.message, options);
+      });
+  };
+
+  const handleRemoveWorkerToShortList = (id) => {
+    setLoadingOnShortlist(true);
+    Http.delete(`/remove/shortlist/user/${id}`)
+      .then((res) => {
+        if (res.data.code === 200) {
+          dispatch(updateUser(res.data.user));
+          ToastNotification("success", res.data.message, options);
+        } else {
+          ToastNotification("error", res.data.message, options);
+        }
+        setLoadingOnShortlist(false);
+      })
+      .catch((err) => {
+        setLoadingOnShortlist(false);
+        ToastNotification("error", err.message, options);
+      });
   };
 
   return (
     <Box sx={styles.wrapper}>
+      <ToastNotificationContainer />
       {loading && (
         <Box align="center">
           <CircularProgress size={40} color="primary" />
@@ -135,11 +205,18 @@ function FindWorkerCard(props) {
               categoryLimit
             );
             const limitedSkills = worker.skillChildren.slice(0, skillLimit);
+            const isFavorite =
+              isAuth() &&
+              user.shortlists?.some(
+                (item) => Number(item.profile_id) === worker.id
+              );
             return (
               <Grid key={workerIndex} item xs={12} sm={12} md={6} lg={4}>
                 <Box
                   sx={styles.cardWrapper}
-                  onClick={() => handleNavigate(worker.profile[0].profile_link)}
+                  onClick={(e) =>
+                    handleNavigate(e, worker.profile[0].profile_link)
+                  }
                 >
                   <Box sx={styles.cardTop}>
                     <Avatar
@@ -180,7 +257,25 @@ function FindWorkerCard(props) {
                           )}
                         </Box>
                       </Box>
-                      <BookmarkBorderIcon sx={styles.bookmark} />
+                      {loadingOnShortlist && <CircularProgress size={24} />}
+                      {!loadingOnShortlist && !isFavorite && (
+                        <BookmarkBorderIcon
+                          sx={styles.bookmark}
+                          variant="outlined"
+                          color="primary"
+                          onClick={(e) => handleAddWorkerToList(e, worker.id)}
+                        />
+                      )}
+                      {!loadingOnShortlist && isFavorite && (
+                        <BookmarkIcon
+                          sx={styles.bookmark}
+                          variant="contained"
+                          color="primary"
+                          onClick={(e) =>
+                            handleRemoveWorkerToList(e, worker.id)
+                          }
+                        />
+                      )}
                     </Box>
                   </Box>
 

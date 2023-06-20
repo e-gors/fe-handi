@@ -12,14 +12,14 @@ import FindJobCard from "../../components/worker/FindJobCard";
 
 const columns = [
   {
-    name: "bid",
+    name: "worker",
     label: "Contractor",
     customBodyRender: (item) => {
-      return item.user?.full_name;
+      return item.full_name;
     },
   },
   {
-    name: "post.user",
+    name: "client",
     label: "Client",
     customBodyRender: (item) => {
       return item.full_name;
@@ -30,6 +30,13 @@ const columns = [
     label: "Contract Name",
     customBodyRender: (item) => {
       return item?.title;
+    },
+  },
+  {
+    name: "post",
+    label: "Job Position",
+    customBodyRender: (item) => {
+      return item?.position;
     },
   },
   {

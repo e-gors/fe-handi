@@ -163,7 +163,7 @@ function ReviewAndPost(props) {
           ToastNotification("success", res.data.message, options);
           localStorage.setItem("postedUrl", res.data.url);
           dispatch(updateUser(res.data.user));
-          setTimeout(() => history.push("/new/job/posted"), 2000);
+          setTimeout(() => history.push("/new/job/posted"), 500);
         } else {
           ToastNotification("error", res.data.message, options);
         }
@@ -245,7 +245,7 @@ function ReviewAndPost(props) {
           typeAndBudget.length > 0 ||
           ques.length > 0 ||
           skillses.length > 0 ||
-          locations) && (
+          locations.length > 0) && (
           <Box sx={{ mb: 1, p: 2 }}>
             <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
               Details
@@ -257,7 +257,7 @@ function ReviewAndPost(props) {
                 </Typography>
               </Box>
             )}
-            {locations && (
+            {locations && locations.length > 0 && (
               <Box sx={{ display: "flex", mt: 1 }}>
                 <Typography>Location: </Typography>
                 <Box sx={{ ml: 1 }}>

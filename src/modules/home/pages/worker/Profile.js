@@ -19,25 +19,20 @@ function Profile() {
   const { uuid } = useParams();
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = React.useState(false);
-
   React.useEffect(() => {
     fetchWorker();
     inCrementViewedUser();
   }, []);
 
   const fetchWorker = () => {
-    setLoading(true);
     publicHttp
       .get(`/worker/${uuid}`)
       .then((res) => {
         if (res.data.code === 200) {
           dispatch(filterWorkers(res.data.data));
         }
-        setLoading(false);
       })
       .catch((err) => {
-        setLoading(false);
         console.warn(err.message);
       });
   };
@@ -203,104 +198,99 @@ function Profile() {
   return (
     <Box sx={styles.wrapper}>
       <Box sx={styles.main}>
-        {loading && (
-          <Box align="center">
-            <CircularProgress />
-          </Box>
-        )}
         <Box>
-          {!loading && (
-            <Box sx={styles.contentWrapper}>
-              <Box sx={styles.bgImageWrapper}></Box>
+          <Box sx={styles.contentWrapper}>
+            <Box sx={styles.bgImageWrapper}></Box>
 
-              <Box sx={styles.mainProfileWrapper}>
-                <Box sx={styles.profileWrapper}>
-                  <Box sx={styles.leftProfileWrapper}>
-                    <Box sx={styles.profileImage}></Box>
-                    <Box sx={styles.fullnameWrapper}>
-                      <Typography sx={styles.fullnameText}>
-                        {worker?.fullname}
-                      </Typography>
-                      <Typography sx={styles.backgroundText}>
-                        {profs && profs.address}
-                      </Typography>
-                    </Box>
+            <Box sx={styles.mainProfileWrapper}>
+              <Box sx={styles.profileWrapper}>
+                <Box sx={styles.leftProfileWrapper}>
+                  <Box sx={styles.profileImage}></Box>
+                  <Box sx={styles.fullnameWrapper}>
+                    <Typography sx={styles.fullnameText}>
+                      {worker?.fullname}
+                    </Typography>
+                    <Typography sx={styles.backgroundText}>
+                      {profs && profs.address}
+                    </Typography>
                   </Box>
-                  <Box sx={styles.members}>
-                    <Box sx={styles.membersEachWrapper}>
-                      <Typography sx={styles.value}>{year && year}</Typography>
-                      <Typography sx={styles.label}>Member Since</Typography>
-                    </Box>
-                    <Box sx={styles.membersEachWrapper}>
-                      <Typography sx={styles.value}>
-                        ₱{rate ? rate : "0"}
-                      </Typography>
-                      <Typography sx={styles.label}>Rates</Typography>
-                    </Box>
-                    <Box sx={styles.membersEachWrapper}>
-                      <Typography sx={styles.value}>{worker.completed}</Typography>
-                      <Typography sx={styles.label}>Completed Jobs</Typography>
-                    </Box>
+                </Box>
+                <Box sx={styles.members}>
+                  <Box sx={styles.membersEachWrapper}>
+                    <Typography sx={styles.value}>{year && year}</Typography>
+                    <Typography sx={styles.label}>Member Since</Typography>
                   </Box>
-                  <Box sx={styles.userRatingWrapper}>
-                    <UserRatingLinearProgress
-                      ratings={worker && worker.ratings}
-                    />
+                  <Box sx={styles.membersEachWrapper}>
+                    <Typography sx={styles.value}>
+                      ₱{rate ? rate : "0"}
+                    </Typography>
+                    <Typography sx={styles.label}>Rates</Typography>
                   </Box>
-                  {profs &&
-                    (profs.facebook_url ||
-                      profs.instagram_url ||
-                      profs.twitter_url) && (
-                      <Box sx={styles.userRatingWrapper}>
-                        <Box sx={styles.socialNetworkMain}>
-                          <Typography sx={styles.socialNetworkText}>
-                            Social Networks
+                  <Box sx={styles.membersEachWrapper}>
+                    <Typography sx={styles.value}>
+                      {worker.completed}
+                    </Typography>
+                    <Typography sx={styles.label}>Completed Jobs</Typography>
+                  </Box>
+                </Box>
+                <Box sx={styles.userRatingWrapper}>
+                  <UserRatingLinearProgress
+                    ratings={worker && worker.ratings}
+                  />
+                </Box>
+                {profs &&
+                  (profs.facebook_url ||
+                    profs.instagram_url ||
+                    profs.twitter_url) && (
+                    <Box sx={styles.userRatingWrapper}>
+                      <Box sx={styles.socialNetworkMain}>
+                        <Typography sx={styles.socialNetworkText}>
+                          Social Networks
+                        </Typography>
+                      </Box>
+                      {profs.facebook_url && (
+                        <Box
+                          sx={styles.social}
+                          onClick={() => window.open(profs.facebook_url)}
+                        >
+                          <FacebookIcon color="primary" />
+                          <Typography sx={styles.socialText}>
+                            Facebook Link
                           </Typography>
                         </Box>
-                        {profs.facebook_url && (
-                          <Box
-                            sx={styles.social}
-                            onClick={() => window.open(profs.facebook_url)}
-                          >
-                            <FacebookIcon color="primary" />
-                            <Typography sx={styles.socialText}>
-                              Facebook Link
-                            </Typography>
-                          </Box>
-                        )}
-                        {profs.instagram_url && (
-                          <Box
-                            sx={styles.social}
-                            onClick={() => window.open(profs.instagram_url)}
-                          >
-                            <InstagramIcon color="primary" />
-                            <Typography sx={styles.socialText}>
-                              Instagram Link
-                            </Typography>
-                          </Box>
-                        )}
-                        {profs.twitter_url && (
-                          <Box
-                            sx={styles.social}
-                            onClick={() => window.open(profs.twitter_url)}
-                          >
-                            <TwitterIcon color="primary" />
-                            <Typography sx={styles.socialText}>
-                              Twitter Link
-                            </Typography>
-                          </Box>
-                        )}
-                      </Box>
-                    )}
-                </Box>
-                <Box sx={styles.projectReviewTabsWrapper}>
-                  <Box>
-                    <ProjectReviewTabs worker={worker && worker} />
-                  </Box>
+                      )}
+                      {profs.instagram_url && (
+                        <Box
+                          sx={styles.social}
+                          onClick={() => window.open(profs.instagram_url)}
+                        >
+                          <InstagramIcon color="primary" />
+                          <Typography sx={styles.socialText}>
+                            Instagram Link
+                          </Typography>
+                        </Box>
+                      )}
+                      {profs.twitter_url && (
+                        <Box
+                          sx={styles.social}
+                          onClick={() => window.open(profs.twitter_url)}
+                        >
+                          <TwitterIcon color="primary" />
+                          <Typography sx={styles.socialText}>
+                            Twitter Link
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+                  )}
+              </Box>
+              <Box sx={styles.projectReviewTabsWrapper}>
+                <Box>
+                  <ProjectReviewTabs worker={worker && worker} />
                 </Box>
               </Box>
             </Box>
-          )}
+          </Box>
         </Box>
       </Box>
     </Box>

@@ -133,101 +133,96 @@ function FindJobCard(props) {
         handleForceUpdate={handleForceUpdate}
       />
       <Grid container spacing={1}>
-        { jobs?.map((job, postIndex) => {
-            const limitedSkills =
-              job?.skills?.length > 2 &&
-              jobs.skills?.length > skillLimit &&
-              jobs.skills.slice(0, skillLimit);
-            return (
-              <Grid key={postIndex} item xs={12} sm={12} md={6}>
-                <Box sx={styles.cardWrapper} onClick={() => handleOpen(job)}>
-                  <Box sx={{ display: "flex" }}>
-                    <Typography
-                      sx={styles.jobCategoryText}
-                      className="position"
-                    >
-                      {job.position}
-                    </Typography>
-                    <Typography sx={{ ml: 1, color: "green" }}>•</Typography>
-                    <Typography
-                      sx={{ ml: 1, color: "green", fontSize: 12, mt: 0.5 }}
-                    >
-                      Posted {newPosts(job.created_at)}
-                    </Typography>
-                  </Box>
-                  <Box sx={styles.cardTop}>
-                    <Avatar
-                      alt={job.client.fullname}
-                      src={
-                        job.client.profile &&
-                        job.client.profile[0]["profile_url"]
-                      }
-                    />
-                    <Box sx={styles.categoryWrapper}>
-                      <Box sx={styles.fullname}>
-                        <Typography sx={styles.fullnameText}>
-                          {job.client.fullname}
-                        </Typography>
+        {jobs?.map((job, postIndex) => {
+          const limitedSkills =
+            job?.skills?.length >= 2 &&
+            job.skills?.length >= skillLimit &&
+            job.skills.slice(0, skillLimit);
 
-                        <Box sx={styles.categoryMainWrapper}>
-                          <Chip
-                            size="small"
-                            key={postIndex}
-                            label={job.category}
-                            variant="contained"
-                            sx={styles.category}
-                          />
-                        </Box>
+          return (
+            <Grid key={postIndex} item xs={12} sm={12} md={6}>
+              <Box sx={styles.cardWrapper} onClick={() => handleOpen(job)}>
+                <Box sx={{ display: "flex" }}>
+                  <Typography sx={styles.jobCategoryText} className="position">
+                    {job.position}
+                  </Typography>
+                  <Typography sx={{ ml: 1, color: "green" }}>•</Typography>
+                  <Typography
+                    sx={{ ml: 1, color: "green", fontSize: 12, mt: 0.5 }}
+                  >
+                    Posted {newPosts(job.created_at)}
+                  </Typography>
+                </Box>
+                <Box sx={styles.cardTop}>
+                  <Avatar
+                    alt={job.client.full_name}
+                    src={job.clientProfile && job.clientProfile.profile_url}
+                  />
+                  <Box sx={styles.categoryWrapper}>
+                    <Box sx={styles.fullname}>
+                      <Typography sx={styles.fullnameText}>
+                        {job.client.full_name}
+                      </Typography>
+
+                      <Box sx={styles.categoryMainWrapper}>
+                        <Chip
+                          size="small"
+                          key={postIndex}
+                          label={job.category}
+                          variant="contained"
+                          sx={styles.category}
+                        />
                       </Box>
                     </Box>
                   </Box>
+                </Box>
 
-                  <div
-                    style={styles.backgroundText}
-                    dangerouslySetInnerHTML={{ __html: job.description }}
-                  />
-                  <Stack sx={styles.skillWrapper}>
-                    {limitedSkills &&
-                      limitedSkills.map((skill, skillIndex) => (
-                        <Chip
-                          size="small"
-                          key={skillIndex}
-                          label={skill}
-                          variant="contained"
-                          sx={styles.skill}
-                        />
-                      ))}
-                    {job.skills &&
-                      job.skills?.length > 2 &&
-                      jobs.skils?.length > skillLimit && (
-                        <Chip
-                          size="small"
-                          key={`${postIndex}-more`}
-                          label={`+${job.skills.length - skillLimit}`}
-                          variant="contained"
-                          sx={styles.moreSkill}
-                        />
-                      )}
-                  </Stack>
+                <div
+                  style={styles.backgroundText}
+                  dangerouslySetInnerHTML={{ __html: job.description }}
+                />
+                <Stack sx={styles.skillWrapper}>
+                  {limitedSkills &&
+                    limitedSkills.map((skill, skillIndex) => (
+                      <Chip
+                        size="small"
+                        key={skillIndex}
+                        label={skill}
+                        variant="contained"
+                        sx={styles.skill}
+                      />
+                    ))}
+                  {job.skills &&
+                    job.skills?.length >= 2 &&
+                    job.skils?.length > skillLimit && (
+                      <Chip
+                        size="small"
+                        key={`${postIndex}-more`}
+                        label={`+${job.skills.length - skillLimit}`}
+                        variant="contained"
+                        sx={styles.moreSkill}
+                      />
+                    )}
+                </Stack>
 
-                  <Box sx={styles.cardBottom}>
-                    <Box sx={styles.cardBottomWrapper}>
-                      <Typography>
-                        ₱{" "}
-                        {job.rate
-                          ? `${formatValue(job.rate)} / day`
-                          : formatValue(job.budget)}
-                      </Typography>
-                      <Typography>{job.job_type}</Typography>
-                      {job.job_type === "Daily Rate" && (
-                        <Typography>{job.days}</Typography>
-                      )}
-                    </Box>
+                <Box sx={styles.cardBottom}>
+                  <Box sx={styles.cardBottomWrapper}>
+                    <Typography>
+                      ₱{" "}
+                      {job.rate
+                        ? `${formatValue(job.rate)} / day`
+                        : formatValue(job.budget)}
+                    </Typography>
+                    <Typography>{job.job_type}</Typography>
+                    {job.job_type === "Daily Rate" && (
+                      <Typography>{job.days}</Typography>
+                    )}
                   </Box>
                 </Box>
-              </Grid>
-            );
-          })}
+              </Box>
+            </Grid>
+          );
+        })}
       </Grid>
 
       {!loading && jobs && jobs.length === 0 && (

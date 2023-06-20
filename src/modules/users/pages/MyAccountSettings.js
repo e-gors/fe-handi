@@ -5,6 +5,7 @@ import {
   Box,
   CircularProgress,
   Divider,
+  FormHelperText,
   IconButton,
   Typography,
 } from "@mui/material";
@@ -26,14 +27,17 @@ import { useHistory } from "react-router-dom";
 
 const emailValidator = new ReeValidate.Validator({
   email: "required|email|regex:^[a-zA-Z0-9]+.[^s@]+@gmail.com$",
+  retype_email: "required|email",
 });
 
 const addressValidator = new ReeValidate.Validator({
   address: "required",
+  retype_address: "required",
 });
 
 const numberValidator = new ReeValidate.Validator({
   contact_number: "required|max:11|numeric|regex:^09[0-9]{9}$",
+  retype_contact_number: "required|max:11|numeric|regex:^09[0-9]{9}$",
 });
 
 const styles = {
@@ -66,6 +70,16 @@ const styles = {
   },
 };
 
+const checkMatchValue = (firstValue, secondValue) => {
+  let match = false;
+  if (firstValue === secondValue) {
+    match = true;
+  } else {
+    match = false;
+  }
+  return match;
+};
+
 function MyAccountSettings(props) {
   const { user } = props;
 
@@ -73,6 +87,9 @@ function MyAccountSettings(props) {
   const history = useHistory();
 
   const [loading, setLoading] = React.useState(false);
+  const [emailError, setEmailError] = React.useState(null);
+  const [phoneError, setPhoneError] = React.useState(null);
+  const [addressError, setAddressError] = React.useState(null);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [type, setType] = React.useState("");
@@ -80,6 +97,7 @@ function MyAccountSettings(props) {
   const [newEmail, setNewEmail] = React.useState({
     values: {
       email: "",
+      retype_email: "",
     },
     errors: emailValidator.errors,
   });
@@ -87,6 +105,7 @@ function MyAccountSettings(props) {
   const [newPhone, setNewPhone] = React.useState({
     values: {
       contact_number: "",
+      retype_contact_number: "",
     },
     errors: numberValidator.errors,
   });
@@ -94,6 +113,7 @@ function MyAccountSettings(props) {
   const [newAddress, setNewAddress] = React.useState({
     values: {
       address: "",
+      retype_address: "",
     },
     errors: addressValidator.errors,
   });
@@ -177,6 +197,43 @@ function MyAccountSettings(props) {
         handleValidate(newPhone.values, numberValidator, "email");
       } else {
         handleValidate(newAddress.values, addressValidator, "email");
+      }
+    }
+  };
+
+  const handleKeyPressUp = (e, type) => {
+    let emails = newEmail.values;
+    let phones = newPhone.values;
+    let addresses = newAddress.values;
+
+    if (type === "email") {
+      let matched = checkMatchValue(emails.email, emails.retype_email);
+      if (!matched) {
+        setEmailError("Email do not match!");
+      } else {
+        setEmailError(null);
+      }
+    } else if (type === "phone") {
+      let matched = checkMatchValue(
+        phones.contact_number,
+        phones.retype_contact_number
+      );
+
+      if (!matched) {
+        setPhoneError("Contact Number do not match!");
+      } else {
+        setPhoneError(null);
+      }
+    } else {
+      let matched = checkMatchValue(
+        addresses.address,
+        addresses.retype_address
+      );
+
+      if (!matched) {
+        setAddressError("Address do not match!");
+      } else {
+        setAddressError(null);
       }
     }
   };
@@ -276,11 +333,25 @@ function MyAccountSettings(props) {
     validator.validateAll(data).then((success) => {
       if (success) {
         if (type === "email") {
-          handleSubmitEmail();
+          let matched = checkMatchValue(data.email, data.retype_email);
+          if (matched) {
+            handleSubmitEmail();
+          } else {
+            setEmailError("Email do not match");
+          }
         } else if (type === "phone") {
-          handleSubmitNumber();
+          let matched = checkMatchValue(
+            data.contact_number,
+            data.retype_contact_number
+          );
+          if (matched) {
+            handleSubmitNumber();
+          }
         } else {
-          handleSubmitAddress();
+          let matched = checkMatchValue(data.address, data.retype_address);
+          if (matched) {
+            handleSubmitAddress();
+          }
         }
       } else {
         if (type === "email") {
@@ -344,6 +415,7 @@ function MyAccountSettings(props) {
                     size="small"
                     fullWidth
                     onKeyPress={handleKeyPress}
+                    onKeyUp={(e) => handleKeyPressUp(e, "email")}
                     value={newEmail.values.email}
                     onChange={handleChangeEMail}
                     errors={newEmail.errors}
@@ -354,6 +426,29 @@ function MyAccountSettings(props) {
                       },
                     }}
                   />
+                </Box>
+                <Box sx={{ mb: 1 }}>
+                  <Typography sx={{ fontSize: 12 }}>Retype Email *</Typography>
+                  <FormField
+                    name="retype_email"
+                    label="Retype New Email"
+                    size="small"
+                    fullWidth
+                    onKeyPress={handleKeyPress}
+                    onKeyUp={(e) => handleKeyPressUp(e, "email")}
+                    value={newEmail.values.retype_email}
+                    onChange={handleChangeEMail}
+                    errors={newEmail.errors}
+                    InputProps={{
+                      style: {
+                        background: "rgba(255, 255, 255, 0.5)",
+                        coor: "black",
+                      },
+                    }}
+                  />
+                  {emailError && (
+                    <FormHelperText error>{emailError}</FormHelperText>
+                  )}
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "right" }}>
                   <Button
@@ -408,6 +503,7 @@ function MyAccountSettings(props) {
                     size="small"
                     fullWidth
                     onKeyPress={handleKeyPress}
+                    onKeyUp={(e) => handleKeyPressUp(e, "phone")}
                     value={newPhone.values.contact_number}
                     onChange={handleChangeNumber}
                     errors={newPhone.errors}
@@ -423,6 +519,36 @@ function MyAccountSettings(props) {
                       maxLength: 11,
                     }}
                   />
+                </Box>
+                <Box sx={{ mb: 1 }}>
+                  <Typography sx={{ fontSize: 12 }}>
+                    New phone number *
+                  </Typography>
+                  <FormField
+                    name="retype_contact_number"
+                    label="Retype Phone Number"
+                    size="small"
+                    fullWidth
+                    onKeyPress={handleKeyPress}
+                    onKeyUp={(e) => handleKeyPressUp(e, "phone")}
+                    value={newPhone.values.retype_contact_number}
+                    onChange={handleChangeNumber}
+                    errors={newPhone.errors}
+                    InputProps={{
+                      style: {
+                        background: "rgba(255, 255, 255, 0.5)",
+                        coor: "black",
+                      },
+                    }}
+                    inputProps={{
+                      inputMode: "numeric",
+                      pattern: "[0-9]*",
+                      maxLength: 11,
+                    }}
+                  />
+                  {phoneError && (
+                    <FormHelperText error>{phoneError}</FormHelperText>
+                  )}
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "right" }}>
                   <Button
@@ -475,6 +601,7 @@ function MyAccountSettings(props) {
                     size="small"
                     fullWidth
                     onKeyPress={handleKeyPress}
+                    onKeyUp={(e) => handleKeyPressUp(e, "address")}
                     value={newAddress.values.address}
                     onChange={handleChangeAddress}
                     errors={newAddress.errors}
@@ -485,6 +612,31 @@ function MyAccountSettings(props) {
                       },
                     }}
                   />
+                </Box>
+                <Box sx={{ mb: 1 }}>
+                  <Typography sx={{ fontSize: 12 }}>
+                    Retype New Address *
+                  </Typography>
+                  <FormField
+                    name="retype_address"
+                    label="Retype New Address"
+                    size="small"
+                    fullWidth
+                    onKeyPress={handleKeyPress}
+                    onKeyUp={(e) => handleKeyPressUp(e, "address")}
+                    value={newAddress.values.retype_address}
+                    onChange={handleChangeAddress}
+                    errors={newAddress.errors}
+                    InputProps={{
+                      style: {
+                        background: "rgba(255, 255, 255, 0.5)",
+                        coor: "black",
+                      },
+                    }}
+                  />
+                  {addressError && (
+                    <FormHelperText error>{addressError}</FormHelperText>
+                  )}
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "right" }}>
                   <Button
@@ -527,7 +679,7 @@ function MyAccountSettings(props) {
         <Box sx={styles.right}>
           <Box sx={styles.center}>
             <Typography>
-              {user.role === "client" ? "Hire only" : "Work only"}
+              {user.role === "Client" ? "Hire only" : "Work only"}
             </Typography>
           </Box>
         </Box>

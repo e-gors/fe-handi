@@ -35,6 +35,8 @@ import { removeUser } from "../redux/actions/userActions";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import PeopleIcon from "@mui/icons-material/People";
+import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 
 const userAnchorItemsOnSmallDevice = [
   {
@@ -138,6 +140,19 @@ const clientAnchorItemsOnLaptop = [
   {
     label: "Logout",
     icon: <LogoutIcon color="primary" />,
+  },
+];
+
+const clientMobileSecondLink = [
+  {
+    label: "Hire",
+    path: "/new/job-offer",
+    icon: <PeopleIcon color="primary" />,
+  },
+  {
+    label: "Post Job",
+    path: "/new/job-post",
+    icon: <HomeRepairServiceIcon color="primary" />,
   },
 ];
 
@@ -344,6 +359,9 @@ export default function PublicAppBarMenu() {
         withDivider
         singleLink={singleLink}
         accountLink={accountLinks}
+        mobileSecondLink={
+          user?.role === "Client" ? clientMobileSecondLink : null
+        }
         logout={logout}
         handleOpenDrawer={handleOpenDrawer}
         handleCloseDrawer={handleCloseDrawer}
@@ -394,6 +412,27 @@ export default function PublicAppBarMenu() {
                 {page.label}
               </Button>
             ))}
+
+          {isAuth() && user?.role === "Client" && (
+            <Box sx={{ "@media(max-width: 1056px)": { display: "none" } }}>
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{ mr: 0.5 }}
+                onClick={() => handleNavigate("/new/job-offer")}
+              >
+                Hire
+              </Button>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={() => handleNavigate("/new/job-post")}
+              >
+                Post Job
+              </Button>
+            </Box>
+          )}
 
           {isAuth() && (
             <Box sx={{ display: { xs: "none", md: "flex" } }}>

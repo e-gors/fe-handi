@@ -21,6 +21,7 @@ export default function PublicDrawerMenu(props) {
     firstLink,
     secondLink,
     accountLink,
+    mobileSecondLink,
     withDivider,
     open,
     handleCloseDrawer,
@@ -79,6 +80,20 @@ export default function PublicDrawerMenu(props) {
           ))}
       </List>
       {withDivider && <Divider />}
+      <List>
+        {mobileSecondLink &&
+          mobileSecondLink.map((data, index) => (
+            <ListItem key={index} disablePadding>
+              <ListItemButton
+                onClick={(e) => handleNavigate(data.path)}
+                selected={data.path === location.pathname}
+              >
+                <ListItemIcon>{data.icon}</ListItemIcon>
+                <ListItemText primary={data.label} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+      </List>
       <List>
         {secondLink &&
           secondLink.map((data, index) => (

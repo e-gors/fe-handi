@@ -312,9 +312,7 @@ function BasicInfo(props) {
         }
         setTitles(title.values.title);
         setDescriptions(jobDescription);
-        if (images && images.length > 0) {
-          setImagesContainer(images);
-        }
+        setImagesContainer(images);
         handleNext();
       } else {
         setTitle((prev) => ({

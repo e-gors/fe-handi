@@ -3,6 +3,7 @@ import {
   Button,
   CircularProgress,
   Divider,
+  FormHelperText,
   IconButton,
   InputAdornment,
   Typography,
@@ -23,7 +24,8 @@ import ConfirmationModal from "../../../components/ConfirmationModal";
 import { useHistory } from "react-router-dom";
 
 const passwordValidator = new ReeValidate.Validator({
-  password: "required|min:5|max:20",
+  password: "required|min:5|max:20|regex:^(?=.*[!@#$%^&*])",
+  retype_password: "required|min:5|max:20",
 });
 
 const styles = {
@@ -56,16 +58,29 @@ const styles = {
   },
 };
 
+const checkMatchValue = (firstValue, secondValue) => {
+  let match = false;
+  if (firstValue === secondValue) {
+    match = true;
+  } else {
+    match = false;
+  }
+  return match;
+};
+
 function Security() {
   const history = useHistory();
 
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [passwordError, setPasswordError] = React.useState(null);
+  const [showFirstPass, setShowFirstPass] = React.useState(false);
+  const [showSecondPass, setShowSecondPass] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [newPassword, setNewPassword] = React.useState({
     values: {
       password: "",
+      retype_password: "",
     },
     errors: passwordValidator.errors,
   });
@@ -96,8 +111,12 @@ function Security() {
     });
   };
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+  const handleClickShowFirstPass = (type) => {
+    if (type === "first") {
+      setShowFirstPass(!showFirstPass);
+    } else {
+      setShowSecondPass(!showSecondPass);
+    }
   };
 
   const handleMouseDownPassword = (event) => {
@@ -105,8 +124,34 @@ function Security() {
   };
 
   const handleKeyPress = (e) => {
+    let passwords = newPassword.values;
+    let matched = checkMatchValue(
+      passwords.password,
+      passwords.retype_password
+    );
+
+    if (matched) {
+      setPasswordError("Password do not match!");
+    } else {
+      setPasswordError(null);
+    }
+
     if (e.key === "Enter") {
       handleValidate();
+    }
+  };
+
+  const handleKeyUp = (e) => {
+    let passwords = newPassword.values;
+
+    let matched = checkMatchValue(
+      passwords.password,
+      passwords.retype_password
+    );
+    if (!matched) {
+      setPasswordError("Password not match!");
+    } else {
+      setPasswordError(null);
     }
   };
 
@@ -132,7 +177,9 @@ function Security() {
   const handleValidate = () => {
     passwordValidator.validateAll(newPassword.values).then((success) => {
       if (success) {
-        handleSubmit();
+        if (!passwordError) {
+          handleSubmit();
+        }
       } else {
         setNewPassword((prev) => ({
           ...prev,
@@ -183,11 +230,12 @@ function Security() {
                     value={newPassword.values.password}
                     onChange={handleChangePassword}
                     onKeyPress={handleKeyPress}
+                    onKeyUp={handleKeyUp}
                     size="small"
                     margin="normal"
                     fullWidth
                     label="New Password"
-                    type={showPassword ? "text" : "password"}
+                    type={showFirstPass ? "text" : "password"}
                     InputProps={{
                       style: {
                         background: "rgba(255, 255, 255, 0.5)",
@@ -201,10 +249,10 @@ function Security() {
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
-                            onClick={handleClickShowPassword}
+                            onClick={() => handleClickShowFirstPass("first")}
                             onMouseDown={handleMouseDownPassword}
                           >
-                            {showPassword ? (
+                            {showFirstPass ? (
                               <VisibilityOffIcon />
                             ) : (
                               <VisibilityIcon />
@@ -214,6 +262,53 @@ function Security() {
                       ),
                     }}
                   />
+                </Box>
+                <Box sx={{ mb: 1 }}>
+                  <Typography sx={{ fontSize: 12 }}>
+                    Retype New Password *
+                  </Typography>
+                  <FormField
+                    required
+                    name="retype_password"
+                    errors={newPassword.errors}
+                    value={newPassword.values.retype_password}
+                    onChange={handleChangePassword}
+                    onKeyPress={handleKeyPress}
+                    onKeyUp={handleKeyUp}
+                    size="small"
+                    margin="normal"
+                    fullWidth
+                    label="Retype New Password"
+                    type={showSecondPass ? "text" : "password"}
+                    InputProps={{
+                      style: {
+                        background: "rgba(255, 255, 255, 0.5)",
+                        coor: "black",
+                      },
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockIcon />
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => handleClickShowFirstPass("second")}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {showSecondPass ? (
+                              <VisibilityOffIcon />
+                            ) : (
+                              <VisibilityIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  {passwordError && (
+                    <FormHelperText error>{passwordError}</FormHelperText>
+                  )}
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "right" }}>
                   <Button

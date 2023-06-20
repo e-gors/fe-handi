@@ -16,6 +16,7 @@ function SelectDropdown(props) {
     options = [],
     categories = [],
     subCategories = [],
+    contracts,
     customError,
     ...rest
   } = props;
@@ -72,6 +73,11 @@ function SelectDropdown(props) {
             </MenuItem>
           ))
         )}
+        {contracts && contracts.map((contract, i) => (
+          <MenuItem key={i} value={contract}>
+            {contract.post.title}
+          </MenuItem>
+        ))}
       </Select>
       <FormHelperText error>{helperText}</FormHelperText>
     </FormControl>

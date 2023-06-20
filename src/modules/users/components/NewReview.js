@@ -14,13 +14,16 @@ import ToastNotificationContainer from "../../../components/ToastNotificationCon
 import ToastNotification from "../../../components/ToastNotification";
 import { options } from "../../../components/options";
 import Http from "../../../utils/Http";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateWorker } from "../../../redux/actions/profileActions";
 import ConfirmationModal from "../../../components/ConfirmationModal";
 import { isAuth } from "../../../utils/helpers";
 import UpdateReview from "./UpdateReview";
+import SelectDropdown from "../../../components/SelectDropdown";
+import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 
 const validator = new Reevalidate.Validator({
+  contract: "required",
   rating: "required|min:1|max:5",
   comment: "required|min:50|max:500",
 });
@@ -39,13 +42,11 @@ const getLabelText = (value) => {
 };
 
 function NewReview(props) {
-  const { worker, isOwner, user } = props;
-
-  const ratings = worker.ratings;
-
-  const doneReview = ratings.some((rating) => rating.user_id === user.id);
+  const { worker, isOwner, user, contracts } = props;
 
   const dispatch = useDispatch();
+
+  const ratings = worker.ratings;
 
   const [openConfirmModal, setOpenConfirmModal] = React.useState(false);
   const [openEditReview, setOpenEditReview] = React.useState(false);
@@ -55,12 +56,20 @@ function NewReview(props) {
   const [error, setError] = React.useState(null);
   const [reviews, setReviews] = React.useState({
     values: {
+      contract: "",
       rating: 0,
       comment: "",
     },
     errors: validator.errors,
   });
   const [hover, setHover] = React.useState(-1);
+
+  const doneReview = ratings.some(
+    (rating) =>
+      Number(rating.user_id) === user.id &&
+      Number(rating.worker_id) === worker.id &&
+      Number(rating.post_id) === reviews.values.contract?.post?.id
+  );
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -74,14 +83,6 @@ function NewReview(props) {
       },
     }));
 
-    if (name === "rating") {
-      if (value <= 0) {
-        setError("Rating is required!");
-      } else {
-        setError(null);
-      }
-    }
-
     const { errors } = validator;
 
     validator.validate(name, value).then((success) => {
@@ -92,6 +93,14 @@ function NewReview(props) {
         }));
       }
     });
+
+    if (name === "rating") {
+      if (value <= 0) {
+        setError("Rating is required!");
+      } else {
+        setError(null);
+      }
+    }
   };
 
   const handleSubmit = () => {
@@ -120,7 +129,11 @@ function NewReview(props) {
 
   const handleValidate = () => {
     if (doneReview) {
-      ToastNotification("error", "You cannot submit another review!", options);
+      ToastNotification(
+        "error",
+        "You cannot submit another review with the contract you selected!",
+        options
+      );
     } else {
       validator.validateAll(reviews.values).then((success) => {
         if (reviews.values.rating <= 0) {
@@ -188,6 +201,16 @@ function NewReview(props) {
       });
   };
 
+  const filteredContracts = contracts?.filter((contract) => {
+    const isPostUserMatch = contract.client?.id === user.id;
+    const isBidUserMatch = contract.worker?.id === worker.id;
+    const istNotPostMatch = !ratings.some(
+      (rating) => Number(rating.post_id) === contract.post.id
+    );
+
+    return istNotPostMatch && isPostUserMatch && isBidUserMatch;
+  });
+
   return (
     <Box sx={{ p: 1 }}>
       <ToastNotificationContainer />
@@ -218,6 +241,32 @@ function NewReview(props) {
             Review
           </Typography>
           <Box>
+            <Box sx={{ mb: 2 }}>
+              <Box>
+                <SelectDropdown
+                  name="contract"
+                  label="Completed Contract"
+                  contracts={filteredContracts}
+                  value={reviews.values.contract}
+                  errors={reviews.errors}
+                  onChange={handleChange}
+                />
+              </Box>
+              {reviews.values.contract &&
+                reviews.values.contract?.status !== "completed" && (
+                  <FormHelperText error>
+                    {reviews.values.contract?.status !== "completed" &&
+                      "The selected contract is still in progress"}
+                  </FormHelperText>
+                )}
+              {reviews.values.contract &&
+                reviews.values.contract?.status === "completed" && (
+                  <FormHelperText sx={{ color: "green" }}>
+                    {reviews.values.contract?.status === "completed" &&
+                      "Selected contract is completed, you can submit a review!"}
+                  </FormHelperText>
+                )}
+            </Box>
             <Box sx={{ mb: 2 }}>
               <Box sx={{ display: "flex" }}>
                 <Rating
@@ -291,6 +340,11 @@ function NewReview(props) {
                   <Box>
                     <Typography sx={{ ml: 1, fontWeight: "bold" }}>
                       {rating.client.fullname}
+                    </Typography>
+                    <Typography sx={{ ml: 1, fontWeight: "bold" }}>
+                      {rating.post.title}{" "}
+                      <DoubleArrowIcon sx={{ fontSize: 11 }} />
+                      {rating.post.position}
                     </Typography>
                     <Box sx={{ ml: 1, display: "flex" }}>
                       <Rating value={parseInt(rating.rating)} readOnly />

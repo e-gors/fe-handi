@@ -1,10 +1,7 @@
 /** @format */
 
 import * as React from "react";
-import PropTypes from "prop-types";
 import {
-  Tabs,
-  Tab,
   Box,
   Typography,
   Button,
@@ -22,9 +19,9 @@ import SelectDropdown from "../../../components/SelectDropdown";
 import ConfirmationModal from "../../../components/ConfirmationModal";
 import ToastNotification from "../../../components/ToastNotification";
 import { options } from "../../../components/options";
-import { useDispatch } from "react-redux";
 import { updateUser } from "../../../redux/actions/userActions";
 import ToastNotificationContainer from "../../../components/ToastNotificationContainer";
+import { useDispatch } from "react-redux";
 
 const status = [
   "pending",
@@ -184,9 +181,9 @@ export default function Contracts(props) {
     Http.post(`/contract/complete/${selectedItem.id}`)
       .then((res) => {
         if (res.data.code === 200) {
+          setOpenCompleteContract(false);
           dispatch(updateUser(res.data.user));
           ToastNotification("success", res.data.message, options);
-          setOpenCompleteContract(false);
         } else {
           ToastNotification("error", res.data.message, options);
         }
@@ -196,14 +193,6 @@ export default function Contracts(props) {
         setLoadingConfirm(false);
         ToastNotification("error", err.message, options);
       });
-  };
-
-  const handleEdit = (values) => {
-    console.log(values);
-  };
-
-  const handleDelete = (values) => {
-    console.log(values);
   };
 
   const handleOpen = (event) => {
@@ -218,10 +207,10 @@ export default function Contracts(props) {
     <Box>
       <ToastNotificationContainer />
       <ConfirmationModal
+        open={openCompleteContract}
+        loading={onLoadingConfirm}
         title="Complete Contract?"
         message="You are about to change the status of your contract from 'in progress' to 'complete'"
-        loading={onLoadingConfirm}
-        open={openCompleteContract}
         onClose={() => setOpenCompleteContract(false)}
         onConfirm={handleCompleteContract}
       />
@@ -328,6 +317,7 @@ export default function Contracts(props) {
       <DataTable
         withPagination
         onComplete={onComplete}
+        search={filterValues.values.search}
         loading={loading}
         data={contracts.data}
         columns={columns}

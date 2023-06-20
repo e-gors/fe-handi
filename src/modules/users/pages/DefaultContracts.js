@@ -34,14 +34,14 @@ function a11yProps(index) {
 
 const defaultContractColumns = [
   {
-    name: "bid",
+    name: "worker",
     label: "Contractor",
     customBodyRender: (item) => {
-      return item.user ? item.user.full_name : item.full_name;
+      return item.full_name;
     },
   },
   {
-    name: "post.user",
+    name: "client",
     label: "Client",
     customBodyRender: (item) => {
       return item.full_name;
@@ -52,6 +52,13 @@ const defaultContractColumns = [
     label: "Contract Name",
     customBodyRender: (item) => {
       return item?.title;
+    },
+  },
+  {
+    name: "post",
+    label: "Job Position",
+    customBodyRender: (item) => {
+      return item?.position;
     },
   },
   {
@@ -74,56 +81,6 @@ const defaultContractColumns = [
     label: "Rate/Budget",
     customBodyRender: (item) => {
       return item.rate ? item.rate : item.budget;
-    },
-  },
-  {
-    name: "status",
-    label: "Status",
-  },
-];
-
-const offerContractColumns = [
-  {
-    name: "offer",
-    label: "Contractor",
-    customBodyRender: (item) => {
-      return item.worker?.full_name;
-    },
-  },
-  {
-    name: "offer",
-    label: "Client",
-    customBodyRender: (item) => {
-      return item.client?.full_name;
-    },
-  },
-  {
-    name: "offer",
-    label: "Contract Name",
-    customBodyRender: (item) => {
-      return item?.title;
-    },
-  },
-  {
-    name: "offer",
-    label: "Type",
-    customBodyRender: (item) => {
-      return item?.type;
-    },
-  },
-  {
-    name: "start_date",
-    label: "Start Date",
-  },
-  {
-    name: "end_date",
-    label: "End Date",
-  },
-  {
-    name: "offer",
-    label: "Rate/Budget",
-    customBodyRender: (item) => {
-      return item.rate;
     },
   },
   {
@@ -156,7 +113,6 @@ export default function DefaultContracts() {
             <Tab label="All Contracts" {...a11yProps(0)} />
             <Tab label="Daily" {...a11yProps(1)} />
             <Tab label="Fixed" {...a11yProps(2)} />
-            <Tab label="Offer" {...a11yProps(3)} />
           </Tabs>
         </Box>
 
@@ -169,9 +125,6 @@ export default function DefaultContracts() {
           </TabPanel>
           <TabPanel value={tab} index={2}>
             <Contracts type="Fixed Cost" columns={defaultContractColumns} />
-          </TabPanel>
-          <TabPanel value={tab} index={3}>
-            <Contracts type="offers" columns={offerContractColumns} />
           </TabPanel>
         </Box>
       </Box>

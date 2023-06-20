@@ -42,20 +42,46 @@ const dailyColumns = [
     },
   },
   {
-    name: "title",
+    name: "client",
+    label: "Client",
+    customBodyRender: (item) => {
+      return item.full_name;
+    },
+  },
+  {
+    name: "job",
     label: "Contract Name",
+    customBodyRender: (item) => {
+      return item.title;
+    },
   },
   {
-    name: "type",
+    name: "job",
+    label: "Job Position",
+    customBodyRender: (item) => {
+      return item.position;
+    },
+  },
+  {
+    name: "job",
     label: "Job Type",
+    customBodyRender: (item) => {
+      return item.job_type;
+    },
   },
   {
-    name: "days",
+    name: "job",
     label: "Days",
+    customBodyRender: (item) => {
+      return item.days;
+    },
   },
   {
-    name: "rate",
+    name: "job",
     label: "Rate",
+    customBodyRender: (item) => {
+      return item.rate;
+    },
   },
   {
     name: "status",
@@ -76,16 +102,39 @@ const fixedColumns = [
     },
   },
   {
-    name: "title",
+    name: "client",
+    label: "Client",
+    customBodyRender: (item) => {
+      return item.full_name;
+    },
+  },
+  {
+    name: "job",
     label: "Contract Name",
+    customBodyRender: (item) => {
+      return item.title;
+    },
   },
   {
-    name: "type",
+    name: "job",
+    label: "Job Position",
+    customBodyRender: (item) => {
+      return item.position;
+    },
+  },
+  {
+    name: "job",
     label: "Job Type",
+    customBodyRender: (item) => {
+      return item.job_type;
+    },
   },
   {
-    name: "budget",
+    name: "job",
     label: "Budget",
+    customBodyRender: (item) => {
+      return item.budget;
+    },
   },
   {
     name: "status",

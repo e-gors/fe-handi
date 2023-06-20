@@ -16,7 +16,7 @@ import { updateUser } from "../../../redux/actions/userActions";
 import Reevalidate from "ree-validate-18";
 
 const validator = new Reevalidate.Validator({
-  about: "required|max:100",
+  about: "required|min:100|max:150",
 });
 
 function UpdateBio(props) {
@@ -127,11 +127,11 @@ function UpdateBio(props) {
           />
           <FormHelperText
             sx={{
-              color: charCount === 100 ? "green" : "red",
+              color: charCount > 100 ? "green" : "red",
               textAlign: "right",
             }}
           >
-            {charCount}/100
+            {charCount}/150
           </FormHelperText>
         </Box>
         <Box

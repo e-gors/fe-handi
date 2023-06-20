@@ -130,15 +130,9 @@ function OptionalFields(props) {
   const filteredSkill = skills.filter((skill) => category.includes(skill.name));
 
   const handleValidate = () => {
-    if (selectedLocations.length > 0) {
-      setLocations(selectedLocations);
-    }
-    if (selectedSkills.length > 0) {
-      setSkills(selectedSkills);
-    }
-    if (questions && questions.length > 0) {
-      setQues(questions);
-    }
+    setLocations(selectedLocations);
+    setSkills(selectedSkills);
+    setQues(questions);
     handleNext();
   };
 

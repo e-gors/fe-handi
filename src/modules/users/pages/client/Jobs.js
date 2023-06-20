@@ -19,7 +19,8 @@ import DataTable from "../../../../components/DataTable";
 import JobPostedModal from "../../components/client/JobPostedModal";
 import { useSelector } from "react-redux";
 
-const status = ["Pending", "Accepted", "Declined", "Withdrawn"];
+const status = ["posted", "drafted", "contracted"];
+const locations = ["Hilongos", "Matalom", "Hindang", "Bato", "Inopacan"];
 const orderByRate = ["Ascending", "Descending"];
 const orderByDate = ["Ascending", "Descending"];
 
@@ -41,6 +42,7 @@ function Jobs(props) {
   const [filterValues, setFilterValues] = React.useState({
     values: {
       search: "",
+      location: "",
       status: "",
       order_by_date: "",
       order_by_rate: "",
@@ -107,13 +109,12 @@ function Jobs(props) {
   const handleChangeFilter = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    const newValue = typeof value === "string" ? value.split(",") : value;
 
     setFilterValues((prev) => ({
       ...prev,
       values: {
         ...prev.values,
-        [name]: newValue,
+        [name]: value,
       },
     }));
   };
@@ -122,6 +123,7 @@ function Jobs(props) {
     setFilterValues({
       values: {
         search: "",
+        location: "",
         status: "",
         order_by_date: "",
         order_by_rate: "",
@@ -146,7 +148,6 @@ function Jobs(props) {
   };
 
   const handleOpen = (event) => {
-    console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 
@@ -254,6 +255,15 @@ function Jobs(props) {
                 <Divider />
                 <MenuItem>
                   <SelectDropdown
+                    name="location"
+                    label="Location"
+                    value={filterValues.values.location}
+                    onChange={handleChangeFilter}
+                    options={locations}
+                  />
+                </MenuItem>
+                <MenuItem>
+                  <SelectDropdown
                     name="status"
                     label="Status"
                     value={filterValues.values.status}
@@ -287,6 +297,7 @@ function Jobs(props) {
         <DataTable
           withPagination
           onView={handleView}
+          search={filterValues.values.search}
           loading={loading}
           data={jobs.data}
           columns={columns}

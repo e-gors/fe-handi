@@ -106,24 +106,20 @@ const UserRatingLinearProgress = (props) => {
     },
   ]);
 
-  // Total reviews
-  const totalRatings = ratings?.length;
-
   React.useEffect(() => {
     if (ratings && ratings.length > 0) {
-      const updatedRatingsData = [...ratingsData];
-      ratings.forEach((rating) => {
-        const ratingValue = rating.rating;
-        const index = updatedRatingsData.findIndex(
-          (data) => data.value === ratingValue
-        );
-        if (index !== -1) {
-          updatedRatingsData[index].count++;
-        }
+      const updatedRatingsData = ratingsData.map((ratingData) => {
+        const count = ratings.filter(
+          (rating) => rating.rating === ratingData.value
+        ).length;
+        return { ...ratingData, count };
       });
       setRatingsData(updatedRatingsData);
     }
-  }, [totalRatings]);
+  }, [ratings]);
+
+  // Total reviews
+  const totalRatings = ratings?.length;
 
   // Calculate the average rating
   const averageRating =

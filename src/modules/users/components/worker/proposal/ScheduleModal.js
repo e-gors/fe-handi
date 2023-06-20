@@ -19,6 +19,8 @@ import ToastNotificationContainer from "../../../../../components/ToastNotificat
 import ToastNotification from "../../../../../components/ToastNotification";
 import { options } from "../../../../../components/options";
 import Http from "./.././../../../../utils/Http";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../../../../redux/actions/userActions";
 
 const style = {
   position: "absolute",
@@ -83,6 +85,8 @@ const today = dayjs();
 function ScheduleModal(props) {
   const { open, handleClose, selectedItem, bid } = props;
 
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = React.useState(false);
   const [schedule, setSchedule] = React.useState({
     values: {
@@ -140,6 +144,7 @@ function ScheduleModal(props) {
     Http.post(`/choose/proposal/${bid.id}/${selectedItem.id}`, dates)
       .then((res) => {
         if (res.data.code === 200) {
+          dispatch(updateUser(res.data.user));
           ToastNotification("success", res.data.message, options);
           handleClose();
         } else {

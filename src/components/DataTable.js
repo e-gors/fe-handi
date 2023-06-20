@@ -22,6 +22,23 @@ import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import { useSelector } from "react-redux";
+
+const highlightMatchedText = (text, search) => {
+  if (!search || search.length < 1) {
+    return text;
+  }
+
+  const textString = String(text);
+  const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`(${escapedSearch})`, "gi");
+  const highlightedText = textString.replace(
+    regex,
+    '<mark style="background-color: yellow; color: black;">$1</mark>'
+  );
+
+  return <span dangerouslySetInnerHTML={{ __html: highlightedText }}></span>;
+};
 
 function DataTable(props) {
   const {
@@ -40,9 +57,12 @@ function DataTable(props) {
     onCancel,
     onView,
     onAccept,
+    search,
     loading,
     ...rest
   } = props;
+
+  const user = useSelector((state) => state.users.user);
 
   const [selectedItem, setSelectedItem] = useState({});
 
@@ -201,7 +221,7 @@ function DataTable(props) {
                             </IconButton>
                           </Tooltip>
                         )}
-                        {onCancel && pending && !withdrawn && (
+                        {onCancel && pending && !withdrawn && !decline && (
                           <Tooltip title="Decline" arrow>
                             <IconButton
                               size="small"
@@ -212,7 +232,7 @@ function DataTable(props) {
                             </IconButton>
                           </Tooltip>
                         )}
-                        {onComplete && inProgress && (
+                        {onComplete && inProgress && user.role === "Client" && (
                           <Tooltip title="Complete contract?" arrow>
                             <IconButton
                               size="small"
@@ -223,7 +243,7 @@ function DataTable(props) {
                             </IconButton>
                           </Tooltip>
                         )}
-                        {onRevoked && pending && !decline && (
+                        {onRevoked && pending && !decline && !withdrawn && (
                           <Tooltip title="Withdrawn" arrow>
                             <IconButton
                               size="small"
@@ -235,7 +255,7 @@ function DataTable(props) {
                           </Tooltip>
                         )}
 
-                        {onEdit && (
+                        {onEdit && pending && (
                           <Tooltip title="Edit" arrow>
                             <IconButton
                               size="small"
@@ -292,14 +312,17 @@ function DataTable(props) {
                             color: cellColor,
                           }}
                         >
-                          {col.customBodyRender
-                            ? col.customBodyRender(
-                                cellValue,
-                                item,
-                                colIndex,
-                                itemIndex
-                              )
-                            : cellValue}
+                          {highlightMatchedText(
+                            col.customBodyRender
+                              ? col.customBodyRender(
+                                  cellValue,
+                                  item,
+                                  colIndex,
+                                  itemIndex
+                                )
+                              : cellValue,
+                            search
+                          )}
                         </TableCell>
                       );
                     })}

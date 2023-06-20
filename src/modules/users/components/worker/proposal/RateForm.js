@@ -143,7 +143,7 @@ function RateForm(props) {
               label="Your Bid"
               name="rate"
               errors={formValues.errors}
-              value={formValues.values.rate}
+              value={formatValue(formValues.values.rate)}
               onBlur={() => handleBlur("rate")}
               onChange={handleChange}
               onKeyDown={handleKeyPress}

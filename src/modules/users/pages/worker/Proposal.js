@@ -26,6 +26,7 @@ import ToastNotificationContainer from "../../../../components/ToastNotification
 const status = ["Pending", "Accepted", "Declined", "Withdrawn"];
 const orderByRate = ["asc", "desc"];
 const orderByDate = ["asc", "desc"];
+const types = ["Daily Rate", "Fixed Cost"];
 
 const styles = {
   wrapper: { mt: 8, p: 2 },
@@ -105,6 +106,7 @@ function Proposal() {
   const [filterValues, setFilterValues] = React.useState({
     values: {
       search: "",
+      type: "",
       status: "",
       order_by_date: "",
       order_by_rate: "",
@@ -168,6 +170,7 @@ function Proposal() {
     setFilterValues({
       values: {
         search: "",
+        type: "",
         status: "",
         order_by_date: "",
         order_by_rate: "",
@@ -310,6 +313,15 @@ function Proposal() {
                 </MenuItem>
                 <MenuItem>
                   <SelectDropdown
+                    name="type"
+                    label="Type"
+                    value={filterValues.values.type}
+                    onChange={handleChangeFilter}
+                    options={types}
+                  />
+                </MenuItem>
+                <MenuItem>
+                  <SelectDropdown
                     name="order_by_date"
                     label="Order By Date"
                     value={filterValues.values.order_by_date}
@@ -335,6 +347,7 @@ function Proposal() {
           withPagination
           onRevoked={handleRevoked}
           onEdit={handleEdit}
+          search={filterValues.values.search}
           loading={loading}
           data={proposals.data}
           columns={columns}

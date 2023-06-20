@@ -26,7 +26,7 @@ import { setUser } from "../../../../../redux/actions/userActions";
 import { options } from "../../../../../components/options";
 import ToastNotification from "../../../../../components/ToastNotification";
 import ToastNotificationContainer from "../../../../../components/ToastNotificationContainer";
-import { isAuth } from "../../../../../utils/helpers";
+import { formatValue, isAuth } from "../../../../../utils/helpers";
 import ApplyStepper from "./ApplyStepper";
 import Http from "../../../../../utils/Http";
 import * as service from "../../../../register/service";
@@ -620,15 +620,15 @@ function ApplyModal(props) {
                               }}
                             >
                               <Avatar
-                                alt={selectedItem.client.fullname}
+                                alt={selectedItem.client.full_name}
                                 src={
                                   selectedItem &&
                                   selectedItem.client &&
-                                  selectedItem.client.profile[0].profile_url
+                                  selectedItem.clientProfile.profile_url
                                 }
                               />
                               <Typography sx={{ ml: 1 }}>
-                                {selectedItem.client.fullname}
+                                {selectedItem.client.full_name}
                               </Typography>
                             </Box>
                             <Box>
@@ -636,7 +636,7 @@ function ApplyModal(props) {
                                 <Typography
                                   sx={{ fontWeight: "bold", fontSize: 16 }}
                                 >
-                                  ₱ {selectedItem.rate}
+                                  ₱ {formatValue(selectedItem.rate)}
                                 </Typography>
                               )}
                               <Typography
@@ -644,7 +644,7 @@ function ApplyModal(props) {
                               >
                                 {selectedItem.days
                                   ? `${selectedItem.days} days`
-                                  : `₱ ${selectedItem.budget}`}
+                                  : `₱ ${formatValue(selectedItem.budget)}`}
                               </Typography>
                             </Box>
                           </Box>
@@ -709,15 +709,15 @@ function ApplyModal(props) {
                         }}
                       >
                         <Avatar
-                          alt={selectedItem.client.fullname}
+                          alt={selectedItem.client.full_name}
                           src={
                             selectedItem &&
                             selectedItem.client &&
-                            selectedItem.client.profile[0].profile_url
+                            selectedItem.clientProfile.profile_url
                           }
                         />
                         <Typography sx={{ ml: 1 }}>
-                          {selectedItem.client.fullname}
+                          {selectedItem.client.full_name}
                         </Typography>
                       </Box>
                       <Box align="right">

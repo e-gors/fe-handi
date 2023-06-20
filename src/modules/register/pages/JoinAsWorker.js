@@ -60,7 +60,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-evenly",
     flexWrap: "wrap",
-    borderRadius: 5,
+    borderRadius: 3,
     boxShadow: 10,
   },
   registerAs: {

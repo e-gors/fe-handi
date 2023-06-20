@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Chip,
+  CircularProgress,
   Grid,
   IconButton,
   Modal,
@@ -159,12 +160,13 @@ function FindJobCardModal(props) {
   const isFavorite =
     isAuth() &&
     user.shortlists?.some((item) => Number(item.post_id) === selectedItem?.id);
-  const isBided = isAuth() && user.bids?.some(
-    (item) => Number(item.post_id) === selectedItem?.id
-  );
+  const isBided =
+    isAuth() &&
+    user.bids?.some((item) => Number(item.post_id) === selectedItem?.id);
 
   const [openApplyModal, setOpenApplyModal] = React.useState(false);
   const [openBidsModal, setOpenBidsModal] = React.useState(false);
+  const [loadingOnShortlist, setLoadingOnShortlist] = React.useState(false);
 
   const handleOpen = () => {
     if (isAuth()) {
@@ -198,6 +200,7 @@ function FindJobCardModal(props) {
 
   const addToShortlist = (id) => {
     if (user && user.length !== 0 && user.role === "Worker") {
+      setLoadingOnShortlist(true);
       Http.post(`/new/shortlist/post/${id}`)
         .then((res) => {
           if (res.data.code === 200) {
@@ -206,8 +209,10 @@ function FindJobCardModal(props) {
           } else {
             ToastNotification("error", res.data.message, options);
           }
+          setLoadingOnShortlist(false);
         })
         .catch((err) => {
+          setLoadingOnShortlist(false);
           ToastNotification("error", err.message, options);
         });
     } else {
@@ -220,6 +225,7 @@ function FindJobCardModal(props) {
   };
 
   const removeToShortlist = (id) => {
+    setLoadingOnShortlist(true);
     Http.delete(`/remove/shortlist/post/${id}`)
       .then((res) => {
         if (res.data.code === 200) {
@@ -228,8 +234,11 @@ function FindJobCardModal(props) {
         } else {
           ToastNotification("error", res.data.message, options);
         }
+        setLoadingOnShortlist(false);
       })
       .catch((err) => {
+        setLoadingOnShortlist(false);
+
         ToastNotification("error", err.message, options);
       });
   };
@@ -281,12 +290,12 @@ function FindJobCardModal(props) {
                       alt={
                         selectedItem &&
                         selectedItem.client &&
-                        selectedItem.client.fullname
+                        selectedItem.client.full_name
                       }
                       src={
                         selectedItem &&
                         selectedItem.client &&
-                        selectedItem.client.profile[0].profile_url
+                        selectedItem.clientProfile.profile_url
                       }
                       sx={{ mr: 2 }}
                     />
@@ -294,7 +303,7 @@ function FindJobCardModal(props) {
                       <Typography sx={styles.fullname}>
                         {selectedItem &&
                           selectedItem.client &&
-                          selectedItem.client.fullname}
+                          selectedItem.client.full_name}
                       </Typography>
                       <Typography sx={styles.date}>
                         Posted {selectedItem && selectedItem.created_at}
@@ -332,8 +341,13 @@ function FindJobCardModal(props) {
                         onClick={() =>
                           addToShortlist(selectedItem && selectedItem.id)
                         }
+                        disabled={loadingOnShortlist}
                       >
-                        Add to Shortlist
+                        {loadingOnShortlist ? (
+                          <CircularProgress size={24} />
+                        ) : (
+                          "Add to Shortlist"
+                        )}
                       </Button>
                     )}
                     {isFavorite && (
@@ -345,8 +359,13 @@ function FindJobCardModal(props) {
                         onClick={() =>
                           removeToShortlist(selectedItem && selectedItem.id)
                         }
+                        disabled={loadingOnShortlist}
                       >
-                        Remove to Shortlist
+                        {loadingOnShortlist ? (
+                          <CircularProgress size={24} />
+                        ) : (
+                          "Remove from Shortlist"
+                        )}
                       </Button>
                     )}
                     <Button
@@ -511,19 +530,19 @@ function FindJobCardModal(props) {
                       alt={
                         selectedItem &&
                         selectedItem.client &&
-                        selectedItem.client.fullname
+                        selectedItem.client.full_name
                       }
                       src={
                         selectedItem &&
                         selectedItem.client &&
-                        selectedItem.client.profile[0].profile_url
+                        selectedItem.clientProfile.profile_url
                       }
                       sx={{ mr: 1 }}
                     />
                     <Typography sx={{ fontWeight: 600 }}>
                       {selectedItem &&
                         selectedItem.client &&
-                        selectedItem.client.fullname}
+                        selectedItem.client.full_name}
                     </Typography>
                   </Box>
                   <Box align="center" sx={styles.profileButtonWrapperButtom}>
