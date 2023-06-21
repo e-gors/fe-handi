@@ -533,8 +533,40 @@ export default function PrivateAppBarMenu() {
                   sx={{
                     boxShadow: 5,
                     border: "1px solid #EEEEEE",
+                    margin: "10px",
                   }}
                 />
+                <Typography
+                  sx={{
+                    paddingRight: "5px",
+                  }}
+                >
+                  {role && (
+                    <span
+                      style={{
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        margin: "0px",
+
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {user.first_name}
+                      <br></br>
+                      <span
+                        style={{
+                          fontSize: "10px",
+                          textTransform: "uppercase",
+                          margin: "0",
+                        }}
+                      >
+                        {user.role}
+                      </span>
+                    </span>
+                  )}
+                </Typography>
               </IconButton>
             </Box>
           )}

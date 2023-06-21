@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   Box,
   Button,
@@ -267,8 +269,7 @@ function JoinAsWorker() {
   };
 
   const handleOpenNewTab = (link) => {
-    let baseUrl = process.env.REACT_APP_BASE_URL;
-    window.open(`${baseUrl}/${link}`, "_blank");
+    window.open(link, "_blank");
   };
 
   const handleChangeRole = (role) => {
@@ -502,7 +503,7 @@ function JoinAsWorker() {
                     textDecoration: "underline",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleOpenNewTab("terms-of-services")}
+                  onClick={() => handleOpenNewTab("/terms-of-services")}
                 >
                   Terms and Condition
                 </span>
@@ -513,7 +514,7 @@ function JoinAsWorker() {
                     textDecoration: "underline",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleOpenNewTab("privacy-policy")}
+                  onClick={() => handleOpenNewTab("/privacy-policy")}
                 >
                   Privacy Policy
                 </span>
