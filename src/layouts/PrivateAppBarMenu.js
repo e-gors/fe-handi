@@ -39,20 +39,20 @@ import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import HubIcon from "@mui/icons-material/Hub";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 
-const userAnchorItemsOnSmallDevice = [
-  {
-    label: "Messages",
-    ariaLabel: "show 4 new mails",
-    badgeContent: 4,
-    icon: <MailIcon color="primary" />,
-  },
-  {
-    label: "Notifications",
-    ariaLabel: "show 17 new notifications",
-    badgeContent: 17,
-    icon: <NotificationsIcon color="primary" />,
-  },
-];
+// const userAnchorItemsOnSmallDevice = [
+//   {
+//     label: "Messages",
+//     ariaLabel: "show 4 new mails",
+//     badgeContent: 4,
+//     icon: <MailIcon color="primary" />,
+//   },
+//   {
+//     label: "Notifications",
+//     ariaLabel: "show 17 new notifications",
+//     badgeContent: 17,
+//     icon: <NotificationsIcon color="primary" />,
+//   },
+// ];
 
 const workerNavLinks = [
   {
@@ -149,40 +149,6 @@ const accountLinks = [
   },
 ];
 
-const workerAnchorItemsOnLaptop = [
-  {
-    path: "/overview/worker",
-    label: "Profile",
-    icon: <AccountCircleRoundedIcon color="primary" />,
-  },
-  {
-    path: "/account/settings",
-    label: "Account Settings",
-    icon: <SettingsRoundedIcon color="primary" />,
-  },
-  {
-    label: "Logout",
-    icon: <LogoutIcon color="primary" />,
-  },
-];
-
-const clientAnchorItemsOnLaptop = [
-  {
-    path: "/overview/client",
-    label: "Profile",
-    icon: <AccountCircleRoundedIcon color="primary" />,
-  },
-  {
-    path: "/account/settings",
-    label: "Account Settings",
-    icon: <SettingsRoundedIcon color="primary" />,
-  },
-  {
-    label: "Logout",
-    icon: <LogoutIcon color="primary" />,
-  },
-];
-
 const logout = [
   {
     label: "Logout",
@@ -194,6 +160,55 @@ export default function PrivateAppBarMenu() {
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
+
+  const baseUrl = process.env.REACT_APP_BACKEND_DOMAIN;
+
+  const workerAnchorItemsOnLaptop = [
+    {
+      path: "/overview/worker",
+      label: "Profile",
+      icon: <AccountCircleRoundedIcon color="primary" />,
+    },
+    {
+      label: "Messages",
+      icon: <MailIcon color="primary" />,
+      path: `${baseUrl}/chats`,
+      isRedirect: true,
+    },
+    {
+      path: "/account/settings",
+      label: "Account Settings",
+      icon: <SettingsRoundedIcon color="primary" />,
+    },
+    {
+      label: "Logout",
+      icon: <LogoutIcon color="primary" />,
+    },
+  ];
+
+  const clientAnchorItemsOnLaptop = [
+    {
+      path: "/overview/client",
+      label: "Profile",
+      icon: <AccountCircleRoundedIcon color="primary" />,
+    },
+    {
+      label: "Messages",
+      icon: <MailIcon color="primary" />,
+      path: `${baseUrl}/chats`,
+      isRedirect: true,
+    },
+    {
+      path: "/account/settings",
+      label: "Account Settings",
+      icon: <SettingsRoundedIcon color="primary" />,
+    },
+    {
+      label: "Logout",
+      icon: <LogoutIcon color="primary" />,
+    },
+  ];
+
   const { id, role, uuid } = user;
   const { profile, fullname } = user;
   const profile_url =
@@ -272,7 +287,7 @@ export default function PrivateAppBarMenu() {
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
-      anchorEl={anchorEl}
+      anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
         vertical: "top",
         horizontal: "right",
@@ -283,15 +298,20 @@ export default function PrivateAppBarMenu() {
         vertical: "top",
         horizontal: "right",
       }}
-      open={isMenuOpen}
+      open={isMobileMenuOpen}
       onClose={handleMenuClose}
     >
       {role && role === "Worker"
         ? workerAnchorItemsOnLaptop &&
           workerAnchorItemsOnLaptop.map((page, i) => (
             <MenuItem
+              selected={page.path === location.pathname}
               onClick={(e) =>
-                !page.path ? handleConfirmLogout() : handleNavigate(page.path)
+                !page.path
+                  ? handleConfirmLogout()
+                  : page.isRedirect
+                  ? window.open(page.path, "_blank")
+                  : handleNavigate(page.path)
               }
               key={i}
             >
@@ -302,8 +322,13 @@ export default function PrivateAppBarMenu() {
         : clientAnchorItemsOnLaptop &&
           clientAnchorItemsOnLaptop.map((page, i) => (
             <MenuItem
+              selected={page.path === location.pathname}
               onClick={(e) =>
-                !page.path ? handleConfirmLogout() : handleNavigate(page.path)
+                !page.path
+                  ? handleConfirmLogout()
+                  : page.isRedirect
+                  ? window.open(page.path, "_blank")
+                  : handleNavigate(page.path)
               }
               key={i}
             >
@@ -315,59 +340,59 @@ export default function PrivateAppBarMenu() {
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      {userAnchorItemsOnSmallDevice &&
-        userAnchorItemsOnSmallDevice.map((item, i) => (
-          <MenuItem key={i}>
-            <IconButton
-              size="large"
-              aria-label={item.ariaLabel}
-              color="inherit"
-            >
-              <Badge badgeContent={item.badgeContent} color="error">
-                {item.icon}
-              </Badge>
-            </IconButton>
-            <p>{item.label}</p>
-          </MenuItem>
-        ))}
+  // const renderMobileMenu = (
+  //   <Menu
+  //     anchorEl={mobileMoreAnchorEl}
+  //     anchorOrigin={{
+  //       vertical: "top",
+  //       horizontal: "right",
+  //     }}
+  //     id={mobileMenuId}
+  //     keepMounted
+  //     transformOrigin={{
+  //       vertical: "top",
+  //       horizontal: "right",
+  //     }}
+  //     open={isMobileMenuOpen}
+  //     onClose={handleMobileMenuClose}
+  //   >
+  //     {/* {userAnchorItemsOnSmallDevice &&
+  //       userAnchorItemsOnSmallDevice.map((item, i) => (
+  //         <MenuItem key={i}>
+  //           <IconButton
+  //             size="large"
+  //             aria-label={item.ariaLabel}
+  //             color="inherit"
+  //           >
+  //             <Badge badgeContent={item.badgeContent} color="error">
+  //               {item.icon}
+  //             </Badge>
+  //           </IconButton>
+  //           <p>{item.label}</p>
+  //         </MenuItem>
+  //       ))} */}
 
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <Avatar
-            alt={fullname && fullname}
-            src={profile_url && profile_url}
-            sx={{
-              boxShadow: 5,
-              border: "1px solid #EEEEEE",
-            }}
-          />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
+  //     <MenuItem onClick={handleProfileMenuOpen}>
+  //       <IconButton
+  //         size="large"
+  //         aria-label="account of current user"
+  //         aria-controls="primary-search-account-menu"
+  //         aria-haspopup="true"
+  //         color="inherit"
+  //       >
+  //         <Avatar
+  //           alt={fullname && fullname}
+  //           src={profile_url && profile_url}
+  //           sx={{
+  //             boxShadow: 5,
+  //             border: "1px solid #EEEEEE",
+  //           }}
+  //         />
+  //       </IconButton>
+  //       <p>Profile</p>
+  //     </MenuItem>
+  //   </Menu>
+  // );
 
   const renderMenuNotAuth = (
     <Menu
@@ -479,7 +504,7 @@ export default function PrivateAppBarMenu() {
             ))}
 
           {isAuth() && role === "Client" && (
-            <Box sx={{ "@media(max-width: 1056px)": { display: "none" } }}>
+            <Box sx={{ "@media(max-width: 900px)": { display: "none" } }}>
               <Button
                 size="small"
                 variant="outlined"
@@ -500,7 +525,7 @@ export default function PrivateAppBarMenu() {
           )}
           {isAuth() && (
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <IconButton
+              {/* <IconButton
                 size="large"
                 aria-label="show 4 new mails"
                 color="inherit"
@@ -517,14 +542,14 @@ export default function PrivateAppBarMenu() {
                 <Badge badgeContent={17} color="error">
                   <NotificationsIcon />
                 </Badge>
-              </IconButton>
+              </IconButton> */}
               <IconButton
                 size="large"
                 edge="end"
                 aria-label="account of current user"
                 aria-controls={menuId}
                 aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
+                onClick={handleMobileMenuOpen}
                 color="inherit"
               >
                 <Avatar
@@ -585,7 +610,7 @@ export default function PrivateAppBarMenu() {
         </Toolbar>
       </AppBar>
 
-      {isAuth() && renderMobileMenu}
+      {/* {isAuth() && renderMobileMenu} */}
       {isAuth() && renderMenu}
       {!isAuth() && renderMenuNotAuth}
     </Box>

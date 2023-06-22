@@ -69,6 +69,14 @@ const routes = [
     path: "/confirmed/:id",
     component: "modules/register/pages/ConfirmedUser",
   },
+  {
+    path: "/forgot-password",
+    component: "modules/home/pages/ForgotPassword",
+  },
+  {
+    path: "/reset-password/:token/:email",
+    component: "modules/home/pages/PasswordReset",
+  },
 
   // Private components
 
