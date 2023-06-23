@@ -16,6 +16,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import PropTypes from "prop-types";
 import ProfileInfo from "../../components/worker/ProfileInfo";
 import Pusher from "pusher-js";
+import NewReview from "../../components/NewReview";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -256,7 +257,7 @@ function WProfileInsight() {
               <ProfileInfo user={user && user} />
             </TabPanel>
             <TabPanel value={tab} index={1}>
-              Tab 2
+              <NewReview worker={user && user} isOwner={true} user={user} />
             </TabPanel>
           </Box>
         </Box>

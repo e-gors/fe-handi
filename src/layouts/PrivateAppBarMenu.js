@@ -12,6 +12,7 @@ import {
   Menu,
   Button,
   Avatar,
+  Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import MailIcon from "@mui/icons-material/Mail";
@@ -38,6 +39,7 @@ import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import HubIcon from "@mui/icons-material/Hub";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 // const userAnchorItemsOnSmallDevice = [
 //   {
@@ -301,6 +303,17 @@ export default function PrivateAppBarMenu() {
       open={isMobileMenuOpen}
       onClose={handleMenuClose}
     >
+      <MenuItem sx={{ "&:Hover": { backgroundColor: "transparent" } }}>
+        <AdminPanelSettingsIcon sx={{ color: "#EB6C51", mr: 1 }} />
+        <Typography sx={{ textAlign: "center" }}>{user?.role}</Typography>
+        <Divider
+          orientation="vertical"
+          flexItem
+          sx={{ width: 5, ml: 1, mr: 1 }}
+        />
+        <Typography>role</Typography>
+      </MenuItem>
+      <Divider />
       {role && role === "Worker"
         ? workerAnchorItemsOnLaptop &&
           workerAnchorItemsOnLaptop.map((page, i) => (
@@ -561,37 +574,6 @@ export default function PrivateAppBarMenu() {
                     margin: "10px",
                   }}
                 />
-                <Typography
-                  sx={{
-                    paddingRight: "5px",
-                  }}
-                >
-                  {role && (
-                    <span
-                      style={{
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        margin: "0px",
-
-                        fontSize: "12px",
-                        fontWeight: "bold",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      {user.first_name}
-                      <br></br>
-                      <span
-                        style={{
-                          fontSize: "10px",
-                          textTransform: "uppercase",
-                          margin: "0",
-                        }}
-                      >
-                        {user.role}
-                      </span>
-                    </span>
-                  )}
-                </Typography>
               </IconButton>
             </Box>
           )}

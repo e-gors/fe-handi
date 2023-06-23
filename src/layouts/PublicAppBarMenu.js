@@ -12,6 +12,7 @@ import {
   Menu,
   Button,
   Avatar,
+  Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import MailIcon from "@mui/icons-material/Mail";
@@ -37,6 +38,7 @@ import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import PeopleIcon from "@mui/icons-material/People";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 const singleLink = [
   {
@@ -246,6 +248,17 @@ export default function PublicAppBarMenu() {
       open={isMobileMenuOpen}
       onClose={handleMenuClose}
     >
+      <MenuItem sx={{ "&:Hover": { backgroundColor: "transparent" } }}>
+        <AdminPanelSettingsIcon sx={{ color: "#EB6C51", mr: 1 }} />
+        <Typography sx={{ textAlign: "center" }}>{user?.role}</Typography>
+        <Divider
+          orientation="vertical"
+          flexItem
+          sx={{ width: 5, ml: 1, mr: 1 }}
+        />
+        <Typography>role</Typography>
+      </MenuItem>
+      <Divider />
       {user && user.role === "Worker"
         ? workerAnchorItemsOnLaptop &&
           workerAnchorItemsOnLaptop.map((page, i) => (
