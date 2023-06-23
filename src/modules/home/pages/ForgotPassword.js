@@ -55,8 +55,6 @@ export default function ForgotPassword() {
     });
   };
 
-  console.log(formValues);
-
   const handleSubmit = () => {
     setLoading(true);
     publicHttp
