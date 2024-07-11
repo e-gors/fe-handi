@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[4394],{64394:function(e,n,i){i.r(n);i(72791);var a=i(80184);n.default=function(e){return e.handleClose,e.onConfirm,(0,a.jsx)("div",{children:"UpdateSkills"})}}}]);
+//# sourceMappingURL=4394.ff0517be.chunk.js.map

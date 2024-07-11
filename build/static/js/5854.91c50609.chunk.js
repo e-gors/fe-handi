@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfe_handi=self.webpackChunkfe_handi||[]).push([[5854],{5854:function(e,f,a){e.exports=a.p+"static/media/uploaded-dummy-2.8fcfc7f5f84298a32b41.jpg"}}]);
